@@ -73,4 +73,17 @@ Assert(batchMarkdown.Contains("synthetic-a.csv")&&batchMarkdown.Contains("synthe
 Assert(batchMarkdown.Contains("same user-defined screening thresholds"),
     "batch report warns about common threshold assumptions");
 
+string tabSeparated="Timestamp\tBattVoltage_mV\tBattCurrent_mA\tBatteryTemp_C\tBatterySOC_pct\n"+
+    "2026-11-01T00:00:00Z\t11500\t2000\t33\t80\n"+
+    "2026-11-01T00:00:10Z\t11400\t2100\t35\t79\n";
+var tab=TelemetryAnalyzer.Analyze(tabSeparated,new TelemetryThresholds());
+Assert(tab.Samples==2 && Math.Abs((tab.MinVoltageV??0)-11.4)<.00001,
+    "TSV and mV/mA vendor columns auto-converted without Excel");
+
+string semi="Timestamp;Voltage_V;Current_A;Temp_C;SOC_pct\n"+
+    "2026-11-01T00:00:00Z;12;1;32;80\n"+
+    "2026-11-01T00:00:10Z;11.9;1;32;79\n";
+Assert(TelemetryAnalyzer.Analyze(semi,new TelemetryThresholds()).Samples==2,
+    "semicolon-separated logs imported with no manual delimiter conversion");
+
 Console.WriteLine("All PackFit engineering core checks passed.");
