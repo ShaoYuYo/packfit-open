@@ -17,6 +17,8 @@ public sealed partial class MainWindow
         {
             var picker=new FileOpenPicker{SuggestedStartLocation=PickerLocationId.DocumentsLibrary};
             picker.FileTypeFilter.Add(".csv");
+            picker.FileTypeFilter.Add(".tsv");
+            picker.FileTypeFilter.Add(".txt");
             WinRT.Interop.InitializeWithWindow.Initialize(picker,
                 WinRT.Interop.WindowNative.GetWindowHandle(this));
             var selected=await picker.PickMultipleFilesAsync();
