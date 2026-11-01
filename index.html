@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#080f1b">
+  <meta name="theme-color" content="#f7f8f7">
   <meta name="description" content="PackFit Open — a privacy-first battery runtime estimator and battery pack feasibility laboratory. Free, open-source, bilingual.">
   <meta name="color-scheme" content="dark light">
   <title>PackFit Open — Personal Battery Lab</title>
@@ -11,8 +11,11 @@
   <link rel="manifest" href="./manifest.webmanifest">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="PackFit Open">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="./styles.css">
   <link rel="stylesheet" href="./assets/premium.css">
+  <link rel="stylesheet" href="./assets/editorial.css">
   <script type="module" src="./src/app.js"></script>
 </head>
 <body data-theme="light">
@@ -21,21 +24,21 @@
     <aside class="sidebar" aria-label="Main navigation">
       <a class="brand" href="#overview" aria-label="PackFit Open home">
         <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none"><path d="M22.3 4 10.5 21.3h10l-2.4 14.6 12.4-18.6H20.2L22.3 4Z" fill="currentColor"/></svg></span>
-        <span><strong>packfit<span class="brand-dot">.</span></strong><small>OPEN SOURCE LAB</small></span>
+        <span><strong>packfit<span class="brand-dot">.</span></strong><small data-i18n="brandCaption">Battery tools</small></span>
       </a>
       <div class="nav-label" data-i18n="workspace">WORKSPACE</div>
       <nav class="nav" aria-label="Primary">
         <button class="nav-item is-active" data-tab="overview" type="button" aria-selected="true"><span class="nav-icon" aria-hidden="true">◫</span><span data-i18n="navOverview">Overview</span><span class="nav-shortcut">01</span></button>
         <button class="nav-item" data-tab="health" type="button" aria-selected="false"><span class="nav-icon">◉</span><span data-pf="navHealth">我的電池</span><span class="nav-shortcut">02</span></button>
         <button class="nav-item" data-tab="everyday" type="button" aria-selected="false"><span class="nav-icon">✳</span><span data-pf="navEveryday">生活工具</span><span class="nav-shortcut">03</span></button>
-        <button class="nav-item" data-tab="studio" type="button" aria-selected="false"><span class="nav-icon" aria-hidden="true">⌘</span><span data-i18n="navStudio">Pack Studio</span><span class="nav-shortcut">02</span></button>
-        <button class="nav-item" data-tab="compare" type="button" aria-selected="false"><span class="nav-icon" aria-hidden="true">▥</span><span data-i18n="navCompare">Compare</span><span class="nav-shortcut">03</span></button>
-        <button class="nav-item" data-tab="method" type="button" aria-selected="false"><span class="nav-icon" aria-hidden="true">◎</span><span data-i18n="navMethod">Methodology</span><span class="nav-shortcut">04</span></button>
+        <button class="nav-item" data-tab="studio" type="button" aria-selected="false"><span class="nav-icon" aria-hidden="true">⌘</span><span data-i18n="navStudio">Pack Studio</span><span class="nav-shortcut">04</span></button>
+        <button class="nav-item" data-tab="compare" type="button" aria-selected="false"><span class="nav-icon" aria-hidden="true">▥</span><span data-i18n="navCompare">Compare</span><span class="nav-shortcut">05</span></button>
+        <button class="nav-item" data-tab="method" type="button" aria-selected="false"><span class="nav-icon" aria-hidden="true">◎</span><span data-i18n="navMethod">Methodology</span><span class="nav-shortcut">06</span></button>
       </nav>
       <div class="sidebar-bottom">
         <div class="sidebar-note"><span class="pulse" aria-hidden="true"></span><span data-i18n="offlineReady">All calculations run on your device</span></div>
         <a class="github-link" href="https://github.com/ShaoYuYo/packfit-open" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">↗</span> GitHub <span class="external-arrow" aria-hidden="true">↗</span></a>
-        <div class="sidebar-foot">VERSION 0.3.0 <span>·</span> MIT LICENSE</div>
+        <div class="sidebar-foot">VERSION 0.4.0 <span>·</span> MIT LICENSE</div>
       </div>
     </aside>
     <div class="app-body">
@@ -54,11 +57,22 @@
               <div class="eyebrow"><span class="eyebrow-line"></span><span data-i18n="heroKicker">ENERGY, UNDERSTOOD.</span></div>
               <h1 id="overview-title"><span data-i18n="heroTitle1">Know your battery.</span><br><span class="gradient-text" data-i18n="heroTitle2">Power your decisions.</span></h1>
               <p class="hero-desc" data-i18n="heroDesc">從續航時間到工程數據，把複雜的電池資訊變得直覺、透明，而且人人都能用。</p>
-              <div class="hero-pills"><span class="hero-pill">⚡ <span data-i18n="pillInstant">Instant calculations</span></span><span class="hero-pill">◇ <span data-i18n="pillPrivate">Privacy-first</span></span><span class="hero-pill">↗ <span data-i18n="pillOpen">Open-source</span></span></div>
+              <div class="hero-actions">
+                <button class="primary-button hero-primary" type="button" data-goto="health"><span data-i18n="ctaBattery">查看我的電池</span><span aria-hidden="true">↗</span></button>
+                <button class="secondary-button hero-secondary" type="button" data-goto="everyday"><span data-i18n="ctaEveryday">常用計算工具</span></button>
+              </div>
+              <p class="hero-fineprint" data-i18n="heroNote">免登入，所有資料都留在你的瀏覽器。</p>
             </div>
-            <div class="hero-visual" aria-hidden="true"><div class="orbit orbit-a"></div><div class="orbit orbit-b"></div><div class="visual-battery"><div class="battery-top"></div><div class="battery-fill"></div><div class="battery-bolt">ϟ</div></div><div class="float-chip chip-a">+ ENERGY</div><div class="float-chip chip-b">POWER / INSIGHT</div></div>
+            <div class="hero-visual hero-visual-sample" aria-hidden="true">
+              <div class="sample-surface">
+                <div class="sample-top"><span>PACK / 01</span><span class="sample-status">DEMO DATA</span></div>
+                <div class="sample-readout"><strong>56<span>Wh</span></strong><span>Battery capacity</span></div>
+                <div class="sample-energy"><span></span><span></span><span></span><span></span><span class="sample-muted"></span></div>
+                <div class="sample-bottom"><span>Li-ion · example</span><span>05 / 06</span></div>
+              </div>
+            </div>
           </div>
-          <div class="section-head"><div><div class="overline" data-i18n="quickStart">01 / QUICK START</div><h2 data-i18n="runtimeTitle">Battery runtime estimator</h2><p class="muted" data-i18n="runtimeIntro">不需要工程背景，輸入電池容量與平均耗電就能估算續航。</p></div><span class="feature-chip">LIVE CALCULATION <span class="live-dot"></span></span></div>
+          <div class="section-head"><div><div class="overline" data-i18n="quickStart">01 / QUICK START</div><h2 data-i18n="runtimeTitle">Battery runtime estimator</h2><p class="muted" data-i18n="runtimeIntro">不需要工程背景，輸入電池容量與平均耗電就能估算續航。</p></div><span class="feature-chip" data-i18n="modelLabel">依輸入值即時計算</span></div>
           <div class="overview-grid">
             <div class="panel form-panel">
               <div class="panel-top"><div><div class="overline" data-i18n="inputs">INPUT PARAMETERS</div><h3 data-i18n="yourDevice">Your device</h3></div><span class="corner-index">A—01</span></div>
@@ -84,9 +98,9 @@
               <div class="result-footer"><span data-i18n="estimatedFormula">Runtime = Wh × usable % × efficiency ÷ W</span><button class="text-link" type="button" data-goto="method"><span data-i18n="seeMethod">See methodology</span> ↗</button></div>
             </div>
           </div>
-          <div class="pf-intro-banner"><div class="pf-intro-symbol">✳</div><div><div class="overline">NEW · PERSONAL BATTERY LAB</div><h3 data-pf="healthTitle">電池狀態，一眼看懂。</h3><p data-pf="healthIntro">完全不懂電池也能開始。</p></div><button class="primary-button" data-goto="health" type="button"><span data-pf="goHealth">看我的電池</span> ↗</button></div>
+          <div class="pf-intro-banner"><div class="pf-intro-symbol">✳</div><div><div class="overline" data-i18n="introEyebrow">先看看你的設備</div><h3 data-pf="healthTitle">電池狀態，一眼看懂。</h3><p data-pf="healthIntro">完全不懂電池也能開始。</p></div><button class="primary-button" data-goto="health" type="button"><span data-pf="goHealth">看我的電池</span> ↗</button></div>
           <section class="panel plan-panel" aria-labelledby="plan-title">
-            <div class="panel-top"><div><div class="overline">ENERGY PROFILE / NEW</div>
+            <div class="panel-top"><div><div class="overline" data-i18n="plannerEyebrow">用電規劃</div>
               <h2 id="plan-title" data-plan="title">今天的電量夠用嗎？</h2>
               <p class="muted" data-plan="intro">填入今天預計使用多久，以及每種活動的平均耗電。看看電池是否足夠，避免出門後才發現電量不夠。</p>
             </div><span class="plan-symbol" aria-hidden="true">✳</span></div>
@@ -193,7 +207,7 @@
           <p class="pf-small pf-wide-note" data-pf="caution">所有數值是簡化估算，不是實際量測。</p>
         </section>
         <section id="studio" data-panel="studio" aria-labelledby="studio-title" hidden>
-          <div class="page-heading"><div class="overline" data-i18n="labKicker">02 / PACK ENGINEERING</div><h1 id="studio-title" data-i18n="labTitle">Pack Studio <span class="gradient-text">/ design sandbox</span></h1><p class="muted" data-i18n="labDesc">在同一個工作區評估串並聯、能量、重量、體積密度與估算續航。不代表實體設計或安規已驗證。</p></div>
+          <div class="page-heading"><div class="overline" data-i18n="labKicker">工程工具</div><h1 id="studio-title" data-i18n="labTitle">Pack Studio <span class="gradient-text">/ design sandbox</span></h1><p class="muted" data-i18n="labDesc">在同一個工作區評估串並聯、能量、重量、體積密度與估算續航。不代表實體設計或安規已驗證。</p></div>
           <div class="preset-strip" role="group" aria-label="Pack templates"><span data-i18n="startingPoint">STARTING POINT</span><button type="button" data-pack-preset="slim" class="preset-button is-selected" data-i18n="presetSlim">Slim notebook</button><button type="button" data-pack-preset="performance" class="preset-button" data-i18n="presetPerf">Performance</button><button type="button" data-pack-preset="compact" class="preset-button" data-i18n="presetCompact">Compact device</button></div>
           <div class="studio-grid">
             <div class="panel form-panel">
@@ -246,7 +260,7 @@
           </div>
         </section>
         <section id="compare" data-panel="compare" aria-labelledby="compare-title" hidden>
-          <div class="page-heading"><div class="overline" data-i18n="compareKicker">03 / SCENARIO ANALYSIS</div><h1 id="compare-title" data-i18n="compareTitle">Design comparison<span class="gradient-text"> / side by side</span></h1><p class="muted" data-i18n="compareDesc">儲存最多四組設計，評估名目能量、重量能量密度、體積能量密度與重量差異。</p></div>
+          <div class="page-heading"><div class="overline" data-i18n="compareKicker">規格比較</div><h1 id="compare-title" data-i18n="compareTitle">Design comparison<span class="gradient-text"> / side by side</span></h1><p class="muted" data-i18n="compareDesc">儲存最多四組設計，評估名目能量、重量能量密度、體積能量密度與重量差異。</p></div>
           <div class="comparison-toolbar"><span id="scenario-count" class="status-chip">0 / 4 saved</span><div><button id="import-json" class="secondary-button" type="button" data-i18n="importJson">Import JSON</button><input id="import-json-file" type="file" class="sr-only" accept=".json,application/json" aria-label="Import PackFit scenarios JSON"><button id="export-json" class="secondary-button" type="button" data-i18n="exportJson">Backup JSON</button><button id="export-comparison" class="secondary-button" type="button" data-i18n="exportAll">Export comparison CSV</button><button id="clear-scenarios" class="danger-button" type="button" data-i18n="clearAll">Clear saved</button></div></div>
           <p id="scenario-import-status" class="transfer-status" role="status" aria-live="polite"></p>
           <div class="transfer-note"><span data-i18n="transferNote">JSON backups keep editable designs, locally.</span> <a href="./examples/sample-scenarios.json" download data-i18n="sampleData">Download sample designs ↗</a></div>
@@ -254,7 +268,7 @@
           <div id="compare-content" hidden><div id="scenario-cards" class="scenario-cards"></div><div class="panel chart-panel"><div class="panel-top"><div><div class="overline" data-i18n="visualCompare">VISUAL BENCHMARK</div><h3 data-i18n="normalized">Comparison by metric</h3></div></div><div id="comparison-bars" class="comparison-bars"></div></div><div class="panel table-panel"><div class="panel-top"><div><div class="overline" data-i18n="dataTable">DATA TABLE</div><h3 data-i18n="detailComparison">Detailed comparison</h3></div></div><div class="table-scroll"><table id="comparison-table"><caption class="sr-only">Pack comparison metrics</caption><thead></thead><tbody></tbody></table></div></div></div>
         </section>
         <section id="method" data-panel="method" aria-labelledby="method-title" hidden>
-          <div class="page-heading"><div class="overline" data-i18n="methodKicker">04 / TRANSPARENCY</div><h1 id="method-title" data-i18n="methodTitle">Behind the numbers<span class="gradient-text"> / methodology</span></h1><p class="muted" data-i18n="methodDesc">每個公式都有可追溯的定義。這是規格估算工具，不是電池電氣、機械或安規簽核系統。</p></div>
+          <div class="page-heading"><div class="overline" data-i18n="methodKicker">計算方法</div><h1 id="method-title" data-i18n="methodTitle">Behind the numbers<span class="gradient-text"> / methodology</span></h1><p class="muted" data-i18n="methodDesc">每個公式都有可追溯的定義。這是規格估算工具，不是電池電氣、機械或安規簽核系統。</p></div>
           <div class="method-grid">
             <article class="panel method-card"><div class="overline">01 / RUNTIME</div><h3 data-i18n="methodRuntime">續航估算</h3><div class="formula">t (h) = E (Wh) × (1 − r) × η / P (W)</div><p data-i18n="methodRuntimeBody">r 是預留容量百分比；η 是輸出效率。假設固定平均功耗，無法預測老化、溫度、負載峰值或關機門檻。</p></article>
             <article class="panel method-card"><div class="overline">02 / CAPACITY</div><h3 data-i18n="methodEnergy">電池組名目能量</h3><div class="formula">E (Wh) = S × P × Vcell × Ahcell</div><p data-i18n="methodEnergyBody">S 為串聯數、P 為並聯數；使用單顆電芯的名目電壓與容量。結果不等於可用能量。</p></article>
@@ -265,7 +279,7 @@
           <div class="method-footer"><a href="https://github.com/ShaoYuYo/packfit-open/blob/main/docs/METHODOLOGY.md" target="_blank" rel="noopener noreferrer" data-i18n="readFull">Read full engineering documentation ↗</a><a href="https://github.com/ShaoYuYo/packfit-open/issues" target="_blank" rel="noopener noreferrer" data-i18n="reportIssue">Report a calculation issue ↗</a></div>
         </section>
       </main>
-      <footer class="footer"><span>© 2026 PackFit Open · <span data-i18n="footerTag">Built for curious minds and responsible engineering.</span></span><span>OPEN BY DESIGN <span class="footer-spark">✳</span></span></footer>
+      <footer class="footer"><span>© 2026 PackFit Open · <span data-i18n="footerTag">Built for curious minds and responsible engineering.</span></span><span>Open source · MIT</span></footer>
     </div>
   </div>
 </body>
