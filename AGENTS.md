@@ -54,3 +54,13 @@ The native Windows app lives under `desktop/`. Keep the browser interface and na
 - Keep WinUI source in C# / XAML. Do not substitute a WebView wrapper while describing it as native.
 - Follow `desktop/README.md` and `.github/workflows/desktop-winui.yml` for build and distribution instructions.
 
+
+
+## Current WinUI workflow and security boundaries
+
+- Use official WinUI 3 `MicaBackdrop`, `TitleBar`, `NavigationView`, `InfoBar`, and platform theme resources; do not impersonate Fluent using web styles or copy proprietary art.
+- Native Windows diagnostics must remain **allowlisted, read-only** and explicitly initiated by the user. Avoid `cmd /c`, PowerShell injection, arbitrary user-defined subprocess arguments, and silent elevation.
+- WPR/WPA/Procmon are optional official Microsoft utilities, linked via documentation; do not download executables or install packages without explicit user action.
+- New CSV formats must include unambiguous units, real test vectors and regression tests; never silently infer unknown log signal units.
+- For any native XAML updates, verify event-handler names and named controls, run C# core checks, build on `windows-latest`, and manually smoke-test a published EXE.
+- Generated diagnostic outputs or engineering handoffs may contain confidential device and employee information. All data stays local; never send it to GitHub Actions, external APIs or public issues.
