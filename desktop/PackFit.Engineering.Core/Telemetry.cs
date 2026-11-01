@@ -64,15 +64,20 @@ public static class TelemetryAnalyzer
         using var reader = new StringReader(csv.TrimStart('\uFEFF'));
         var firstLine = reader.ReadLine();
         if (firstLine is null) throw new FormatException("CSV is empty.");
-        var headers = CsvRow(firstLine).Select(Normalize).ToList();
+        char delimiter = DetectDelimiter(firstLine);
+        var headers = CsvRow(firstLine,delimiter).Select(Normalize).ToList();
         int ti = Select(headers, "timestamp", "datetime", "time", "timestamputc");
         if (ti < 0) throw new FormatException("CSV must contain Timestamp (ISO-8601 with timezone).");
         var v = FindUnit(headers, ("voltagev", 1), ("packvoltagev", 1),
-            ("voltagemv", .001), ("packvoltagemv", .001));
+            ("voltagemv", .001), ("packvoltagemv", .001),
+            ("batteryvoltagev",1),("battvoltagev",1),
+            ("batteryvoltagemv",.001),("battvoltagemv",.001));
         var i = FindUnit(headers, ("currenta", 1), ("packcurrenta", 1),
-            ("currentma", .001), ("packcurrentma", .001));
-        int temp = Select(headers, "tempc", "temperaturec", "packtempc");
-        int soc = Select(headers, "soc", "socpct", "socpercent", "stateofcharge");
+            ("currentma", .001), ("packcurrentma", .001),
+            ("batterycurrenta",1),("battcurrenta",1),
+            ("batterycurrentma",.001),("battcurrentma",.001));
+        int temp = Select(headers, "tempc", "temperaturec", "packtempc", "batterytempc", "battcelltempc", "celltempc");
+        int soc = Select(headers, "soc", "socpct", "socpercent", "stateofcharge", "batterysoc", "batterysocpct", "batterysocpercent");
         if (v.Index < 0 && i.Index < 0 && temp < 0 && soc < 0)
             throw new FormatException("Provide at least one measured signal column.");
 
@@ -89,7 +94,7 @@ public static class TelemetryAnalyzer
             if (string.IsNullOrWhiteSpace(line)) continue;
             count++;
             if (count > MaxLines) throw new FormatException("CSV exceeds 200,000 measurement rows.");
-            var cells=CsvRow(line);
+            var cells=CsvRow(line,delimiter);
             if (cells.Count != headers.Count) throw new FormatException($"Row {count+1}: wrong column count (multiline quoted values are not supported).");
             if (!DateTimeOffset.TryParse(cells[ti], CultureInfo.InvariantCulture,
                 DateTimeStyles.AssumeUniversal, out var when) ||
@@ -190,7 +195,25 @@ public static class TelemetryAnalyzer
     }
 
     /// <summary>One-line CSV parser supporting commas and escaped quotes; multiline values are rejected.</summary>
-    private static List<string> CsvRow(string line)
+    private static char DetectDelimiter(string header)
+    {
+        int commas=0,tabs=0,semicolons=0;bool quoted=false;
+        for(int i=0;i<header.Length;i++)
+        {
+            char ch=header[i];
+            if(ch=='"')
+            {
+                if(quoted&&i+1<header.Length&&header[i+1]=='"'){i++;continue;}
+                quoted=!quoted;
+            }
+            if(!quoted){if(ch==',')commas++;else if(ch=='\t')tabs++;else if(ch==';')semicolons++;}
+        }
+        if(tabs>commas&&tabs>=semicolons)return '\t';
+        if(semicolons>commas&&semicolons>tabs)return ';';
+        return ',';
+    }
+
+    private static List<string> CsvRow(string line,char delimiter)
     {
         var fields=new List<string>();
         var buffer=new StringBuilder();
@@ -203,7 +226,7 @@ public static class TelemetryAnalyzer
                 if(quoted && n+1<line.Length && line[n+1]=='"'){buffer.Append('"');n++;}
                 else quoted=!quoted;
             }
-            else if(c==','&&!quoted){fields.Add(buffer.ToString().Trim());buffer.Clear();}
+            else if(c==delimiter&&!quoted){fields.Add(buffer.ToString().Trim());buffer.Clear();}
             else buffer.Append(c);
         }
         if(quoted)throw new FormatException("Unclosed CSV quotation mark.");
