@@ -26,7 +26,14 @@ public static class WindowsDiagnostics
         if(!Path.IsPathFullyQualified(output)||
             !output.EndsWith(".html",StringComparison.OrdinalIgnoreCase))
             throw new ArgumentException("Choose a valid HTML report filename.");
-        if(File.Exists(output))throw new IOException("Output file already exists. Choose a new filename.");
+        // FileSavePicker often creates a zero-byte placeholder. Only delete that
+        // placeholder, never replace an existing report containing user data.
+        if(File.Exists(output))
+        {
+            if(new FileInfo(output).Length!=0)
+                throw new IOException("Output file already contains data. Choose another filename.");
+            File.Delete(output);
+        }
         string[] args=kind switch {
             "energy"=>["/energy","/duration","30","/output",output],
             "sleepstudy"=>["/sleepstudy","/output",output],
