@@ -1,5 +1,5 @@
 /* Offline-first static assets; navigations are network-first to allow updates. */
-const CACHE = "packfit-static-v0.6.0";
+const CACHE = "packfit-static-v0.6.1";
 const RESOURCES = [
   "./", "./index.html", "./styles.css", "./assets/premium.css", "./assets/editorial.css",
   "./assets/atelier.css", "./assets/workspace.css", "./assets/logo.svg", "./manifest.webmanifest", "./examples/sample-scenarios.json",
@@ -8,7 +8,7 @@ const RESOURCES = [
   "./src/i18n.js", "./src/consumer.js", "./src/consumer-ui.js",
   "./src/consumer-i18n.js", "./src/scenario-transfer.js", "./src/pwa.js",
   "./src/planner.js", "./src/planner-ui.js", "./src/motion-enhance.js",
-  "./src/theme.js", "./src/device.js", "./src/device-ui.js", "./src/device-benchmark-worker.js"
+  "./src/theme.js", "./src/device.js", "./src/dxdiag.js", "./src/device-ui.js", "./src/device-benchmark-worker.js"
 ];
 const cacheUrls = new Set(RESOURCES.map((path)=>new URL(path,self.registration.scope).pathname));
 
