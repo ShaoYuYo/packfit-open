@@ -20,6 +20,9 @@ public sealed partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+        ExtendsContentIntoTitleBar = true;
+        SetTitleBar(AppTitleBar);
+        SetupGuides();
         Navigation.SelectedItem = Navigation.MenuItems[0];
         ShowPage("overview");
     }
@@ -39,6 +42,9 @@ public sealed partial class MainWindow : Window
         ValidationPanel.Visibility = name == "validation" ? Visibility.Visible : Visibility.Collapsed;
         PackPanel.Visibility = name == "pack" ? Visibility.Visible : Visibility.Collapsed;
         ReportPanel.Visibility = name == "report" ? Visibility.Visible : Visibility.Collapsed;
+        GuidePanel.Visibility = name == "guide" ? Visibility.Visible : Visibility.Collapsed;
+        DiagnosticsPanel.Visibility = name == "diagnostics" ? Visibility.Visible : Visibility.Collapsed;
+        ResourcesPanel.Visibility = name == "resources" ? Visibility.Visible : Visibility.Collapsed;
     }
 
     private void Notice(string message, bool error = false)
