@@ -37,6 +37,8 @@ The analyzer also recognizes \`CSV\`, **TSV (tab-separated)** and **semicolon-se
 The comparison and troubleshooting guides are **screening aids**, not automatic root-cause analysis, verified SVTP compliance, or a replacement for independent engineering judgment.
 
 
+Start with the [practical beginner troubleshooting guide](docs/TROUBLESHOOTING.md) if you are unsure which Windows tool to use. The [Fluent implementation notes](docs/FLUENT.md) explain how the native app shell follows Microsoft design guidance.
+
 ## Why a laptop engineer needs it
 
 Repeated manual effort is often not in a complex equation. It is importing five supplier log files, normalizing mV and mA, checking unusual temperature and SOC behavior, reconciling test status from different teams, and copying consistent results into a review email.
