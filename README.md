@@ -21,7 +21,7 @@
 
 ### Design principles
 
-- **Zero runtime dependencies, zero API keys, zero telemetry:** plain HTML, CSS and JavaScript modules.
+- **Dependency-free calculations, zero API keys, zero telemetry:** core modules are plain HTML/CSS/JavaScript; the optional Motion library is loaded separately for visual transitions.
 - **Privacy-first:** inputs and saved scenarios stay in local browser storage; no backend or accounts.
 - **Accessible by default:** semantic form controls, keyboard navigation, reduced-motion support, mobile layout, dark/light themes.
 - **Bilingual:** Traditional Chinese and English.
