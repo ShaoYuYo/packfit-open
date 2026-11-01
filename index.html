@@ -106,8 +106,8 @@
               <p class="pf-small" data-pf="local">報告只在瀏覽器內處理，不會上傳。</p>
               <div class="subhead" data-pf="orManual">或手動輸入容量（Wh）</div>
               <div class="field-grid">
-                <label class="field"><span class="field-title" data-pf="design">設計容量</span><div class="input-wrap"><input id="pf-design" type="number" inputmode="decimal" min="0.1" max="2000" step="0.1" value="56"><span>Wh</span></div></label>
-                <label class="field"><span class="field-title" data-pf="full">滿充容量</span><div class="input-wrap"><input id="pf-full" type="number" inputmode="decimal" min="0.01" max="2500" step="0.1" value="49"><span>Wh</span></div></label>
+                <label class="field"><span class="field-title" data-pf="design">設計容量</span><div class="input-wrap"><input id="pf-design" type="number" inputmode="decimal" min="0.1" max="2000" step="0.1" value="" placeholder="例：56"><span>Wh</span></div></label>
+                <label class="field"><span class="field-title" data-pf="full">滿充容量</span><div class="input-wrap"><input id="pf-full" type="number" inputmode="decimal" min="0.01" max="2500" step="0.1" value="" placeholder="例：49"><span>Wh</span></div></label>
               </div>
               <button id="pf-analyze" class="secondary-button" type="button" data-pf="analyze">計算健康度</button>
               <p class="pf-message" id="pf-report-status" role="status" aria-live="polite"></p>
@@ -117,6 +117,7 @@
             <div class="overline" data-pf="capacityScore">容量保留率</div>
             <div class="pf-health-layout"><div id="pf-health-ring" class="pf-ring" style="--ring:0%"><div class="pf-ring-inner"><strong id="pf-health-percent">—</strong><small>RETENTION</small></div></div>
             <div class="pf-health-metrics"><div><span data-pf="design">設計容量</span><b id="pf-out-design">—</b></div><div><span data-pf="full">滿充容量</span><b id="pf-out-full">—</b></div><div><span data-pf="cycles">循環次數</span><b id="pf-out-cycles">—</b></div></div></div>
+            <button id="pf-use-capacity" type="button" class="secondary-button" data-pf="useForCalc">將容量套用到續航與生活計算機</button>
             <p id="pf-health-advice" class="pf-small"></p>
           </article>
         </section>
