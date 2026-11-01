@@ -17,3 +17,8 @@ The Service Worker caches only known static same-origin files under this GitHub 
 Imported portable scenario JSON is size-limited, version-checked, and numeric-field-whitelisted before being stored. Only trusted, canonicalized values may become editable scenarios; imported text is displayed through safe DOM text methods. Use public or synthetic example data when reporting bugs.
 
 The web app's optional Google Fonts import makes a request to a third-party font provider while online; this does not send battery readings, scenario values or imported report content. Users who require a fully isolated deployment can remove that stylesheet import.
+
+
+## Optional animation dependency (v0.5)
+
+Motion is MIT-licensed and loaded asynchronously from `https://cdn.jsdelivr.net/npm/motion@13.2.0/+esm` as a purely optional interface enhancement. This causes a normal browser request to the third-party jsDelivr domain when online. The application does not send battery measurements, report contents or saved scenarios to that domain. If the CDN is blocked or the device is offline, browser-native animations are used and the calculator continues functioning. Motion is not cached by the app's service worker, which only caches same-origin static resources. For a fully offline or more restrictive deployment, remove the optional import or vendor a reviewed, licensed copy.
