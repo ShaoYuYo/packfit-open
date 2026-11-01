@@ -6,6 +6,37 @@ PackFit Engineering Desktop is a companion to the [browser edition](https://shao
 
 > Status: developer preview. WinUI source code and the Windows build workflow are included. **Do not call a release downloadable or tested until the GitHub Actions build succeeds and the EXE is tested on a real Windows machine.** No engineering safety or regulatory certification is implied.
 
+## Windows 11 Fluent UI and guided workflow refresh
+
+The native window now follows Microsoft's [modern WinUI 3 app structure](https://learn.microsoft.com/en-us/windows/apps/develop/ui/windows-app-sdk-app-structure): **Mica** background (with Windows 10 fallback), a built-in **TitleBar** integrated with the system caption buttons, icon-based **NavigationView**, Fluent cards, **InfoBar** status messages, **Expander** help sections and native keyboard-focus behavior. This is a real WinUI UI, not a WebView theme.
+
+**Three new workflows for engineers who do not want to memorize commands:**
+
+| Workspace | Purpose | Needs another installation? |
+| --- | --- | --- |
+| **問題排查引導 / Guided investigation** | Step-by-step evidence checklists for sleep-drain, slow charging, unexpected shutdown, heat/throttling and capacity decline; copy or save a reviewable Markdown investigation handoff. | **No** |
+| **Windows 診斷工具箱 / Built-in diagnostics** | One-click read-only \`powercfg /a\`, \`/requests\`, \`/lastwake\`, \`/waketimers\`, \`/devicequery wake_armed\`. Generate Energy Report or SleepStudy to a path chosen by the user; open Reliability Monitor, Event Viewer or DxDiag. | **No**; some reports require administrator permissions or supported sleep modes |
+| **工具與安裝指南 / Official tools** | Check whether \`wpr.exe\`, \`wpa.exe\`, and \`procmon.exe\` are on common executable search paths; explain when ETW or process-level analysis is necessary and link to official Microsoft resources. | Optional, **manual** installation for WPA/Procmon |
+
+Read-only diagnostics never change power scheme settings and do not trigger automatic elevation or install third-party software. Reports stay on the local machine; users must remove sensitive details before sharing.
+
+### Optional Microsoft tools
+
+- **Windows Performance Recorder (WPR):** command-line version usually ships with Windows; captures ETW traces and may require administrator privileges. See [WPR official documentation](https://learn.microsoft.com/en-us/windows-hardware/test/wpt/introduction-to-wpr).
+- **Windows Performance Analyzer (WPA):** used to inspect ETL traces, CPU scheduling, power/performance timelines. The graphical tool is included in the **Windows Performance Toolkit** from the [Windows ADK official download page](https://learn.microsoft.com/en-us/windows-hardware/get-started/adk-install/).
+- **Process Monitor (Procmon):** Microsoft Sysinternals utility useful for file, registry and process/driver activity investigations. [Official download and guide](https://learn.microsoft.com/en-us/sysinternals/downloads/procmon).
+
+The app opens these Microsoft pages on user request. **It does not auto-download, install or bypass enterprise IT policy.**
+
+### Compare many supplier and system logs without Excel preprocessing
+
+The **Telemetry Screening** screen can import **up to 12 local log files** at once, applying the same explicitly selected limits to each. A compact comparison lists sample counts, peak temperatures and flag counts. All successful file results are included in the exported Markdown report, along with any failed file imports.
+
+The analyzer also recognizes \`CSV\`, **TSV (tab-separated)** and **semicolon-separated** rows. Headers explicitly declaring \`BatteryVoltage_mV\`, \`BattCurrent_mA\`, \`BatteryTemp_C\`, \`BatterySOC_pct\` and similar supported aliases are accepted without manually converting units in Excel. Unitless electrical values are **not silently guessed**. Time zone and current sign still require confirmation.
+
+The comparison and troubleshooting guides are **screening aids**, not automatic root-cause analysis, verified SVTP compliance, or a replacement for independent engineering judgment.
+
+
 ## Why a laptop engineer needs it
 
 Repeated manual effort is often not in a complex equation. It is importing five supplier log files, normalizing mV and mA, checking unusual temperature and SOC behavior, reconciling test status from different teams, and copying consistent results into a review email.
@@ -19,7 +50,7 @@ This desktop edition targets those repetitive steps:
 | **Telemetry Screening** | Import timestamped CSV, convert mV/mA to V/A, flag thermal/voltage/current/SOC/time-gap anomalies | Find candidate suspect ranges in long logs |
 | **Validation Matrix** | Read test cases with explicit min/max requirements; classify PASS/FAIL/NOT RUN | Review and track outstanding SVTP-like test cases without recreating formulas |
 | **Pack Estimation** | Compute S/P energy, cell+overhead mass, envelope volume, Wh/kg, Wh/L and ideal runtime | Quickly sanity-check competing public or approved design assumptions |
-| **Engineering Report** | Generate an auditable Markdown report with findings, thresholds and reviewer checklist | Prepare a consistent review handoff rather than copying dozens of values |
+| **Engineering Report** | Generate auditable Markdown reports with flags, test verdicts, batch comparisons and review checklists | Prepare a consistent handoff instead of copying results across tools |
 
 **Important:** Findings are *screening flags*, not root-cause conclusions. Team reviews, battery manufacturer specifications, IEC/UL/UN transportation requirements and approvals remain necessary. You must independently validate thresholds and interpretations.
 
@@ -79,7 +110,7 @@ Timestamp,Voltage_V,Current_A,Temp_C,SOC_pct
 - Pack voltage range, maximum absolute current, temperature thresholds, SOC slope and sample-gap threshold are user-configurable.
 - A **disabled voltage/current limit** is not a PASS; it means this rule is not checked.
 - Energy integration uses approximate trapezoidal voltage×current, for periods where both are available, and is not a calibrated capacity measurement.
-- Max CSV input: 12 MB or 200,000 rows. Only first 1,000 findings are expanded in reports; the full count is retained.
+- Max CSV input: 12 MB or 200,000 rows per file; batch mode accepts up to 12 files and 50 MB total. Only first 1,000 findings are expanded in reports; the full count is retained.
 
 **No universal battery limit:** the default temperatures (−20°C / 60°C) are *illustrative*, not specifications for a particular chemistry, model, OEM or safety standard. Consult your approved design and test plan.
 
