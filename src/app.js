@@ -4,6 +4,7 @@ import {PACK_PRESETS,DEVICE_PRESETS} from "./presets.js";
 import {readSettings,writeSettings,readScenarios,writeScenarios,MAX_SCENARIOS} from "./storage.js";
 import {scenariosToCsv,downloadCsv} from "./csv.js";
 import {translate} from "./i18n.js";
+import {initializeConsumer,translateConsumer,consumerSectionTitle} from "./consumer-ui.js";
 
 const el = (id) => document.getElementById(id);
 const $ = (selector) => document.querySelector(selector);
@@ -109,9 +110,9 @@ function renderPack() {
   el("save-scenario").disabled = !packResult;
   el("export-single").disabled = !packResult;
 }
-function panelTitle(key) { return t({overview:"navOverview",studio:"navStudio",compare:"navCompare",method:"navMethod"}[key]); }
+function panelTitle(key) { return key==="health"||key==="everyday" ? consumerSectionTitle(key,settings.language) : t({overview:"navOverview",studio:"navStudio",compare:"navCompare",method:"navMethod"}[key]); }
 function setPanel(panel) {
-  const allowed = ["overview","studio","compare","method"];
+  const allowed = ["overview","health","everyday","studio","compare","method"];
   const active = allowed.includes(panel) ? panel : "overview";
   for (const button of $$("[data-tab]")) {
     const chosen = button.dataset.tab===active;
@@ -141,7 +142,7 @@ function updateLocale() {
   }
   setText("language-toggle",settings.language==="en"?"繁":"EN");
   el("language-toggle").setAttribute("aria-label",settings.language==="en"?"切換成繁體中文":"Switch to English");
-  renderRuntime();renderPack();renderCompare();
+  renderRuntime();renderPack();renderCompare();translateConsumer(settings.language);
   setText("current-section",panelTitle($(".nav-item.is-active")?.dataset.tab||"overview"));
 }
 function updateTheme() {
@@ -270,3 +271,4 @@ function setup() {
   window.addEventListener("hashchange",()=>setPanel(location.hash.slice(1)));
 }
 setup();
+initializeConsumer(()=>settings.language);
