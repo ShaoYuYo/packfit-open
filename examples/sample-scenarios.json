@@ -1,0 +1,36 @@
+{
+  "format": "packfit.scenarios",
+  "version": 1,
+  "scenarios": [
+    {
+      "name": "Illustrative slim notebook (3S1P)",
+      "input": {
+        "series": 3,
+        "parallel": 1,
+        "nominalCellV": 3.85,
+        "cellCapacityMah": 5000,
+        "cellMassG": 57,
+        "overheadMassG": 65,
+        "xMm": 240,
+        "yMm": 70,
+        "zMm": 6.8,
+        "loadW": 16
+      }
+    },
+    {
+      "name": "Illustrative compact device (2S1P)",
+      "input": {
+        "series": 2,
+        "parallel": 1,
+        "nominalCellV": 3.85,
+        "cellCapacityMah": 3600,
+        "cellMassG": 46,
+        "overheadMassG": 45,
+        "xMm": 170,
+        "yMm": 64,
+        "zMm": 7,
+        "loadW": 8
+      }
+    }
+  ]
+}
