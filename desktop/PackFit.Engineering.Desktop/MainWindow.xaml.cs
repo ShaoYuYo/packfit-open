@@ -253,8 +253,10 @@ public sealed partial class MainWindow : Window
 
     private string CreateReport()
     {
-        return EngineeringReport.Build(ProjectBox.Text, AuthorBox.Text, _battery,
+        string review=EngineeringReport.Build(ProjectBox.Text, AuthorBox.Text, _battery,
             _telemetry, _matrix, _pack, _limits);
+        string batch=BatchReport();
+        return string.IsNullOrWhiteSpace(batch)?review:review+"\n\n"+batch;
     }
 
     private void PreviewReportClick(object sender, RoutedEventArgs e)
