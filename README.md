@@ -8,6 +8,10 @@
 
 > **EXE availability is conditional on a successful Windows Actions build.** The workflow creates a ZIP with `PackFit.Engineering.exe` and its runtime dependencies; it also attempts an optional standalone single-file EXE. Do not claim it is downloadable or verified before the build passes. The desktop app is a developer preview, not a certified battery diagnostic or approval tool.
 
+The native desktop now includes a **Windows 11 Fluent shell** (Mica, integrated TitleBar/navigation, InfoBar and progressive help), a guided investigation assistant for common notebook issues, a **read-only Windows diagnostic toolbox** and links to optional official Microsoft tools. It can also batch-screen up to 12 CSV/TSV logs at once and produce a consolidated review handoff.
+
+[Desktop troubleshooting guide](desktop/docs/TROUBLESHOOTING.md) · [Fluent UI implementation](desktop/docs/FLUENT.md) · [Windows build workflow](https://github.com/ShaoYuYo/packfit-open/actions/workflows/desktop-winui.yml)
+
 The existing browser-based application remains available below.
 
 ![CI](https://github.com/ShaoYuYo/packfit-open/actions/workflows/ci.yml/badge.svg)
