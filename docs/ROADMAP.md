@@ -27,12 +27,18 @@ This roadmap records *planned* work rather than claiming implemented features or
 - Integrated optional open-source Motion while retaining native offline fallback.
 - Expanded color and interaction regression checks.
 
-## v0.6 — Quality improvements (proposed)
+## v0.6 — System themes and Device Insights (implemented)
+- Default appearance follows OS/browser system preferences and updates automatically.
+- Unified responsive layout for all seven workspaces.
+- Device hardware hints, user-initiated WebGL inspection and local computation probe.
+- Extended regression tests; privacy and uncertainty made explicit.
+
+## v0.7 — Quality improvements (proposed)
 - Browser-level visual/accessibility integration tests, supported Windows battery report fixture cases.
 - Independent review of math and language clarity; explicit load measurement guidance.
 - Improve PWA icon compatibility and real-world offline validation.
 
-## v0.7 — Deeper analysis (proposed; research required)
+## v0.8 — Deeper analysis (proposed; research required)
 - Optional variable-workload timelines and sensitivity plots with public reproducible assumptions.
 - Sensitivity plots for efficiency, reserve and average load, with reproducible calculations.
 - Portable version migrations for JSON backups, with explicit backward compatibility tests.
