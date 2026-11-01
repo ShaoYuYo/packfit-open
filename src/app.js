@@ -3,6 +3,7 @@ import {formatNumber,formatDuration} from "./format.js";
 import {PACK_PRESETS,DEVICE_PRESETS} from "./presets.js";
 import {readSettings,writeSettings,readScenarios,writeScenarios,MAX_SCENARIOS} from "./storage.js";
 import {scenariosToCsv,downloadCsv} from "./csv.js";
+import {serializeScenarios,parseScenarioFile,MAX_JSON_CHARS} from "./scenario-transfer.js";
 import {translate} from "./i18n.js";
 import {initializeConsumer,translateConsumer,consumerSectionTitle} from "./consumer-ui.js";
 
@@ -156,6 +157,7 @@ function scenarioRows() {
 function renderCompare() {
   setText("scenario-count",scenarios.length+" / "+MAX_SCENARIOS+" "+t("countSaved"));
   el("export-comparison").disabled = scenarios.length===0;
+  el("export-json").disabled = scenarios.length===0;
   el("clear-scenarios").disabled = scenarios.length===0;
   el("compare-empty").hidden = scenarios.length>0;
   el("compare-content").hidden = scenarios.length===0;
@@ -260,6 +262,32 @@ function setup() {
   el("save-scenario").addEventListener("click",saveScenario);
   el("export-single").addEventListener("click",()=>{
     if(currentPackInput)downloadCsv(scenariosToCsv([{name:"PackFit Studio",input:currentPackInput}]),"packfit-scenario.csv");
+  });
+  el("import-json").addEventListener("click",()=>el("import-json-file").click());
+  el("export-json").addEventListener("click",()=>{
+    if(!scenarios.length)return;
+    const json=serializeScenarios(scenarios);
+    const url=URL.createObjectURL(new Blob([json],{type:"application/json;charset=utf-8"}));
+    const link=document.createElement("a");
+    link.href=url;link.download="packfit-scenarios.json";
+    document.body.append(link);link.click();link.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),1000);
+  });
+  el("import-json-file").addEventListener("change",async(event)=>{
+    const input=event.target, file=input.files?.[0];
+    if(!file)return;
+    const status=el("scenario-import-status");
+    try{
+      if(file.size>MAX_JSON_CHARS)throw new Error("tooLarge");
+      const items=parseScenarioFile(await file.text());
+      if(scenarios.length && !window.confirm(t("importConfirm")))return;
+      if(!writeScenarios(items))throw new Error("storage");
+      scenarios=items;
+      status.textContent=t("importSuccess")+": "+items.length;
+      renderCompare();
+    }catch(error){
+      status.textContent=t(error?.message==="tooLarge"?"importOversized":"importFailure");
+    }finally{input.value="";}
   });
   el("export-comparison").addEventListener("click",()=>{if(scenarios.length)downloadCsv(scenariosToCsv(scenarios),"packfit-comparison.csv");});
   el("clear-scenarios").addEventListener("click",()=>{
