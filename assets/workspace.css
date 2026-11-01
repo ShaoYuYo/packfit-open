@@ -1,0 +1,240 @@
+/**
+ * PackFit 0.6 workspace refresh.
+ * A single layout scale applied across ALL seven workspaces, including Device.
+ * Existing component CSS remains for fallback; these are the final theme rules.
+ */
+:root{
+  --page-max:1360px;--ui-radius:16px;--ui-radius-sm:11px;
+  --ui-gap:18px;--focus-shadow:0 0 0 3px rgba(118,81,94,.14);
+}
+body{line-height:1.55}
+body[data-theme="light"]{--bg:#f6f3f0;--panel:#fffdfb;--panel2:#f1ebe7;--field:#fcf9f7;--border:#e4dbd7;--hero:#eee8e3}
+body[data-theme="dark"]{--bg:#19171a;--panel:#262226;--panel2:#332b31;--field:#211d21;--border:#4a4146;--hero:#332c30}
+.app-shell{grid-template-columns:250px minmax(0,1fr)}
+.sidebar{position:sticky;top:0;height:100dvh;padding:28px 15px 20px;display:flex;flex-direction:column;min-width:0}
+.brand{margin:0 10px 33px;align-items:center;gap:10px}
+.brand strong{font-size:19px;line-height:1.2}
+.brand small{font-size:11px;line-height:1.2}
+.nav-label{padding:0 13px;margin:0 0 9px}
+.nav{display:flex;flex-direction:column;gap:3px}
+.nav-item{display:flex;justify-content:flex-start;text-align:left;width:100%;padding:10px 13px;min-height:43px;font-weight:560;border:0;background:transparent}
+.nav-item.is-active:before{display:none}
+.nav-item.is-active{border:0;border-left:3px solid var(--accent-strong);padding-left:10px}
+.nav-item .nav-shortcut{display:none}
+.sidebar-bottom{margin-top:auto}
+.app-body{min-width:0}
+.topbar{height:76px;padding:0 clamp(24px,4vw,57px);display:flex;align-items:center;justify-content:space-between}
+.topbar-actions{display:flex;align-items:center;gap:11px;flex-wrap:nowrap}
+.theme-mode-wrap{display:flex;align-items:center;gap:8px;padding:5px 8px 5px 12px;border:1px solid var(--border);border-radius:12px;background:var(--panel)}
+.theme-mode-wrap span{font-size:11px;color:var(--muted);white-space:nowrap;font-weight:650}
+.theme-mode-wrap select{border:0;outline-offset:2px;background:transparent;color:var(--text);height:29px;font-size:12px;font-weight:650;min-width:90px;max-width:114px;cursor:pointer}
+.theme-mode-wrap select option{background:var(--panel);color:var(--text)}
+.topbar .status-chip{border-radius:10px;padding:7px 10px}
+.icon-button{border-radius:10px}
+.main-content{max-width:var(--page-max);width:100%;margin:0 auto;padding:35px clamp(24px,4vw,55px) 76px}
+.page-heading,.pf-page-title,.device-heading{padding:14px 0 29px;max-width:940px}
+.page-heading h1,.pf-page-title h1,.device-heading h1{font-size:clamp(32px,3.5vw,47px)!important;font-weight:730;letter-spacing:-.052em;line-height:1.2}
+.page-heading>.muted{max-width:720px;font-size:14px;margin-top:12px}
+.page-heading .overline{font-size:11px;letter-spacing:.075em}
+.section-head{margin:42px 0 18px}
+.section-head h2{font-size:22px}
+.panel{border:1px solid var(--border);border-radius:var(--ui-radius);padding:26px;box-shadow:0 5px 19px var(--shadow)}
+.panel:hover{box-shadow:0 5px 19px var(--shadow)}
+.panel-top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+.panel-top h3{font-size:17px;margin-top:7px}
+.panel-top .overline{font-size:10px}
+.field-grid{gap:14px 17px}
+.field{min-width:0}
+.field-title{font-size:12px;font-weight:590;line-height:1.5}
+.input-wrap{width:100%;height:46px;background:var(--field);border:1px solid var(--border)}
+.input-wrap:focus-within{box-shadow:var(--focus-shadow)}
+.input-wrap input{min-width:0;width:100%;font-size:15px;font-variant-numeric:tabular-nums}
+.input-wrap span{white-space:nowrap}
+.field select{min-height:46px;width:100%;font-size:13px}
+.subhead{padding:9px 0;margin-top:20px;border-bottom:1px solid var(--line);font-size:12px;font-weight:700}
+.helper,.pf-small,.consumer-caveat,.device-footnote{font-size:12px;line-height:1.75}
+.primary-button,.secondary-button,.danger-button,.preset-button{min-height:42px;border-radius:10px;font-size:12px;font-weight:680;padding:10px 15px}
+.primary-button:disabled,.secondary-button:disabled{opacity:.5;cursor:not-allowed}
+:where(a,button,input,select,summary):focus-visible{outline:2px solid var(--accent-strong);outline-offset:3px}
+.sr-only:focus-visible{position:static;clip:auto;width:auto;height:auto}
+.status-chip,.result-status{letter-spacing:0;font-size:11px}
+.metric-row{display:flex;align-items:center;justify-content:space-between;gap:14px;min-height:37px;font-variant-numeric:tabular-nums}
+.metric-row strong,.metric-row b{overflow-wrap:anywhere;text-align:right}
+/* Overview: primary purpose front and center, fast calculators immediately below. */
+.hero,.hero.hero-overview{min-height:300px;padding:38px clamp(27px,3.6vw,48px);gap:38px;border-radius:19px;align-items:center}
+.hero h1{font-size:clamp(35px,3.9vw,57px);line-height:1.18}
+.hero-desc{font-size:14px}
+.sample-surface{max-width:340px;background:var(--panel);border-radius:16px}
+.overview-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:var(--ui-gap)}
+.overview-grid>.panel{min-width:0;height:100%}
+.form-panel>.field{margin-bottom:16px}
+.result-panel{display:flex;flex-direction:column}
+.runtime-main{padding:10px 0 24px}
+.result-footer{margin-top:auto}
+.pf-intro-banner{margin:19px 0;display:grid;grid-template-columns:48px minmax(0,1fr) auto;padding:19px 22px;gap:18px;align-items:center}
+.pf-intro-symbol{width:48px;height:48px}
+.pf-intro-banner h3{font-size:15px}
+.pf-intro-banner p{margin-top:4px}
+.device-discover{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:15px;align-items:center;padding:17px 20px;border:1px solid var(--border);border-radius:14px;background:var(--panel);margin:13px 0 18px}
+.device-discover-icon{display:grid;place-items:center;width:44px;height:44px;border:1px solid var(--border);border-radius:12px;background:var(--field);color:var(--accent-strong);font-size:22px}
+.device-discover strong{font-size:13px}
+.device-discover p{font-size:12px;color:var(--muted);line-height:1.7;margin:5px 0 0}
+.mini-grid{gap:var(--ui-gap)}
+.mini-card{padding:20px;border-radius:14px}
+.plan-panel{margin-top:23px}
+.plan-layout{grid-template-columns:minmax(0,1.2fr) minmax(260px,.8fr);gap:23px}
+.plan-activity{background:var(--field);border:1px solid var(--border);grid-template-columns:minmax(115px,1.1fr) minmax(0,.8fr) minmax(0,.8fr)}
+.plan-output{background:var(--panel2);border-color:var(--border)}
+/* Battery health, consumer tools and calculations share column and header rhythm. */
+.pf-two{grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--ui-gap)}
+.pf-surface{min-width:0;display:flex;flex-direction:column;gap:5px;padding:26px}
+.pf-card-heading{min-height:74px}
+.pf-card-heading h3{font-size:18px}
+.pf-live{min-height:190px}
+.pf-steps{border:1px solid var(--border);padding:17px}
+.pf-command{gap:11px}
+.pf-retention{margin-top:var(--ui-gap)}
+.pf-health-metrics{gap:12px}
+.pf-health-metrics>div{background:var(--field)}
+.pf-three{grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--ui-gap)}
+.pf-tool{display:flex;flex-direction:column;gap:5px;padding:24px}
+.pf-tool .pf-card-heading{min-height:113px}
+.pf-result{margin-top:auto}
+.pf-tips{gap:var(--ui-gap)}
+/* Engineering studio: configuration sidebar + readable output. */
+.preset-strip{display:flex;align-items:center;flex-wrap:wrap;gap:9px;padding:13px 16px;margin-bottom:18px;border:1px solid var(--border);border-radius:13px;background:var(--panel)}
+.preset-strip>span{color:var(--muted);font-size:11px;font-weight:700;margin-right:4px}
+.preset-button{border:1px solid var(--border);background:var(--field);font-size:12px;min-height:38px}
+.studio-grid{display:grid;grid-template-columns:minmax(0,1.02fr) minmax(0,.98fr);gap:var(--ui-gap);align-items:start}
+.studio-grid>.panel{min-width:0}
+.studio-results{display:grid;gap:var(--ui-gap);min-width:0}
+.pack-visual-panel,.detail-panel{min-width:0}
+.kpi-grid{gap:12px}
+.kpi{border:1px solid var(--border);box-shadow:none;border-radius:13px;padding:16px}
+.kpi strong{font-size:clamp(20px,2.7vw,29px)}
+.detail-actions{display:flex;gap:9px;flex-wrap:wrap}
+.cell-diagram{max-width:100%;overflow-x:auto}
+/* Comparison page: actions wrap; charts, tables and cards stay readable. */
+.comparison-toolbar{display:flex;align-items:center;justify-content:space-between;gap:13px;flex-wrap:wrap;padding:16px;border:1px solid var(--border);background:var(--panel);border-radius:13px}
+.comparison-toolbar>div{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-start}
+.comparison-toolbar .danger-button{margin-left:auto}
+.scenario-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--ui-gap)}
+.scenario-card{min-width:0}
+.chart-panel,.table-panel{margin-top:var(--ui-gap)}
+.chart-panel{overflow:hidden}
+.chart-row{min-width:0}
+.chart-fill{transition:width 260ms cubic-bezier(.22,.72,.28,1)}
+.table-scroll{max-width:100%;overflow-x:auto}
+#comparison-table{min-width:620px;font-size:12px}
+#comparison-table th,#comparison-table td{padding:12px 13px;border-bottom:1px solid var(--line)}
+.empty-state{border:1px dashed var(--border);background:var(--panel);border-radius:16px;padding:45px 24px}
+.method-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--ui-gap)}
+.method-card{min-height:0}
+.method-card .formula{font-size:12px;line-height:1.8;overflow-wrap:anywhere}
+.method-card p{font-size:12px;line-height:1.85;color:var(--muted)}
+.disclaimer-panel{padding:21px;border:1px solid var(--border)}
+.method-footer{display:flex;flex-wrap:wrap;gap:18px}
+/* Device analysis: private resource hints and opt-in diagnostics. */
+.device-heading h1{max-width:760px}
+.device-headline{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(180px,.65fr);gap:30px;align-items:center;background:var(--hero);border:1px solid var(--border);border-radius:18px;padding:31px clamp(24px,3.2vw,42px);margin-bottom:27px}
+.device-headline strong{display:block;font-size:clamp(25px,3.6vw,39px);font-weight:730;letter-spacing:-.045em;line-height:1.32;margin:13px 0 10px;color:var(--text)}
+.device-headline .device-certainty{display:inline-flex;font-size:11px;color:var(--accent-strong);background:var(--panel);border:1px solid var(--border);border-radius:99px;padding:5px 10px}
+.device-headline p{font-size:12px;line-height:1.9;max-width:550px;color:var(--muted);margin:16px 0 0}
+.device-machine-illustration{height:155px;position:relative;display:grid;place-items:center}
+.device-chassis{height:105px;width:176px;border:2px solid var(--accent-strong);border-radius:13px;display:grid;grid-template-columns:repeat(2,1fr);gap:11px;padding:20px;box-shadow:0 12px 35px rgba(66,46,57,.06);transform:rotate(-5deg);background:var(--panel)}
+.device-chassis span{border:1px solid var(--border);border-radius:4px;background:var(--panel2)}
+.device-illustration-label{position:absolute;bottom:0;right:15%;font:650 10px var(--mono-font);letter-spacing:.1em;color:var(--muted)}
+.device-section-bar{display:flex;justify-content:space-between;align-items:center;gap:16px;margin:22px 0 16px}
+.device-section-bar h2{font-size:18px;margin:0}
+.device-stat-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px}
+.device-stat{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:20px 19px;min-width:0}
+.device-stat span{font-size:11px;color:var(--muted);display:block;margin-bottom:12px}
+.device-stat strong{font-size:17px;line-height:1.4;font-weight:720;letter-spacing:-.025em;display:block;overflow-wrap:anywhere}
+.device-footnote{color:var(--muted);margin:12px 0 25px}
+.device-tool-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--ui-gap)}
+.device-tool-panel{display:flex;flex-direction:column;gap:15px;min-width:0;padding:26px}
+.device-tool-header{display:flex;gap:14px;align-items:flex-start}
+.device-icon-symbol{width:42px;height:42px;flex:none;display:grid;place-items:center;background:var(--panel2);color:var(--accent-strong);font-size:19px;border-radius:12px}
+.device-tool-header h3{font-size:17px;margin:3px 0 6px}
+.device-tool-header p{font-size:12px;color:var(--muted);line-height:1.7;margin:0}
+.device-details{margin:4px 0 0}
+.device-details div{display:grid;grid-template-columns:minmax(115px,.8fr) minmax(0,1.2fr);gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}
+.device-details dt{font-size:12px;color:var(--muted)}
+.device-details dd{font-size:12px;font-weight:650;margin:0;overflow-wrap:anywhere;text-align:right}
+.device-action{align-self:flex-start;margin-top:auto}
+.device-benchmark-readout{background:var(--panel2);border-radius:12px;padding:22px;margin-top:6px}
+.device-benchmark-readout span{color:var(--muted);font-size:11px}
+.device-benchmark-readout strong{display:block;font-size:30px;letter-spacing:-.055em;font-variant-numeric:tabular-nums;margin-top:9px;color:var(--accent-strong)}
+.device-disclaimer{margin:23px 0;background:var(--panel2);border:1px solid var(--border);border-radius:13px;padding:19px 22px}
+.device-disclaimer h3{font-size:13px;margin:0 0 9px}
+.device-disclaimer p{font-size:12px;line-height:1.8;color:var(--muted);margin:0}
+.footer{border-top:1px solid var(--border);padding:22px clamp(24px,4vw,55px);margin-top:20px}
+@media(max-width:1190px){
+  .device-stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .pf-three{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .pf-three>.pf-tool:last-child{grid-column:span 2}
+}
+@media(max-width:1040px){
+  .app-shell{grid-template-columns:1fr}
+  .sidebar{position:relative;height:auto;display:flex;flex-direction:row;flex-wrap:wrap;align-items:center;gap:10px;padding:13px 17px}
+  .brand{margin:0 10px 0 0}
+  .sidebar .nav{display:flex;flex-direction:row;flex-wrap:wrap;gap:4px;justify-content:flex-start}
+  .sidebar .nav-item{width:auto!important;flex:none;min-height:38px;padding:9px 12px;border:0;border-radius:8px}
+  .sidebar .nav-item.is-active{border:0;background:var(--panel2)}
+  .sidebar-bottom,.sidebar-note,.nav-label{display:none}
+  .topbar{height:65px}
+  .studio-grid{grid-template-columns:1fr}
+  .studio-results{grid-template-columns:1fr 1fr;align-items:start}
+  .detail-panel{grid-column:span 2}
+}
+@media(max-width:770px){
+  .sidebar{position:sticky;top:0;z-index:20;padding:10px 14px;background:var(--sidebar);display:block}
+  .brand{margin-bottom:10px}
+  .sidebar .nav{display:flex;flex-wrap:nowrap;overflow-x:auto;overscroll-behavior-inline:contain;scrollbar-width:none;gap:4px}
+  .sidebar .nav::-webkit-scrollbar{display:none}
+  .sidebar .nav-item{white-space:nowrap}
+  .topbar{height:auto;min-height:56px;padding:9px 14px}
+  .topbar .status-chip{display:none}
+  .theme-mode-wrap{padding:3px 5px 3px 9px}
+  .theme-mode-wrap span{display:none}
+  .theme-mode-wrap select{min-width:78px;font-size:11px}
+  .main-content{padding:23px 15px 55px}
+  .hero,.hero.hero-overview{padding:27px 21px;min-height:0;display:block}
+  .hero .hero-visual{display:none}
+  .hero h1{font-size:clamp(33px,8vw,45px)}
+  .overview-grid,.pf-two,.pf-three,.method-grid,.device-tool-grid{grid-template-columns:1fr}
+  .pf-three>.pf-tool:last-child{grid-column:span 1}
+  .studio-results{grid-template-columns:1fr}
+  .detail-panel{grid-column:span 1}
+  .page-heading h1{font-size:clamp(30px,8vw,40px)!important}
+  .pf-intro-banner,.device-discover{grid-template-columns:46px minmax(0,1fr);gap:11px;padding:18px}
+  .pf-intro-banner>.primary-button,.device-discover>.secondary-button{grid-column:1/-1;width:100%}
+  .plan-layout{grid-template-columns:1fr}
+  .plan-activity{grid-template-columns:1fr 1fr}
+  .plan-activity strong{grid-column:1/-1}
+  .device-headline{grid-template-columns:1fr;padding:25px}
+  .device-machine-illustration{display:none}
+  .device-stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .comparison-toolbar{align-items:stretch}
+  .comparison-toolbar>div{width:100%}
+  .scenario-cards{grid-template-columns:1fr}
+  .footer{padding:20px 15px}
+}
+@media(max-width:450px){
+  .topbar .crumb-muted,.topbar .crumb-slash{display:none}
+  .theme-mode-wrap select{max-width:87px}
+  .main-content{padding:16px 11px 42px}
+  .panel,.pf-surface,.pf-tool,.device-tool-panel{padding:18px}
+  .field-grid{gap:12px}
+  .device-stat{padding:16px}
+  .device-stat strong{font-size:15px}
+  .pf-live{flex-wrap:wrap}
+  .device-details div{grid-template-columns:1fr;gap:5px}
+  .device-details dd{text-align:left}
+  .comparison-toolbar>div>*{flex:1 1 120px}
+}
+@media(prefers-reduced-motion:reduce){
+  .nav-item,.primary-button,.secondary-button,.chart-fill,.track-fill{
+    animation:none!important;transition:none!important;scroll-behavior:auto!important
+  }
+}
