@@ -4,6 +4,7 @@ import {readFileSync,existsSync} from "node:fs";
 import {fileURLToPath} from "node:url";
 import {resolve,dirname} from "node:path";
 import {DICTIONARY} from "../src/i18n.js";
+import {CONSUMER_I18N} from "../src/consumer-i18n.js";
 
 const root=resolve(dirname(fileURLToPath(import.meta.url)),"..");
 const read=(path)=>readFileSync(resolve(root,path),"utf8");
@@ -32,4 +33,16 @@ test("all relative script modules and stylesheet files exist",()=>{
 test("no runtime CDN JavaScript or remote telemetry endpoint",()=>{
   assert.doesNotMatch(html,/<script[^>]+src="https?:\/\//i);
   assert.doesNotMatch(app,/\bfetch\s*\(|\bsendBeacon\s*\(/);
+});
+test("consumer workspace translations and reference keys are complete",()=>{
+  assert.deepEqual(Object.keys(CONSUMER_I18N["zh-TW"]).sort(),Object.keys(CONSUMER_I18N.en).sort());
+  const used=[...html.matchAll(/data-pf="([^"]+)"/g)].map((m)=>m[1]);
+  const missing=[...new Set(used.filter((key)=>!(key in CONSUMER_I18N.en)))];
+  assert.deepEqual(missing,[]);
+});
+test("consumer routes have matching navigation controls and panels",()=>{
+  for(const route of ["health","everyday"]){
+    assert.ok(html.includes('data-tab="'+route+'"'));
+    assert.ok(html.includes('data-panel="'+route+'"'));
+  }
 });
