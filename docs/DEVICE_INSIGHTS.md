@@ -54,3 +54,10 @@ There is no registration, remote hardware collection, upload or tracking. New ha
 - Full GPU identification unavailable on many privacy-minded devices.
 - Performance probe is not standardized; desktop/mobile devices may behave very differently.
 - Independent cross-browser, accessibility and real device QA is still required.
+
+
+## Optional Windows DxDiag import (v0.6.1)
+
+To obtain names that browsers intentionally hide, launch Windows DxDiag (press Win + R, type `dxdiag`, Enter). Choose **Save All Information** to create a `.txt` report, then select that file in Device Insights. The browser parses only `Processor`, `Memory`, `Operating System`, and up to five `Card name` entries. It does not render or upload the full report, persist a device name or generate a hardware identifier. The report file itself may contain private fields, so avoid sharing it publicly. Language/format variations may be unsupported.
+
+Reference: [Intel — How to extract DxDiag information](https://www.intel.com/content/www/us/en/support/articles/000022556.html).
