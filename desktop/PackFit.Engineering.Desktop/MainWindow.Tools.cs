@@ -30,6 +30,9 @@ public sealed partial class MainWindow
             }
         }
     }
+    private void AppTitleBar_PaneToggleRequested(TitleBar sender,object args)
+        => Navigation.IsPaneOpen = !Navigation.IsPaneOpen;
+
     private void GoGuideClick(object sender,RoutedEventArgs e)=>SelectPage("guide");
     private void GoDiagnosticsClick(object sender,RoutedEventArgs e)=>SelectPage("diagnostics");
     private void GoResourcesClick(object sender,RoutedEventArgs e)=>SelectPage("resources");
