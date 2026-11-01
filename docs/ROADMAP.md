@@ -17,12 +17,17 @@ This roadmap records *planned* work rather than claiming implemented features or
 - Scoped offline cache and web app manifest.
 - More tests and beginner/user support documentation.
 
-## v0.4 — Quality improvements (proposed)
+## v0.4 — Typography and interaction refresh (implemented)
+- Improved Chinese/English font pairing and consistent readable hierarchy.
+- Replaced generic visual effects, rebuilt first-visit language and reduced continuous animation.
+- Preserved calculation behavior and reduced-motion support.
+
+## v0.5 — Quality improvements (proposed)
 - Browser-level visual/accessibility integration tests, supported Windows battery report fixture cases.
 - Independent review of math and language clarity; explicit load measurement guidance.
 - Improve PWA icon compatibility and real-world offline validation.
 
-## v0.5 — Deeper analysis (proposed; research required)
+## v0.6 — Deeper analysis (proposed; research required)
 - Optional variable-workload timelines and sensitivity plots with public reproducible assumptions.
 - Sensitivity plots for efficiency, reserve and average load, with reproducible calculations.
 - Portable version migrations for JSON backups, with explicit backward compatibility tests.
