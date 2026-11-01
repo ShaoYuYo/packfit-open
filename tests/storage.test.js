@@ -15,11 +15,11 @@ const valid = (id) => ({id:String(id),name:"Scenario "+id,input:{...PACK_PRESETS
 test("empty or corrupted storage returns safe defaults",()=>{
   store.clear();
   assert.deepEqual(readScenarios(),[]);
-  assert.deepEqual(readSettings(),{language:"zh-TW",theme:"dark"});
+  assert.deepEqual(readSettings(),{language:"zh-TW",theme:"light"});
   store.set("packfit:scenarios:v1","{bad-json");
   assert.deepEqual(readScenarios(),[]);
   store.set("packfit:settings:v1","{bad-json");
-  assert.deepEqual(readSettings(),{language:"zh-TW",theme:"dark"});
+  assert.deepEqual(readSettings(),{language:"zh-TW",theme:"light"});
 });
 test("saved scenarios round trip and do not leak arbitrary fields",()=>{
   store.clear();
@@ -49,5 +49,5 @@ test("settings preserve supported language and theme only",()=>{
   assert.equal(writeSettings({language:"en",theme:"light"}),true);
   assert.deepEqual(readSettings(),{language:"en",theme:"light"});
   store.set("packfit:settings:v1",JSON.stringify({language:"invalid",theme:"invalid"}));
-  assert.deepEqual(readSettings(),{language:"zh-TW",theme:"dark"});
+  assert.deepEqual(readSettings(),{language:"zh-TW",theme:"light"});
 });
