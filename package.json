@@ -1,7 +1,7 @@
 {
   "name": "packfit-open",
   "private": true,
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Open-source privacy-first battery pack and runtime feasibility toolkit",
   "type": "module",
   "scripts": {
