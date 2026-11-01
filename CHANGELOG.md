@@ -1,5 +1,14 @@
 # Changelog
 
+## Desktop Fluent + diagnostics workflow update — 2026-11-01
+
+- Replaced the original plain WinUI shell with Mica, native TitleBar/pane toggle, Fluent navigation icons, layered cards and pinned InfoBar.
+- Added guided investigation checklists for Modern Standby drain, charging issues, sudden shutdown, heat/throttling and battery capacity decline, with editable handoff notes.
+- Added read-only Windows powercfg diagnostics, user-selected Energy/SleepStudy HTML reports, native shortcuts to Reliability Monitor/Event Viewer/DxDiag/MSInfo32.
+- Added an official-tools guide for Windows Performance Recorder/Analyzer and Sysinternals Process Monitor, with optional local presence detection and no automatic installation.
+- Added batch screening of up to 12 local telemetry logs, integrated batch summaries in Markdown reports, plus TSV/semicolon-delimited and explicit mV/mA column alias support.
+- Added first-use synthetic CSV templates, source-level regression tests and documentation. Current updated Windows EXE build and launch require validation against a successful workflow run.
+
 ## Desktop engineering developer preview — 2026-11-01
 
 - Added a separate native **WinUI 3 / C#** Windows application alongside the existing browser app (which remains v0.6.1).
