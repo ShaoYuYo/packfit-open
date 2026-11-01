@@ -4,7 +4,7 @@
 
 PackFit Engineering Desktop is a companion to the [browser edition](https://shaoyuyo.github.io/packfit-open/). The web app helps consumers estimate runtime; the desktop app is intended for **laptop battery, power, validation, reliability and system engineers** who need to turn scattered test measurements into clear, reproducible follow-up items.
 
-> Status: developer preview. WinUI source code and the Windows build workflow are included. **Do not call a release downloadable or tested until the GitHub Actions build succeeds and the EXE is tested on a real Windows machine.** No engineering safety or regulatory certification is implied.
+> **Public beta available:** [v0.7.0-beta.1](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.1). Automated browser and C# tests passed; GitHub Actions successfully built both Windows distributions. **Real Windows hardware smoke-testing and enterprise code signing remain unverified.** No engineering safety or regulatory certification is implied.
 
 ## Windows 11 Fluent UI and guided workflow refresh
 
@@ -56,15 +56,19 @@ This desktop edition targets those repetitive steps:
 
 **Important:** Findings are *screening flags*, not root-cause conclusions. Team reviews, battery manufacturer specifications, IEC/UL/UN transportation requirements and approvals remain necessary. You must independently validate thresholds and interpretations.
 
-## How to download an EXE
+## Download and run the first public beta
 
-1. Open [GitHub Actions — Build Windows WinUI Desktop](https://github.com/ShaoYuYo/packfit-open/actions/workflows/desktop-winui.yml).
-2. Open a run that has a **green success** result. If none exists yet, the EXE is **not verified or available**. A maintainer with workflow permissions can manually run it using **Run workflow**.
-3. Under **Artifacts**, download **PackFit-Engineering-WinUI-win-x64**. GitHub downloads the build archive; extract the contents to a folder.
-4. Run `PackFit.Engineering.exe` **from within that extracted folder**. The other files belong to the self-contained WinUI runtime and must stay beside it.
-5. If a second artifact **PackFit-Engineering-single-EXE-win-x64** exists, it is a *separately built optional single-file* variant. First startup of the portable executable can extract runtime components to a temporary directory; do not assume it is zero-extraction.
+**[Open GitHub Releases — v0.7.0-beta.1](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.1)**
 
-GitHub Actions artifacts are retained for **30 days** per workflow configuration. This is a developer preview, currently unsigned. Windows SmartScreen may warn about unsigned executables. Only download from a build you trust; **do not bypass company security policy**. An enterprise release should be signed and tested on managed Windows endpoints.
+The initial beta release has three verified attached assets:
+
+1. [**PackFit-Engineering-win-x64.zip**](https://github.com/ShaoYuYo/packfit-open/releases/download/v0.7.0-beta.1/PackFit-Engineering-win-x64.zip) — recommended. Download, extract every file, then run `PackFit.Engineering.exe` within the extracted folder.
+2. [**PackFit-Engineering-portable-win-x64.exe**](https://github.com/ShaoYuYo/packfit-open/releases/download/v0.7.0-beta.1/PackFit-Engineering-portable-win-x64.exe) — a larger, optional single-file build. It may extract runtime files at startup; do not assume it is zero-extraction.
+3. [**SHA256SUMS.txt**](https://github.com/ShaoYuYo/packfit-open/releases/download/v0.7.0-beta.1/SHA256SUMS.txt) — checksums for confirming the downloaded file matches the published artifact.
+
+The release workflow performed web tests, engineering core tests and native WinUI compilation, then published the binaries from the **same commit**. Compilation and artifact presence are verified; **manual Windows 10/11 launch, hardware diagnostics, accessibility and performance are not yet independently validated**.
+
+This beta is unsigned. Windows SmartScreen may warn about unsigned executables. Only download artifacts you trust; do **not** bypass company security policies. An enterprise deployment would require code signing and managed endpoint testing. [Individual Actions build artifacts](https://github.com/ShaoYuYo/packfit-open/actions/workflows/desktop-winui.yml) are available for developer investigation but are not the preferred user downloads.
 
 ### Build it yourself (Windows 10/11 x64)
 
