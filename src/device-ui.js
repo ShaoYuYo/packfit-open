@@ -1,5 +1,6 @@
 import {normalizeHardwareHints,resourceProfile,graphicsCapabilities} from "./device.js";
 import {formatNumber} from "./format.js";
+import {parseDxDiagReport} from "./dxdiag.js";
 
 export const DEVICE_COPY={
  "zh-TW":{
@@ -19,6 +20,10 @@ export const DEVICE_COPY={
   benchmarkIdle:"尚未測試",benchmarkFailed:"測試未能完成；瀏覽器可能限制背景工作或 Worker。",
   benchmarkHelp:"同一台電腦、同一瀏覽器的數字較有參考性；時間越短代表這次完成得越快。",
   privacyTitle:"隱私與限制",privacyText:"裝置資料只在本頁顯示，不會上傳、追蹤或儲存。瀏覽器為保護隱私，可能故意隱藏、簡化或限制 CPU、RAM、GPU 相關資訊。網站不能可靠判定實際遊戲 FPS。",
+  importTitle:"想看更完整的 Windows 硬體型號？",importIntro:"使用 Windows 的 DxDiag 匯出報告。檔案只在本機解析，既不上傳也不儲存。",
+  importSteps:"按 Win + R，輸入 dxdiag，點「儲存所有資訊」，將文字報告存成 .txt。",
+  importButton:"選擇 DxDiag 文字報告",reportCpu:"CPU 型號",reportRam:"記憶體",reportGpu:"顯示晶片",reportOs:"作業系統",
+  reportMissing:"尚未匯入",reportDone:"已從本機報告讀取硬體規格",reportError:"無法辨識這份 DxDiag 文字報告。請確認檔案格式。",reportTooLarge:"報告超過 2 MB，無法匯入。",
   refresh:"重新讀取",justNow:"從目前瀏覽器讀取",unitThreads:"執行緒",unitGiB:"GB（概略）"
  },
  en:{
@@ -38,11 +43,15 @@ export const DEVICE_COPY={
   benchmarkIdle:"Not tested",benchmarkFailed:"Test could not finish; the browser may restrict workers or background tasks.",
   benchmarkHelp:"Comparing runs on the same device/browser is more useful. Lower milliseconds means faster completion in this specific test.",
   privacyTitle:"Privacy & limitations",privacyText:"Hardware hints stay on this page: no upload, tracking or persistent storage. Browsers may deliberately limit, approximate or conceal CPU/RAM/GPU information. No reliable game FPS prediction is possible.",
+  importTitle:"Want more exact Windows hardware names?",importIntro:"Export a Windows DxDiag report. The file is parsed locally and never uploaded or stored.",
+  importSteps:"Press Win + R, type dxdiag, select Save All Information and save the text report as a .txt file.",
+  importButton:"Choose DxDiag text report",reportCpu:"CPU model",reportRam:"Memory",reportGpu:"Graphics adapters",reportOs:"Operating system",
+  reportMissing:"Not imported",reportDone:"Hardware details read locally",reportError:"Could not read this DxDiag text report. Check the file format.",reportTooLarge:"Report exceeds the 2 MB limit.",
   refresh:"Read again",justNow:"Browser-provided snapshot",unitThreads:"threads",unitGiB:"GB (coarse)"
  }
 };
 let locale="zh-TW";
-let hints=null,graphics=null,probe=null;
+let hints=null,graphics=null,probe=null,diagnostic=null,reportMessage="";
 const $=id=>document.getElementById(id);
 const t=key=>DEVICE_COPY[locale][key]||key;
 function show(id,value){$(id).textContent=String(value);}
@@ -59,6 +68,11 @@ function rerender(){
   show("device-webgl",graphics?(graphics.webgl||t("webglUnavailable")):t("gpuPending"));
   show("device-texture",graphics&&graphics.maxTexture?formatNumber(graphics.maxTexture,locale,0)+" px":t("unknownValue"));
   show("device-benchmark",probe?formatNumber(probe.medianMs,locale,1)+" ms":t("benchmarkIdle"));
+  show("device-report-cpu",diagnostic?.cpu||t("reportMissing"));
+  show("device-report-ram",diagnostic?.ram||t("reportMissing"));
+  show("device-report-gpu",diagnostic?.gpus?.join(" / ")||t("reportMissing"));
+  show("device-report-os",diagnostic?.os||t("reportMissing"));
+  show("device-report-status",reportMessage?t(reportMessage):"");
 }
 export function translateDevice(language){
   locale=language==="en"?"en":"zh-TW";
@@ -110,6 +124,22 @@ export function initializeDevice(getLanguage){
   $("device-refresh").addEventListener("click",refreshHints);
   $("device-probe-gpu").addEventListener("click",probeGraphics);
   $("device-run-bench").addEventListener("click",runProbe);
+  $("device-report-file").addEventListener("change",async(event)=>{
+    const input=event.target,file=input.files?.[0];
+    if(!file)return;
+    if(file.size>2_000_000){
+      reportMessage="reportTooLarge";rerender();input.value="";return;
+    }
+    try{
+      diagnostic=parseDxDiagReport(await file.text());
+      reportMessage="reportDone";
+    }catch{
+      reportMessage="reportError";
+    }finally{
+      input.value="";
+      rerender();
+    }
+  });
   refreshHints();
   translateDevice(getLanguage());
 }
