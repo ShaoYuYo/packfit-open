@@ -1,5 +1,13 @@
 # Changelog
 
+## Desktop engineering developer preview — 2026-11-01
+
+- Added a separate native **WinUI 3 / C#** Windows application alongside the existing browser app (which remains v0.6.1).
+- Introduced pure .NET engineering calculations and a standalone regression runner.
+- Implemented Windows `powercfg` battery capacity reading, unit-aware telemetry CSV analysis, explicit validation matrix PASS/FAIL/NOT RUN classification, nominal pack design estimates, and auditable Markdown report generation.
+- Added synthetic sample CSVs, extensive desktop instructions, and a Windows GitHub Actions workflow that builds self-contained `PackFit.Engineering.exe` distribution artifacts on success.
+- Added an optional single-file EXE publishing attempt; **a successful build and actual Windows execution still require verification**, and the desktop remains a preview rather than a certified engineering tool.
+
 ## 0.6.1 — 2026-11-01
 
 - Added optional, locally parsed Windows DxDiag text import for CPU model, RAM, GPU labels and OS where browser hints are insufficient.
