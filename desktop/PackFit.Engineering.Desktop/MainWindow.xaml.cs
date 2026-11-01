@@ -111,7 +111,7 @@ public sealed partial class MainWindow : Window
                 throw new InvalidOperationException(
                     $"powercfg 失敗（結束碼：{process.ExitCode}）。部分桌機沒有可用電池。");
             string html = await File.ReadAllTextAsync(reportPath);
-            _battery = BatteryReportParser.Parse(html);
+            _battery = await Task.Run(() => BatteryReportParser.Parse(html));
             UpdateBattery();
             Notice("Windows 電池報告已在本機建立並分析。");
         }
@@ -132,7 +132,7 @@ public sealed partial class MainWindow : Window
         {
             var path = await PickFileAsync(".html", ".htm");
             if (path is null) return;
-            _battery = BatteryReportParser.Parse(await File.ReadAllTextAsync(path));
+            _battery = await Task.Run(() => BatteryReportParser.Parse(File.ReadAllText(path)));
             UpdateBattery();
             Notice("已匯入並分析電池容量報告。");
         }
@@ -167,7 +167,7 @@ public sealed partial class MainWindow : Window
             if (path is null) return;
             var thresholds = ReadThresholds();
             string text = await File.ReadAllTextAsync(path);
-            _telemetry = TelemetryAnalyzer.Analyze(text, thresholds);
+            _telemetry = await Task.Run(() => TelemetryAnalyzer.Analyze(text, thresholds));
             _limits = thresholds;
             TelemetryResult.Text = string.Format(Culture,
                 "{0:N0} 筆量測 · {1:N0} 項異常或提示 · 期間 {2:g}\n溫度 {3}～{4} °C · 放電能量估算 {5} Wh",
@@ -195,7 +195,7 @@ public sealed partial class MainWindow : Window
         {
             var path = await PickFileAsync(".csv");
             if (path is null) return;
-            _matrix = ValidationMatrix.Parse(await File.ReadAllTextAsync(path));
+            _matrix = await Task.Run(() => ValidationMatrix.Parse(File.ReadAllText(path)));
             var summary = ValidationMatrix.Summarize(_matrix);
             ValidationResult.Text = string.Format(Culture,
                 "Total {0:N0}   PASS {1:N0}   FAIL {2:N0}   NOT RUN {3:N0}   完成項目通過率 {4}%",
