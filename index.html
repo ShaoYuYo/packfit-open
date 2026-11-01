@@ -245,6 +245,26 @@
               <button id="device-run-bench" class="primary-button device-action" type="button" data-device-i18n="runBenchmark">開始本機測試</button>
             </article>
           </div>
+          <article class="panel device-import-panel">
+            <div class="device-tool-header"><span class="device-icon-symbol" aria-hidden="true">▤</span>
+              <div><h3 data-device-i18n="importTitle">想看完整一點的 Windows 硬體型號？</h3>
+              <p data-device-i18n="importIntro">Windows 可以用 DxDiag 匯出文字報告。檔案只會在本頁分析，無須上傳到伺服器。</p></div>
+            </div>
+            <div class="device-import-instructions">
+              <span data-device-i18n="importSteps">按 Win + R，輸入 dxdiag，然後選擇「儲存所有資訊」，將文字報告存成 .txt。</span>
+              <label class="secondary-button device-import-button" for="device-report-file">
+                <span data-device-i18n="importButton">選擇 DxDiag 文字報告</span>
+              </label>
+              <input id="device-report-file" class="sr-only" type="file" accept=".txt,text/plain" aria-label="Choose DxDiag text file">
+            </div>
+            <div class="device-report-grid">
+              <div><span data-device-i18n="reportCpu">CPU 型號</span><strong id="device-report-cpu">—</strong></div>
+              <div><span data-device-i18n="reportRam">記憶體</span><strong id="device-report-ram">—</strong></div>
+              <div><span data-device-i18n="reportGpu">顯示晶片</span><strong id="device-report-gpu">—</strong></div>
+              <div><span data-device-i18n="reportOs">作業系統</span><strong id="device-report-os">—</strong></div>
+            </div>
+            <p id="device-report-status" class="device-footnote" role="status" aria-live="polite"></p>
+          </article>
           <aside class="device-disclaimer">
             <h3 data-device-i18n="privacyTitle">隱私與限制</h3>
             <p data-device-i18n="privacyText">資訊僅在本頁顯示，不上傳、不追蹤，也不能可靠預估遊戲 FPS。</p>
