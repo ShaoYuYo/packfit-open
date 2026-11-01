@@ -20,7 +20,7 @@ export const DICTIONARY = {
     externalVolume:"外部包絡體積",technicalReadout:"計算結果",metrics:"其他規格",massTotal:"電池組總重量",volumeTotal:"外部體積",
     packRuntime:"選定負載下的理想續航",cellCount:"電芯總數",saveScenario:"+ 儲存到比較",exportCSV:"匯出 CSV",
     compareKicker:"03 / 設計比較",compareTitle:"設計比較 / 並排分析",compareDesc:"最多儲存四組設計，直接比較名目能量、重量與能量密度。",
-    exportAll:"匯出比較 CSV",importJson:"匯入 JSON",exportJson:"備份 JSON",transferNote:"JSON 備份可保存完整且可再次編輯的設計方案，檔案僅在你的裝置處理。",importSuccess:"已匯入設計方案",importFailure:"無法匯入：檔案格式、版本或數值有問題。請確認是 PackFit 匯出的 JSON。",importOversized:"檔案過大，上限為 200 KB。",importConfirm:"匯入將取代目前儲存的設計方案，確定繼續嗎？",clearAll:"清除全部",emptyTitle:"尚未儲存任何設計",emptyDesc:"先到電池設計室調整參數，再將設計儲存到這裡比較。",
+    exportAll:"匯出比較 CSV",importJson:"匯入 JSON",exportJson:"備份 JSON",transferNote:"JSON 備份可保存完整且可再次編輯的設計方案，檔案僅在你的裝置處理。",sampleData:"下載範例設計 ↗",importSuccess:"已匯入設計方案",importFailure:"無法匯入：檔案格式、版本或數值有問題。請確認是 PackFit 匯出的 JSON。",importOversized:"檔案過大，上限為 200 KB。",importConfirm:"匯入將取代目前儲存的設計方案，確定繼續嗎？",clearAll:"清除全部",emptyTitle:"尚未儲存任何設計",emptyDesc:"先到電池設計室調整參數，再將設計儲存到這裡比較。",
     openStudio:"開啟電池設計室",visualCompare:"視覺化比較",normalized:"指標對照",dataTable:"完整數據",detailComparison:"詳細比較",
     methodKicker:"04 / 模型透明化",methodTitle:"數字背後 / 計算方法",methodDesc:"公式完全公開。此工具提供初步規格估算，不取代專業工程驗證或安規認證。",
     methodRuntime:"續航估算",methodRuntimeBody:"r 為預留比例；η 為效率。假設固定平均負載，無法預測老化、溫度、功率峰值或關機門檻。",
