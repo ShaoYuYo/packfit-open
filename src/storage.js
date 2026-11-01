@@ -5,8 +5,8 @@ export const MAX_SCENARIOS = 4;
 export function readSettings() {
   try {
     const value = JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}");
-    return {language: value.language === "en" ? "en" : "zh-TW", theme: value.theme === "light" ? "light" : "dark"};
-  } catch { return {language:"zh-TW",theme:"dark"}; }
+    return {language: value.language === "en" ? "en" : "zh-TW", theme: value.theme === "dark" ? "dark" : "light"};
+  } catch { return {language:"zh-TW",theme:"light"}; }
 }
 export function writeSettings(settings) {
   try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); return true; } catch { return false; }
