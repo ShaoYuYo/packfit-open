@@ -1,5 +1,7 @@
 # PackFit Open
 
+![CI](https://github.com/ShaoYuYo/packfit-open/actions/workflows/ci.yml/badge.svg)
+
 **Battery intelligence, made accessible.** A bilingual, responsive, offline-capable battery runtime estimator and battery pack engineering sandbox.
 
 [Open the live app](https://shaoyuyo.github.io/packfit-open/) · [Issues](https://github.com/ShaoYuYo/packfit-open/issues) · [Methodology](docs/METHODOLOGY.md)
@@ -31,6 +33,8 @@
 - [繁體中文使用指南](docs/USER_GUIDE.zh-TW.md)
 - [English Quick Start](docs/USER_GUIDE.en.md)
 - [Synthetic, downloadable scenario examples](examples/sample-scenarios.json)
+- [Developer module reference](docs/DEVELOPER_API.md)
+- [Release quality checklist](docs/RELEASE_CHECKLIST.md)
 - [Open-source adoption evidence (only verified claims)](docs/PROJECT_EVIDENCE.md)
 
 ## Run
