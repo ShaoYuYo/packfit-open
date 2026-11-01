@@ -6,7 +6,7 @@
 
 [Open the live app](https://shaoyuyo.github.io/packfit-open/) · [Issues](https://github.com/ShaoYuYo/packfit-open/issues) · [Methodology](docs/METHODOLOGY.md)
 
-> **Project status:** v0.6.0 — initial community release. Mathematical feasibility estimates only; not certified engineering analysis.
+> **Project status:** v0.6.1 — initial community release. Mathematical feasibility estimates only; not certified engineering analysis.
 
 ## What you can do
 
@@ -117,3 +117,7 @@ See [design decisions](docs/DESIGN_SYSTEM.md) and [dependency/privacy policy](SE
 **Detailed GPU identification** only runs if you click Check GPU details; it uses WebGL and may return an anonymized renderer or no data. **Computation probe** runs only after you choose Run local test, in a dedicated Worker and reports elapsed milliseconds for a fixed JavaScript task. Thermal conditions, background work and browsers affect the result. Neither test uploads, stores or fingerprints device information; there is no analytics endpoint.
 
 The seven workspaces have a unified responsive layout in `assets/workspace.css`, with larger readable controls, consistent spacing and reflowing columns. See [User Guide](docs/USER_GUIDE.zh-TW.md) and [Device limitations](docs/DEVICE_INSIGHTS.md).
+
+### Optional full Windows hardware names
+
+The browser cannot read your full hardware inventory. To see a more precise CPU model, installed RAM label, OS and one or more GPU names, open Windows **DxDiag** (Win + R → `dxdiag`) and choose **Save All Information**. Select the resulting `.txt` report in Device Insights. Only these fields are extracted into memory; machine name and other diagnostic details are discarded. The raw report is **not uploaded, tracked or saved**. Do not publish DxDiag reports unredacted, because the original report may contain sensitive device identifiers.
