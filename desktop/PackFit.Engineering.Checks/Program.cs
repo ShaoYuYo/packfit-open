@@ -59,4 +59,18 @@ Assert(report.Contains("TEMP_HIGH")&&report.Contains("Validation matrix"),
     "auditable report includes findings and validation");
 Assert(report.Contains("not a compliance certificate"),"explicit report safety disclaimer");
 
+var sleepPlan=InvestigationGuides.Find("sleep-drain");
+Assert(sleepPlan.Steps.Count>=4,"guided sleep-drain investigation covers actionable evidence");
+Assert(InvestigationGuides.ToMarkdown(sleepPlan,"No company data").Contains("- [ ]"),
+    "investigation handoff provides reviewable checkboxes");
+
+string batchMarkdown=TelemetryBatch.ToMarkdown([
+    new TelemetryBatchItem("synthetic-a.csv",analysis),
+    new TelemetryBatchItem("synthetic-b.csv",analysis)
+]);
+Assert(batchMarkdown.Contains("synthetic-a.csv")&&batchMarkdown.Contains("synthetic-b.csv"),
+    "batch comparison includes both source files");
+Assert(batchMarkdown.Contains("same user-defined screening thresholds"),
+    "batch report warns about common threshold assumptions");
+
 Console.WriteLine("All PackFit engineering core checks passed.");
