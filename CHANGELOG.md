@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.6.1 — 2026-11-01
+
+- Added optional, locally parsed Windows DxDiag text import for CPU model, RAM, GPU labels and OS where browser hints are insufficient.
+- Added synthetic tests and responsive UI layout for the report import; original diagnostic data is never uploaded or stored.
+
 ## 0.6.0 — 2026-11-01
 
 - Automatic OS-driven light/dark theme, updated live on system preference changes, plus explicit theme override selector and safe settings migration.
