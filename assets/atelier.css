@@ -1,0 +1,137 @@
+/**
+ * PackFit Open 0.5 — Warm Graphite / Plum / Champagne
+ * Palette is intentionally neutral: muted aubergine for actions,
+ * graphite for structure, warm ivory for surfaces, brass for small details.
+ *
+ * Layered after editorial.css so older decorative palettes are not visible.
+ * Color never carries a result/status without accompanying text.
+ */
+:root {
+  --plum-700:#76515e;
+  --plum-500:#98717c;
+  --brass:#b39372;
+  --brass-muted:#d9c7b6;
+  --graphite:#302d32;
+  --ink-soft:#6f696c;
+  --ease-quick:cubic-bezier(.22,.72,.28,1);
+}
+body[data-theme="light"] {
+  --bg:#f6f3f0;--sidebar:#f7f4f1;--panel:#fffdfb;--panel2:#f1ebe7;
+  --field:#fbf8f6;--text:#302d32;--muted:#6e676b;--border:#e6ddda;
+  --line:#ece5e1;--hero:#efe9e5;--track:#e9dfdc;
+  --accent:#76515e;--accent-strong:#76515e;--purple:#94727a;
+  --shadow:rgba(46,33,36,.052);--elevation:0 5px 23px rgba(53,39,43,.045);
+  background:var(--bg);color:var(--text);
+}
+body[data-theme="dark"] {
+  --bg:#19171a;--sidebar:#1d1a1d;--panel:#262226;--panel2:#342c31;
+  --field:#221e22;--text:#f4eeed;--muted:#bdb0b0;--border:#494044;
+  --line:#41373d;--hero:#30292d;--track:#4b3e44;
+  --accent:#d9aeba;--accent-strong:#d9aeba;--purple:#c29da8;
+  --shadow:rgba(0,0,0,.18);--elevation:0 5px 23px rgba(0,0,0,.13);
+  background:var(--bg);color:var(--text);
+}
+body[data-theme="light"] .brand-mark{background:var(--graphite);color:#f6f3f0}
+body[data-theme="dark"] .brand-mark{background:#e3ccd0;color:#2c2127}
+.brand-dot{color:var(--accent-strong)}
+.nav-item.is-active:before{background:var(--accent-strong)}
+.sidebar-note{background:var(--panel2)}
+.sidebar-note .pulse{background:var(--brass);box-shadow:none}
+.status-dot,.live-dot{background:var(--accent-strong);box-shadow:none}
+.hero,.hero.hero-overview{
+  background:linear-gradient(140deg,var(--hero) 0%,var(--panel2) 100%);
+  border-color:var(--border);
+}
+body[data-theme="dark"] .hero,body[data-theme="dark"] .hero.hero-overview{
+  background:linear-gradient(135deg,#342c31,var(--hero));
+}
+.sample-surface{box-shadow:0 13px 35px rgba(55,42,44,.07)}
+body[data-theme="dark"] .sample-surface{box-shadow:0 13px 35px rgba(0,0,0,.12)}
+.sample-status{color:var(--accent-strong);background:var(--panel2)}
+.sample-energy span{background:var(--accent-strong)}
+.sample-energy .sample-muted{background:var(--track)}
+.sample-readout strong{color:var(--text)}
+.eyebrow,.overline{color:var(--accent-strong)}
+.eyebrow-line{background:var(--brass)}
+.feature-chip{background:var(--panel2)}
+body[data-theme="light"] .primary-button{
+  color:#ffffff;background:#76515e;border-color:#76515e;
+}
+body[data-theme="light"] .primary-button:hover{
+  background:#65434f;border-color:#65434f;
+}
+body[data-theme="dark"] .primary-button{
+  color:#261a20;background:#d9aeba;border-color:#d9aeba;
+}
+body[data-theme="dark"] .primary-button:hover{
+  background:#e4bdc6;border-color:#e4bdc6;
+}
+.primary-button{box-shadow:none}
+.primary-button:hover{box-shadow:0 5px 14px rgba(71,39,51,.12)}
+.nav-item:hover,.secondary-button:hover,.mini-card:hover{border-color:var(--border)}
+.icon-button:hover{border-color:var(--accent-strong)}
+.input-wrap:focus-within{
+  border-color:var(--accent-strong);
+  box-shadow:0 0 0 3px rgba(118,81,94,.12);
+}
+body[data-theme="dark"] .input-wrap:focus-within{
+  box-shadow:0 0 0 3px rgba(217,174,186,.16);
+}
+input:focus-visible,select:focus-visible,button:focus-visible,a:focus-visible,
+summary:focus-visible{outline-color:var(--accent-strong)}
+::selection{background:#e6cad2;color:#2a1e25}
+body[data-theme="dark"] ::selection{background:#755160;color:#f8eeef}
+.track-fill,#plan-fill{background:var(--accent-strong)}
+.plan-output.is-short #plan-fill{background:var(--brass)}
+body[data-theme="light"] .plan-output.is-short>strong{color:#8f633c}
+body[data-theme="dark"] .plan-output.is-short>strong{color:#dfbf93}
+.pf-result,.plan-output,.consumer-output{background:var(--panel2)}
+.pf-intro-banner{
+  background:var(--panel);border:1px solid var(--border);
+}
+.pf-intro-symbol,.plan-symbol,.pf-tool-icon,.soft-orb,.mini-icon{
+  background:var(--panel2);color:var(--accent-strong);
+}
+.pf-ring,.luminous-ring{
+  background:conic-gradient(var(--accent-strong) 0 var(--ring,0%),
+     var(--track) var(--ring,0%) 100%);
+  box-shadow:0 0 0 5px rgba(118,81,94,.045);
+}
+#live-ring{background:conic-gradient(var(--accent-strong) 0 var(--value,0%),
+  var(--track) var(--value,0%) 100%)}
+.pf-ring-inner,.luminous-inner{background:var(--panel)}
+.plan-activity,.pf-steps,.pf-command{background:var(--field);border-color:var(--border)}
+.preset-button.is-selected,.preset-button:hover{
+  border-color:var(--accent-strong);color:var(--accent-strong);background:var(--panel2);
+}
+.topology-label,.cell-unit{color:var(--accent-strong);border-color:var(--border);background:var(--panel2)}
+.result-status,.text-link,.pf-message,.save-feedback,.transfer-status,.method-footer{color:var(--accent-strong)}
+.metric-row strong,.metric-row b,.pf-result>div b{color:var(--text)}
+.chart-fill{background:var(--swatch,var(--accent-strong))}
+.scenario-card:before{background:var(--swatch,var(--accent-strong))}
+.ring{background:conic-gradient(var(--accent-strong) 0 81%,var(--track) 81% 100%)}
+.disclaimer-panel{background:rgba(179,147,114,.07);border-color:rgba(179,147,114,.28)}
+.disclaimer-mark{background:rgba(179,147,114,.16);color:var(--brass)}
+.warning{background:rgba(179,147,114,.09);border-color:rgba(179,147,114,.29)}
+body[data-theme="light"] .warning{color:#87633c}
+body[data-theme="dark"] .warning{color:#e1bd91}
+.formula{color:var(--accent-strong)}
+.pf-tips summary{color:var(--text)}
+.pf-upload:hover,.file-button:hover{border-color:var(--accent-strong)}
+/* Status feedback should not be communicated by saturation alone. */
+.plan-status,.pf-small,.helper,.consumer-caveat{color:var(--muted)}
+.footer{border-color:var(--border)}
+/* Motion is driven by short JS transitions; no decorative or looping animations. */
+@media(prefers-reduced-motion:no-preference){
+  [data-panel]:not([hidden]){animation:none!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .sample-surface,.primary-button,.secondary-button,.nav-item,
+  [data-panel]:not([hidden]),#plan-fill,.chart-fill,.track-fill{
+    transition:none!important;animation:none!important;
+  }
+}
+@media(prefers-contrast:more){
+  body[data-theme="light"]{--border:#958b8e;--muted:#494348}
+  body[data-theme="dark"]{--border:#c2b1b8;--muted:#e1d7db}
+}
