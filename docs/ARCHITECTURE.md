@@ -44,3 +44,9 @@ PackFit Open is a static, dependency-free ES module application built for GitHub
 - CI: syntax checks, Node native tests and static entry-point checks.
 
 Follow-up priorities include browser-level visual tests, more detailed user guidance, more locale coverage, and engineering model refinements with referenced formulas.
+## Consumer additions (v0.2)
+
+- `src/consumer.js`: pure bounded everyday models and a nonexecuting Windows report HTML parser.
+- `src/consumer-ui.js`: browser-only UI controller, opt-in live Battery API, local file reader, formula rendering.
+- `src/consumer-i18n.js`: bilingual beginner labels and explanations.
+- `assets/premium.css`: light-first design refinement with graceful reduced motion.
