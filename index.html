@@ -17,9 +17,25 @@
   <link rel="stylesheet" href="./assets/premium.css">
   <link rel="stylesheet" href="./assets/editorial.css">
   <link rel="stylesheet" href="./assets/atelier.css">
+  <link rel="stylesheet" href="./assets/workspace.css">
   <script type="module" src="./src/app.js"></script>
 </head>
 <body data-theme="light">
+  <script>
+  (() => {
+    let mode="system";
+    try {
+      const stored=JSON.parse(localStorage.getItem("packfit:settings:v1") || "{}");
+      if(["system","light","dark"].includes(stored.themeMode))mode=stored.themeMode;
+    } catch {}
+    const dark=window.matchMedia?.("(prefers-color-scheme: dark)").matches ?? false;
+    const effective=mode==="system"?(dark?"dark":"light"):mode;
+    document.body.dataset.theme=effective;
+    document.documentElement.style.colorScheme=effective;
+    const meta=document.querySelector('meta[name="theme-color"]');
+    if(meta)meta.content=effective==="dark"?"#19171a":"#f6f3f0";
+  })();
+  </script>
   <a class="skip-link" href="#content">Skip to content</a>
   <div class="app-shell">
     <aside class="sidebar" aria-label="Main navigation">
@@ -31,6 +47,7 @@
       <nav class="nav" aria-label="Primary">
         <button class="nav-item is-active" data-tab="overview" type="button" aria-selected="true"><span class="nav-icon" aria-hidden="true">◫</span><span data-i18n="navOverview">Overview</span><span class="nav-shortcut">01</span></button>
         <button class="nav-item" data-tab="health" type="button" aria-selected="false"><span class="nav-icon">◉</span><span data-pf="navHealth">我的電池</span><span class="nav-shortcut">02</span></button>
+        <button class="nav-item" data-tab="device" type="button" aria-selected="false"><span class="nav-icon" aria-hidden="true">▣</span><span data-device-i18n="navDevice">裝置分析</span><span class="nav-shortcut">03</span></button>
         <button class="nav-item" data-tab="everyday" type="button" aria-selected="false"><span class="nav-icon">✳</span><span data-pf="navEveryday">生活工具</span><span class="nav-shortcut">03</span></button>
         <button class="nav-item" data-tab="studio" type="button" aria-selected="false"><span class="nav-icon" aria-hidden="true">⌘</span><span data-i18n="navStudio">Pack Studio</span><span class="nav-shortcut">04</span></button>
         <button class="nav-item" data-tab="compare" type="button" aria-selected="false"><span class="nav-icon" aria-hidden="true">▥</span><span data-i18n="navCompare">Compare</span><span class="nav-shortcut">05</span></button>
@@ -39,7 +56,7 @@
       <div class="sidebar-bottom">
         <div class="sidebar-note"><span class="pulse" aria-hidden="true"></span><span data-i18n="offlineReady">All calculations run on your device</span></div>
         <a class="github-link" href="https://github.com/ShaoYuYo/packfit-open" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">↗</span> GitHub <span class="external-arrow" aria-hidden="true">↗</span></a>
-        <div class="sidebar-foot">VERSION 0.5.0 <span>·</span> MIT LICENSE</div>
+        <div class="sidebar-foot">VERSION 0.6.0 <span>·</span> MIT LICENSE</div>
       </div>
     </aside>
     <div class="app-body">
@@ -48,7 +65,14 @@
         <div class="topbar-actions">
           <span class="status-chip"><span class="status-dot" aria-hidden="true"></span><span data-i18n="localOnly">100% local</span></span>
           <button id="language-toggle" class="icon-button lang-button" type="button" aria-label="Switch language">EN</button>
-          <button id="theme-toggle" class="icon-button" type="button" aria-label="Toggle color theme">☼</button>
+          <label class="theme-mode-wrap" for="theme-mode">
+            <span data-i18n="appearanceLabel">外觀</span>
+            <select id="theme-mode" aria-label="Color appearance">
+              <option value="system" data-i18n="themeSystem">跟隨系統</option>
+              <option value="light" data-i18n="themeLight">淺色</option>
+              <option value="dark" data-i18n="themeDark">深色</option>
+            </select>
+          </label>
         </div>
       </header>
       <main id="content" class="main-content">
@@ -128,6 +152,11 @@
               <div class="plan-error" id="plan-error" role="alert" hidden></div>
             </div></div>
           </section>
+          <div class="device-discover">
+            <span class="device-discover-icon" aria-hidden="true">▣</span>
+            <div><strong data-i18n="deviceDiscoveryTitle">想知道這台電腦的規格？</strong><p data-i18n="deviceDiscoveryText">看看瀏覽器能讀到哪些硬體資訊。</p></div>
+            <button class="secondary-button" type="button" data-goto="device"><span data-i18n="deviceDiscoveryAction">開啟裝置分析</span> ↗</button>
+          </div>
           <div class="mini-grid">
             <button class="mini-card" type="button" data-goto="studio"><span class="mini-icon">⌘</span><span><strong data-i18n="studioCardTitle">Engineering-grade metrics</strong><small data-i18n="studioCardDesc">Series / parallel, energy density, pack dimensions</small></span><span class="mini-arrow">↗</span></button>
             <button class="mini-card" type="button" data-goto="compare"><span class="mini-icon">▥</span><span><strong data-i18n="compareCardTitle">Compare configurations</strong><small data-i18n="compareCardDesc">Save scenarios and export your results</small></span><span class="mini-arrow">↗</span></button>
@@ -169,6 +198,58 @@
           </article>
         </section>
 
+        
+        <section id="device" data-panel="device" aria-labelledby="device-title" hidden>
+          <div class="page-heading device-heading">
+            <div class="overline" data-device-i18n="pageTag">裝置概況 / BROWSER INSIGHTS</div>
+            <h1 id="device-title" data-device-i18n="pageTitle">這台電腦的硬體如何？</h1>
+            <p class="muted" data-device-i18n="pageIntro">網站只讀取瀏覽器允許的基本資料。深入辨識由你選擇。</p>
+          </div>
+          <div class="device-headline">
+            <div>
+              <div class="overline" data-device-i18n="resourceTitle">資源概況</div>
+              <strong id="device-profile">—</strong>
+              <span id="device-confidence" class="device-certainty">—</span>
+              <p data-device-i18n="resourceIntro">根據瀏覽器提供的粗略資訊判斷，不代表跑分。</p>
+            </div>
+            <div class="device-machine-illustration" aria-hidden="true">
+              <span class="device-chassis"><span></span><span></span><span></span><span></span></span>
+              <span class="device-illustration-label">LOCAL / DEVICE</span>
+            </div>
+          </div>
+          <div class="device-section-bar"><h2 data-device-i18n="deviceLabel">目前瀏覽器能讀到的資料</h2><button id="device-refresh" class="secondary-button" type="button" data-device-i18n="refresh">重新讀取</button></div>
+          <div class="device-stat-grid">
+            <article class="device-stat"><span data-device-i18n="platform">作業平台</span><strong id="device-platform">—</strong></article>
+            <article class="device-stat"><span data-device-i18n="threads">邏輯執行緒</span><strong id="device-threads">—</strong></article>
+            <article class="device-stat"><span data-device-i18n="memory">概略記憶體</span><strong id="device-memory">—</strong></article>
+            <article class="device-stat"><span data-device-i18n="webgpu">WebGPU</span><strong id="device-webgpu">—</strong></article>
+          </div>
+          <p class="device-footnote" data-device-i18n="basicLead">這些是瀏覽器回報的資料，不代表完整硬體清單。</p>
+          <div class="device-tool-grid">
+            <article class="panel device-tool-panel">
+              <div class="device-tool-header"><span class="device-icon-symbol" aria-hidden="true">◈</span><div><h3 data-device-i18n="graphicsTitle">深入看顯示晶片</h3><p data-device-i18n="graphicsIntro">部分瀏覽器可能提供 GPU 名稱；你可以決定是否查詢。</p></div></div>
+              <dl class="device-details">
+                <div><dt data-device-i18n="gpuName">顯示晶片</dt><dd id="device-renderer">—</dd></div>
+                <div><dt data-device-i18n="webgl">WebGL 支援</dt><dd id="device-webgl">—</dd></div>
+                <div><dt data-device-i18n="maxTexture">最大紋理尺寸</dt><dd id="device-texture">—</dd></div>
+              </dl>
+              <button id="device-probe-gpu" class="secondary-button device-action" type="button" data-device-i18n="probeGpu">查看 GPU 資訊</button>
+            </article>
+            <article class="panel device-tool-panel">
+              <div class="device-tool-header"><span class="device-icon-symbol" aria-hidden="true">⌁</span><div><h3 data-device-i18n="benchmarkTitle">測一下瀏覽器的運算速度</h3><p data-device-i18n="benchmarkIntro">只有你按下測試才會執行，這不是標準 CPU 跑分。</p></div></div>
+              <div class="device-benchmark-readout">
+                <span data-device-i18n="benchmarkResult">這次運算耗時（中位數）</span>
+                <strong id="device-benchmark" role="status" aria-live="polite">—</strong>
+              </div>
+              <p class="device-footnote" data-device-i18n="benchmarkHelp">比較同一設備、同一瀏覽器的結果才比較有參考價值。</p>
+              <button id="device-run-bench" class="primary-button device-action" type="button" data-device-i18n="runBenchmark">開始本機測試</button>
+            </article>
+          </div>
+          <aside class="device-disclaimer">
+            <h3 data-device-i18n="privacyTitle">隱私與限制</h3>
+            <p data-device-i18n="privacyText">資訊僅在本頁顯示，不上傳、不追蹤，也不能可靠預估遊戲 FPS。</p>
+          </aside>
+        </section>
         <section id="everyday" data-panel="everyday" aria-labelledby="everyday-heading" hidden>
           <div class="page-heading pf-page-title"><div class="overline" data-pf="everydayTag">EVERYDAY / 02</div><h1 id="everyday-heading" data-pf="everydayTitle">日常電力，算得明白。</h1><p class="muted" data-pf="everydayIntro">充電電費、行動電源、充電時間，三個生活中最實用的計算機。</p></div>
           <div class="pf-three">
