@@ -43,3 +43,14 @@ test("unknown fields are discarded instead of being persisted",()=>{
   assert.equal(Object.hasOwn(result[0],"extra"),false);
   assert.equal(Object.hasOwn(result[0].input,"untrusted"),false);
 });
+
+test("the downloadable public example parses as a valid import file",async()=>{
+  const {readFileSync}=await import("node:fs");
+  const {resolve,dirname}=await import("node:path");
+  const {fileURLToPath}=await import("node:url");
+  const root=resolve(dirname(fileURLToPath(import.meta.url)),"..");
+  const json=readFileSync(resolve(root,"examples/sample-scenarios.json"),"utf8");
+  const scenarios=parseScenarioFile(json);
+  assert.equal(scenarios.length,2);
+  assert.ok(scenarios.every((s)=>s.name.toLowerCase().includes("illustrative")));
+});
