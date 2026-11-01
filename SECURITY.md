@@ -22,3 +22,8 @@ The web app's optional Google Fonts import makes a request to a third-party font
 ## Optional animation dependency (v0.5)
 
 Motion is MIT-licensed and loaded asynchronously from `https://cdn.jsdelivr.net/npm/motion@13.2.0/+esm` as a purely optional interface enhancement. This causes a normal browser request to the third-party jsDelivr domain when online. The application does not send battery measurements, report contents or saved scenarios to that domain. If the CDN is blocked or the device is offline, browser-native animations are used and the calculator continues functioning. Motion is not cached by the app's service worker, which only caches same-origin static resources. For a fully offline or more restrictive deployment, remove the optional import or vendor a reviewed, licensed copy.
+
+
+## Optional DxDiag files (v0.6.1)
+
+The site accepts a DxDiag plain-text report only following an explicit file-selection action. It rejects files larger than 2 MB, parses a strict small set of hardware-related labels, and displays sanitized text rather than evaluating or injecting imported content as HTML. Only CPU, RAM, OS and up to five GPU names are held in temporary page memory. Computer name, serial numbers and the rest of the original report are not uploaded or persisted. Remind users not to share raw system reports publicly.
