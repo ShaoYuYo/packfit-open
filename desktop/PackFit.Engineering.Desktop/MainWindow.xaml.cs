@@ -1,0 +1,274 @@
+using System.Diagnostics;
+using System.Globalization;
+using System.Text;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using PackFit.Engineering.Core;
+using Windows.Storage.Pickers;
+
+namespace PackFit.Engineering.Desktop;
+
+public sealed partial class MainWindow : Window
+{
+    private BatteryHealth? _battery;
+    private TelemetryAnalysis? _telemetry;
+    private TelemetryThresholds? _limits;
+    private IReadOnlyList<ValidationItem>? _matrix;
+    private PackResult? _pack;
+    private static readonly CultureInfo Culture = CultureInfo.InvariantCulture;
+
+    public MainWindow()
+    {
+        InitializeComponent();
+        Navigation.SelectedItem = Navigation.MenuItems[0];
+        ShowPage("overview");
+    }
+
+    private void Navigation_SelectionChanged(
+        NavigationView sender, NavigationViewSelectionChangedEventArgs args)
+    {
+        if (args.SelectedItemContainer is NavigationViewItem item)
+            ShowPage(item.Tag?.ToString() ?? "overview");
+    }
+
+    private void ShowPage(string name)
+    {
+        OverviewPanel.Visibility = name == "overview" ? Visibility.Visible : Visibility.Collapsed;
+        BatteryPanel.Visibility = name == "battery" ? Visibility.Visible : Visibility.Collapsed;
+        TelemetryPanel.Visibility = name == "telemetry" ? Visibility.Visible : Visibility.Collapsed;
+        ValidationPanel.Visibility = name == "validation" ? Visibility.Visible : Visibility.Collapsed;
+        PackPanel.Visibility = name == "pack" ? Visibility.Visible : Visibility.Collapsed;
+        ReportPanel.Visibility = name == "report" ? Visibility.Visible : Visibility.Collapsed;
+    }
+
+    private void Notice(string message, bool error = false)
+    {
+        NoticeBar.Severity = error ? InfoBarSeverity.Error : InfoBarSeverity.Success;
+        NoticeBar.Title = error ? "需要確認" : "已完成";
+        NoticeBar.Message = message;
+        NoticeBar.IsOpen = true;
+    }
+
+    private static double ReadNumber(TextBox box)
+    {
+        if (!double.TryParse(box.Text.Trim(), NumberStyles.Float, Culture, out double value)
+            || !double.IsFinite(value))
+            throw new FormatException($"「{box.Header}」需要有效數字。");
+        return value;
+    }
+
+    private static double? ReadOptional(TextBox box)
+        => string.IsNullOrWhiteSpace(box.Text) ? null : ReadNumber(box);
+
+    private async Task<string?> PickFileAsync(params string[] extensions)
+    {
+        var picker = new FileOpenPicker
+        {
+            SuggestedStartLocation = PickerLocationId.DocumentsLibrary
+        };
+        foreach (var extension in extensions) picker.FileTypeFilter.Add(extension);
+        WinRT.Interop.InitializeWithWindow.Initialize(picker,
+            WinRT.Interop.WindowNative.GetWindowHandle(this));
+        var file = await picker.PickSingleFileAsync();
+        return file?.Path;
+    }
+
+    private async void GenerateBatteryClick(object sender, RoutedEventArgs e)
+    {
+        string reportPath = Path.Combine(Path.GetTempPath(),
+            $"packfit-battery-{Guid.NewGuid():N}.html");
+        try
+        {
+            var info = new ProcessStartInfo("powercfg.exe")
+            {
+                UseShellExecute = false,
+                CreateNoWindow = true
+            };
+            info.ArgumentList.Add("/batteryreport");
+            info.ArgumentList.Add("/output");
+            info.ArgumentList.Add(reportPath);
+            using var process = Process.Start(info) ??
+                throw new InvalidOperationException("無法啟動 Windows powercfg。");
+            using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(25));
+            try
+            {
+                await process.WaitForExitAsync(timeout.Token);
+            }
+            catch (OperationCanceledException)
+            {
+                if (!process.HasExited) process.Kill(entireProcessTree: true);
+                throw new TimeoutException("Windows 電池報告超過執行時間限制。");
+            }
+            if (process.ExitCode != 0)
+                throw new InvalidOperationException(
+                    $"powercfg 失敗（結束碼：{process.ExitCode}）。部分桌機沒有可用電池。");
+            string html = await File.ReadAllTextAsync(reportPath);
+            _battery = BatteryReportParser.Parse(html);
+            UpdateBattery();
+            Notice("Windows 電池報告已在本機建立並分析。");
+        }
+        catch (Exception ex)
+        {
+            Notice(ex.Message, true);
+        }
+        finally
+        {
+            try { if (File.Exists(reportPath)) File.Delete(reportPath); }
+            catch { /* A temporary report file may be locked by security software. */ }
+        }
+    }
+
+    private async void ImportBatteryClick(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            var path = await PickFileAsync(".html", ".htm");
+            if (path is null) return;
+            _battery = BatteryReportParser.Parse(await File.ReadAllTextAsync(path));
+            UpdateBattery();
+            Notice("已匯入並分析電池容量報告。");
+        }
+        catch (Exception ex) { Notice(ex.Message, true); }
+    }
+
+    private void UpdateBattery()
+    {
+        if (_battery is null) return;
+        BatteryResult.Text = string.Format(Culture,
+            "設計容量 {0:0.##} Wh\n滿充容量 {1:0.##} Wh\n容量保留率 {2:0.0}%\n循環次數 {3}",
+            _battery.DesignWh, _battery.FullChargeWh, _battery.RetentionPercent,
+            _battery.Cycles?.ToString(Culture) ?? "未提供");
+        OverviewBattery.Text = _battery.RetentionPercent.ToString("0.0", Culture) + "%";
+    }
+
+    private TelemetryThresholds ReadThresholds() => new(
+        MinimumTemperatureC: ReadNumber(MinTempBox),
+        MaximumTemperatureC: ReadNumber(MaxTempBox),
+        MinimumVoltageV: ReadOptional(MinVoltBox),
+        MaximumVoltageV: ReadOptional(MaxVoltBox),
+        MaximumAbsCurrentA: ReadOptional(MaxCurrentBox),
+        MaxSocRatePctPerMinute: ReadNumber(MaxSocRateBox),
+        MaximumGapSeconds: ReadNumber(MaxGapBox),
+        PositiveCurrentMeansDischarge: DischargeSignCheck.IsChecked == true);
+
+    private async void ImportTelemetryClick(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            var path = await PickFileAsync(".csv");
+            if (path is null) return;
+            var thresholds = ReadThresholds();
+            string text = await File.ReadAllTextAsync(path);
+            _telemetry = TelemetryAnalyzer.Analyze(text, thresholds);
+            _limits = thresholds;
+            TelemetryResult.Text = string.Format(Culture,
+                "{0:N0} 筆量測 · {1:N0} 項異常或提示 · 期間 {2:g}\n溫度 {3}～{4} °C · 放電能量估算 {5} Wh",
+                _telemetry.Samples, _telemetry.TotalFindings, _telemetry.Duration,
+                _telemetry.MinTemperatureC?.ToString("0.##",Culture) ?? "N/A",
+                _telemetry.MaxTemperatureC?.ToString("0.##",Culture) ?? "N/A",
+                _telemetry.EstimatedDischargedWh?.ToString("0.###",Culture) ?? "N/A");
+            TelemetryList.Items.Clear();
+            foreach (var f in _telemetry.Findings.Take(1000))
+                TelemetryList.Items.Add(
+                    $"Row {f.Row:00000}   [{f.Severity}] {f.Code} — {f.Message}");
+            if (_telemetry.HiddenFindings > 0)
+                TelemetryList.Items.Add($"...另有 {_telemetry.HiddenFindings} 筆未列於畫面。");
+            if (_telemetry.TotalFindings == 0)
+                TelemetryList.Items.Add("此輪門檻下未發現異常；不等於安全驗證通過。");
+            OverviewTelemetry.Text = _telemetry.TotalFindings.ToString("N0",Culture) + " flags";
+            Notice("量測 CSV 分析完成。請確認門檻、電流正負號及原始資料。");
+        }
+        catch (Exception ex) { Notice(ex.Message, true); }
+    }
+
+    private async void ImportValidationClick(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            var path = await PickFileAsync(".csv");
+            if (path is null) return;
+            _matrix = ValidationMatrix.Parse(await File.ReadAllTextAsync(path));
+            var summary = ValidationMatrix.Summarize(_matrix);
+            ValidationResult.Text = string.Format(Culture,
+                "Total {0:N0}   PASS {1:N0}   FAIL {2:N0}   NOT RUN {3:N0}   完成項目通過率 {4}%",
+                summary.Total, summary.Passed, summary.Failed, summary.NotRun,
+                summary.PassRatePercent?.ToString("0.0",Culture) ?? "N/A");
+            ValidationList.Items.Clear();
+            foreach (var item in _matrix.Take(400))
+                ValidationList.Items.Add(
+                    $"{item.Verdict,-8}  {item.TestId} · {item.Metric} " +
+                    $"{item.Measured?.ToString("0.###",Culture) ?? "—"} {item.Unit} " +
+                    $"[{item.Minimum?.ToString(Culture) ?? "—"}～{item.Maximum?.ToString(Culture) ?? "—"}]");
+            if (_matrix.Count > 400)
+                ValidationList.Items.Add($"另外 {_matrix.Count - 400} 筆未顯示；報告會包含全部案例。");
+            OverviewValidation.Text = $"{summary.Failed} FAIL / {summary.NotRun} OPEN";
+            Notice("驗證矩陣已完成 PASS/FAIL/NOT RUN 整理。");
+        }
+        catch (Exception ex) { Notice(ex.Message, true); }
+    }
+
+    private void CalculatePackClick(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            var design = new PackDesign(
+                Series: checked((int)ReadNumber(SeriesBox)),
+                Parallel: checked((int)ReadNumber(ParallelBox)),
+                CellVoltageV: ReadNumber(CellVoltageBox),
+                CellCapacityAh: ReadNumber(CellCapacityBox),
+                CellMassG: ReadNumber(CellMassBox),
+                NonCellMassG: ReadNumber(OverheadBox),
+                LengthMm: ReadNumber(LengthBox),
+                WidthMm: ReadNumber(WidthBox),
+                HeightMm: ReadNumber(HeightBox),
+                LoadW: ReadNumber(LoadBox));
+            _pack = PackCalculator.Calculate(design);
+            PackResultText.Text = string.Format(Culture,
+                "電芯 {0} 顆 · 電壓 {1:0.##} V · 容量 {2:0.##} Ah\n" +
+                "名目能量 {3:0.##} Wh · 重量 {4:0.##} g · 包絡體積 {5:0.####} L\n" +
+                "重量 ED {6:0.#} Wh/kg · 體積 ED {7:0.#} Wh/L\n" +
+                "固定負載理想續航 {8:0.##} 小時（未扣除損耗與預留）",
+                _pack.CellCount, _pack.NominalVoltageV, _pack.CapacityAh,
+                _pack.EnergyWh, _pack.TotalMassG, _pack.VolumeL,
+                _pack.GravimetricWhKg, _pack.VolumetricWhL,
+                _pack.IdealRuntimeHours);
+            Notice("電池包名目數據已計算。不是機構可行性或安規簽核。");
+        }
+        catch (Exception ex) { Notice(ex.Message, true); }
+    }
+
+    private string CreateReport()
+    {
+        return EngineeringReport.Build(ProjectBox.Text, AuthorBox.Text, _battery,
+            _telemetry, _matrix, _pack, _limits);
+    }
+
+    private void PreviewReportClick(object sender, RoutedEventArgs e)
+    {
+        ReportPreview.Text = CreateReport();
+        Notice("工程摘要預覽已更新。");
+    }
+
+    private async void ExportReportClick(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            var picker = new FileSavePicker
+            {
+                SuggestedStartLocation = PickerLocationId.DocumentsLibrary,
+                SuggestedFileName = "PackFit-Engineering-Review"
+            };
+            picker.FileTypeChoices.Add("Markdown", new List<string>{".md"});
+            WinRT.Interop.InitializeWithWindow.Initialize(picker,
+                WinRT.Interop.WindowNative.GetWindowHandle(this));
+            var selected = await picker.PickSaveFileAsync();
+            if (selected is null) return;
+            string report = CreateReport();
+            await File.WriteAllTextAsync(selected.Path, report,
+                new UTF8Encoding(encoderShouldEmitUTF8Identifier: false));
+            ReportPreview.Text = report;
+            Notice("Markdown 工程報告已儲存。");
+        }
+        catch (Exception ex) { Notice(ex.Message, true); }
+    }
+}
