@@ -2,14 +2,26 @@ import {calculatePack, getPackInputKeys} from "./calc.js";
 const STORE_KEY = "packfit:scenarios:v1";
 const SETTINGS_KEY = "packfit:settings:v1";
 export const MAX_SCENARIOS = 4;
+export const THEME_OPTIONS = Object.freeze(["system","light","dark"]);
 export function readSettings() {
   try {
     const value = JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}");
-    return {language: value.language === "en" ? "en" : "zh-TW", theme: value.theme === "dark" ? "dark" : "light"};
-  } catch { return {language:"zh-TW",theme:"light"}; }
+    // Legacy v0.5 theme values were saved without explicit user intent, so
+    // new installations and upgrades default to the system theme.
+    const mode = THEME_OPTIONS.includes(value.themeMode) ? value.themeMode : "system";
+    return {language:value.language === "en" ? "en" : "zh-TW",theme:mode};
+  } catch { return {language:"zh-TW",theme:"system"}; }
 }
 export function writeSettings(settings) {
-  try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); return true; } catch { return false; }
+  try {
+    const mode = THEME_OPTIONS.includes(settings.theme) ? settings.theme : "system";
+    localStorage.setItem(SETTINGS_KEY,JSON.stringify({
+      language:settings.language === "en" ? "en" : "zh-TW",
+      themeMode:mode,
+      preferencesVersion:2
+    }));
+    return true;
+  } catch { return false; }
 }
 export function validateScenario(record) {
   if (!record || typeof record !== "object" || typeof record.name !== "string" || !record.name.trim() ||
