@@ -8,6 +8,9 @@
   <meta name="color-scheme" content="dark light">
   <title>PackFit Open — Personal Battery Lab</title>
   <link rel="icon" type="image/svg+xml" href="./assets/logo.svg">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="PackFit Open">
   <link rel="stylesheet" href="./styles.css">
   <link rel="stylesheet" href="./assets/premium.css">
   <script type="module" src="./src/app.js"></script>
@@ -215,7 +218,9 @@
         </section>
         <section id="compare" data-panel="compare" aria-labelledby="compare-title" hidden>
           <div class="page-heading"><div class="overline" data-i18n="compareKicker">03 / SCENARIO ANALYSIS</div><h1 id="compare-title" data-i18n="compareTitle">Design comparison<span class="gradient-text"> / side by side</span></h1><p class="muted" data-i18n="compareDesc">儲存最多四組設計，評估名目能量、重量能量密度、體積能量密度與重量差異。</p></div>
-          <div class="comparison-toolbar"><span id="scenario-count" class="status-chip">0 / 4 saved</span><div><button id="export-comparison" class="secondary-button" type="button" data-i18n="exportAll">Export comparison CSV</button><button id="clear-scenarios" class="danger-button" type="button" data-i18n="clearAll">Clear saved</button></div></div>
+          <div class="comparison-toolbar"><span id="scenario-count" class="status-chip">0 / 4 saved</span><div><button id="import-json" class="secondary-button" type="button" data-i18n="importJson">Import JSON</button><input id="import-json-file" type="file" class="sr-only" accept=".json,application/json" aria-label="Import PackFit scenarios JSON"><button id="export-json" class="secondary-button" type="button" data-i18n="exportJson">Backup JSON</button><button id="export-comparison" class="secondary-button" type="button" data-i18n="exportAll">Export comparison CSV</button><button id="clear-scenarios" class="danger-button" type="button" data-i18n="clearAll">Clear saved</button></div></div>
+          <p id="scenario-import-status" class="transfer-status" role="status" aria-live="polite"></p>
+          <div class="transfer-note" data-i18n="transferNote">JSON backups keep all four editable designs. Files are stored only on your device.</div>
           <div id="compare-empty" class="empty-state"><div class="empty-symbol">▤</div><h2 data-i18n="emptyTitle">No saved designs yet</h2><p data-i18n="emptyDesc">Go to Pack Studio, adjust parameters, then save a configuration to compare it here.</p><button class="primary-button" type="button" data-goto="studio"><span data-i18n="openStudio">Open Pack Studio</span> ↗</button></div>
           <div id="compare-content" hidden><div id="scenario-cards" class="scenario-cards"></div><div class="panel chart-panel"><div class="panel-top"><div><div class="overline" data-i18n="visualCompare">VISUAL BENCHMARK</div><h3 data-i18n="normalized">Comparison by metric</h3></div></div><div id="comparison-bars" class="comparison-bars"></div></div><div class="panel table-panel"><div class="panel-top"><div><div class="overline" data-i18n="dataTable">DATA TABLE</div><h3 data-i18n="detailComparison">Detailed comparison</h3></div></div><div class="table-scroll"><table id="comparison-table"><caption class="sr-only">Pack comparison metrics</caption><thead></thead><tbody></tbody></table></div></div></div>
         </section>
