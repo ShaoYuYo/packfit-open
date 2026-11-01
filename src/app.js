@@ -24,7 +24,25 @@ const swatches = ["#7ce4b4","#a7adff","#f2c47f","#f29cbe"];
 const t = (key) => translate(settings.language,key);
 const num = (value,digits=1) => formatNumber(value,settings.language,digits);
 const dur = (value) => formatDuration(value,settings.language);
-function setText(id,text) { el(id).textContent = String(text); }
+const metricMotionIds = new Set([
+  "runtime-display","usable-wh","pack-energy","pack-voltage",
+  "pack-whkg","pack-whl","pack-mass","pack-runtime"
+]);
+function setText(id,text) {
+  const element=el(id);
+  const value=String(text);
+  if(element.textContent===value)return;
+  element.textContent=value;
+  // A brief response to changed calculations, not an always-running animation.
+  // Honor the operating-system motion preference, including live changes.
+  if(!metricMotionIds.has(id)||document.hidden||!element.getClientRects().length||
+     typeof element.animate!=="function"||
+     window.matchMedia?.("(prefers-reduced-motion: reduce)").matches)return;
+  element.animate(
+    [{opacity:.58,transform:"translateY(2px)"},{opacity:1,transform:"translateY(0)"}],
+    {duration:170,easing:"cubic-bezier(.22,.82,.28,1)"}
+  );
+}
 function getInputs() { return Object.fromEntries(Object.entries(packIds).map(([key,id]) => [key,el(id).value])); }
 function clearNumbers(ids) { ids.forEach((id)=>setText(id,"—")); }
 function renderRuntime() {
@@ -150,6 +168,7 @@ function updateLocale() {
 }
 function updateTheme() {
   document.body.dataset.theme = settings.theme;
+  document.querySelector('meta[name="theme-color"]')?.setAttribute("content",settings.theme==="dark"?"#111917":"#f7f8f7");
   el("theme-toggle").textContent = settings.theme==="dark"?"☼":"☾";
   el("theme-toggle").setAttribute("aria-label",settings.theme==="dark"?"Switch to light theme":"Switch to dark theme");
 }
