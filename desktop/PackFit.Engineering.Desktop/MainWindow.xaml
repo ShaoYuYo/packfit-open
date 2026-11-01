@@ -13,7 +13,9 @@
       </Grid.RowDefinitions>
       <TitleBar Grid.Row="0" x:Name="AppTitleBar"
                 Title="PackFit Engineering" Subtitle="Battery validation · Local workstation"
-                IsPaneToggleButtonVisible="True" PaneToggleRequested="AppTitleBar_PaneToggleRequested" />
+                IsPaneToggleButtonVisible="True" PaneToggleRequested="AppTitleBar_PaneToggleRequested">
+        <TitleBar.IconSource><FontIconSource Glyph="&#xE8FD;" /></TitleBar.IconSource>
+      </TitleBar>
       <NavigationView x:Name="Navigation" Grid.Row="1" PaneDisplayMode="Left"
           OpenPaneLength="252" IsBackButtonVisible="Collapsed"
           IsPaneToggleButtonVisible="False" IsSettingsVisible="False" SelectionChanged="Navigation_SelectionChanged">
@@ -24,6 +26,8 @@
           <NavigationViewItem Content="驗證矩陣" Tag="validation"><NavigationViewItem.Icon><FontIcon Glyph="&#xE9D5;" /></NavigationViewItem.Icon></NavigationViewItem>
           <NavigationViewItem Content="電池包估算" Tag="pack"><NavigationViewItem.Icon><FontIcon Glyph="&#xE8FD;" /></NavigationViewItem.Icon></NavigationViewItem>
           <NavigationViewItem Content="工程報告" Tag="report"><NavigationViewItem.Icon><FontIcon Glyph="&#xE8A5;" /></NavigationViewItem.Icon></NavigationViewItem>
+          <NavigationViewItemSeparator />
+          <NavigationViewItemHeader Content="協助與診斷" />
           <NavigationViewItem Content="問題排查引導" Tag="guide"><NavigationViewItem.Icon><FontIcon Glyph="&#xE9CE;" /></NavigationViewItem.Icon></NavigationViewItem>
           <NavigationViewItem Content="Windows 診斷工具" Tag="diagnostics"><NavigationViewItem.Icon><FontIcon Glyph="&#xE8B7;" /></NavigationViewItem.Icon></NavigationViewItem>
           <NavigationViewItem Content="工具與安裝指南" Tag="resources"><NavigationViewItem.Icon><FontIcon Glyph="&#xE897;" /></NavigationViewItem.Icon></NavigationViewItem>
