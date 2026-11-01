@@ -179,6 +179,41 @@ public sealed partial class MainWindow
         }
         catch(Exception ex){Notice("無法開啟工具："+ex.Message,true);}
     }
+    private static readonly string SampleTelemetry =
+        "Timestamp,Voltage_V,Current_A,Temp_C,SOC_pct\n" +
+        "2026-11-01T00:00:00Z,11.50,2.0,34,80\n" +
+        "2026-11-01T00:00:10Z,11.45,2.1,35,79.8\n";
+    private static readonly string SampleMatrix =
+        "TestID,Category,Metric,Measured,Min,Max,Unit,Owner,Notes\n" +
+        "THERM-001,Thermal,Surface temp,49,,60,C,EE,Synthetic example\n" +
+        "ELEC-002,Electrical,Pack voltage,13.4,12.4,13.2,V,EE,Synthetic example\n" +
+        "SYS-003,System,Sleep drop,,0,3,percent,System,Not measured\n";
+
+    private async Task SaveExampleAsync(string name,string contents)
+    {
+        try
+        {
+            var picker=new FileSavePicker{
+                SuggestedStartLocation=PickerLocationId.DocumentsLibrary,
+                SuggestedFileName=name
+            };
+            picker.FileTypeChoices.Add("CSV",new List<string>{".csv"});
+            WinRT.Interop.InitializeWithWindow.Initialize(picker,
+                WinRT.Interop.WindowNative.GetWindowHandle(this));
+            var file=await picker.PickSaveFileAsync();
+            if(file is null)return;
+            await File.WriteAllTextAsync(file.Path,contents,new System.Text.UTF8Encoding(true));
+            Notice("合成範例已儲存，可使用 Windows 記事本編輯，不一定需要 Excel。");
+        }
+        catch(Exception ex){Notice("無法儲存範例："+ex.Message,true);}
+    }
+    private async void SaveTelemetryExampleClick(object sender,RoutedEventArgs e)
+        =>await SaveExampleAsync("PackFit-Telemetry-Example",SampleTelemetry);
+    private async void SaveValidationExampleClick(object sender,RoutedEventArgs e)
+        =>await SaveExampleAsync("PackFit-Validation-Example",SampleMatrix);
+    private void OpenSystemInfoClick(object sender,RoutedEventArgs e)
+        =>LaunchWindowsTool("msinfo32.exe");
+
     private void OpenReliabilityClick(object sender,RoutedEventArgs e)
         =>LaunchWindowsTool("perfmon.exe","/rel");
     private void OpenEventViewerClick(object sender,RoutedEventArgs e)
