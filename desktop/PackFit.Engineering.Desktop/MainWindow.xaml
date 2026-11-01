@@ -3,29 +3,41 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Title="PackFit Engineering">
+    <Window.SystemBackdrop>
+      <MicaBackdrop />
+    </Window.SystemBackdrop>
     <Grid>
-      <NavigationView x:Name="Navigation" PaneDisplayMode="Left"
-          OpenPaneLength="245" IsBackButtonVisible="Collapsed"
-          IsSettingsVisible="False" SelectionChanged="Navigation_SelectionChanged">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="*" />
+      </Grid.RowDefinitions>
+      <TitleBar Grid.Row="0" x:Name="AppTitleBar" Title="PackFit Engineering" Subtitle="Battery validation · Local workstation" />
+      <NavigationView x:Name="Navigation" Grid.Row="1" PaneDisplayMode="Left"
+          OpenPaneLength="252" IsBackButtonVisible="Collapsed"
+          IsPaneToggleButtonVisible="False" IsSettingsVisible="False" SelectionChanged="Navigation_SelectionChanged">
         <NavigationView.MenuItems>
-          <NavigationViewItem Content="總覽 / 工作台" Tag="overview" />
-          <NavigationViewItem Content="電池健康度" Tag="battery" />
-          <NavigationViewItem Content="量測 CSV 分析" Tag="telemetry" />
-          <NavigationViewItem Content="驗證矩陣" Tag="validation" />
-          <NavigationViewItem Content="電池包估算" Tag="pack" />
-          <NavigationViewItem Content="工程報告" Tag="report" />
+          <NavigationViewItem Content="總覽 / 工作台" Tag="overview"><NavigationViewItem.Icon><FontIcon Glyph="&#xE80F;" /></NavigationViewItem.Icon></NavigationViewItem>
+          <NavigationViewItem Content="電池健康度" Tag="battery"><NavigationViewItem.Icon><FontIcon Glyph="&#xE7F4;" /></NavigationViewItem.Icon></NavigationViewItem>
+          <NavigationViewItem Content="量測 CSV 分析" Tag="telemetry"><NavigationViewItem.Icon><FontIcon Glyph="&#xE9D9;" /></NavigationViewItem.Icon></NavigationViewItem>
+          <NavigationViewItem Content="驗證矩陣" Tag="validation"><NavigationViewItem.Icon><FontIcon Glyph="&#xE9D5;" /></NavigationViewItem.Icon></NavigationViewItem>
+          <NavigationViewItem Content="電池包估算" Tag="pack"><NavigationViewItem.Icon><FontIcon Glyph="&#xE8FD;" /></NavigationViewItem.Icon></NavigationViewItem>
+          <NavigationViewItem Content="工程報告" Tag="report"><NavigationViewItem.Icon><FontIcon Glyph="&#xE8A5;" /></NavigationViewItem.Icon></NavigationViewItem>
+          <NavigationViewItem Content="問題排查引導" Tag="guide"><NavigationViewItem.Icon><FontIcon Glyph="&#xE9CE;" /></NavigationViewItem.Icon></NavigationViewItem>
+          <NavigationViewItem Content="Windows 診斷工具" Tag="diagnostics"><NavigationViewItem.Icon><FontIcon Glyph="&#xE8B7;" /></NavigationViewItem.Icon></NavigationViewItem>
+          <NavigationViewItem Content="工具與安裝指南" Tag="resources"><NavigationViewItem.Icon><FontIcon Glyph="&#xE897;" /></NavigationViewItem.Icon></NavigationViewItem>
         </NavigationView.MenuItems>
         <NavigationView.Content>
-          <Grid Padding="25,18,25,30">
-            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+          <Grid Padding="25,12,25,22">
+            <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="*" /></Grid.RowDefinitions>
+            <InfoBar Grid.Row="0" x:Name="NoticeBar" Title="PackFit" Severity="Informational"
+                IsOpen="False" IsClosable="True" Margin="0,0,0,10" />
+            <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
               <StackPanel Spacing="12" MaxWidth="1170" HorizontalAlignment="Stretch">
-                <InfoBar x:Name="NoticeBar" Title="PackFit" Severity="Informational"
-                    IsOpen="False" IsClosable="True" Margin="0,0,0,8" />
                 <StackPanel x:Name="OverviewPanel" Spacing="17" Visibility="Collapsed"><StackPanel Spacing="8" Margin="0,0,0,12">
 <TextBlock Text="ENGINEERING / WORKSPACE" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
-<TextBlock Text="PackFit Engineering" FontSize="30" FontWeight="SemiBold" />
+<TextBlock Text="工程工作台" FontSize="30" FontWeight="SemiBold" />
 <TextBlock Text="筆電電池工程驗證工作台 · 整理資料、標記異常、產生可複查的測試摘要。" FontSize="13" TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
-</StackPanel><Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="14" Padding="22"><StackPanel Spacing="13"><TextBlock Text="常用工作" FontSize="18" FontWeight="SemiBold" /><TextBlock Text="先讀取電池狀態、匯入量測資料，再確認測試門檻。所有運算都在本機執行。" TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/><StackPanel Orientation="Horizontal" Spacing="12"><Button x:Name="QuickBattery" Content="產生電池報告" Click="GenerateBatteryClick" Style="{StaticResource AccentButtonStyle}" MinHeight="42" Padding="17,10" /><Button x:Name="QuickTelemetry" Content="匯入量測 CSV" Click="ImportTelemetryClick"  MinHeight="42" Padding="17,10" /><Button x:Name="QuickExport" Content="輸出工程報告" Click="ExportReportClick"  MinHeight="42" Padding="17,10" /></StackPanel></StackPanel></Border><Grid ColumnSpacing="14"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+</StackPanel><Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="14" Padding="22"><StackPanel Spacing="13"><TextBlock Text="常用工作" FontSize="18" FontWeight="SemiBold" /><TextBlock Text="先讀取電池狀態、匯入量測資料，再確認測試門檻。所有運算都在本機執行。" TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/><StackPanel Orientation="Horizontal" Spacing="12"><Button x:Name="QuickBattery" Content="產生電池報告" Click="GenerateBatteryClick" Style="{StaticResource AccentButtonStyle}" MinHeight="42" Padding="17,10" /><Button x:Name="QuickTelemetry" Content="匯入量測 CSV" Click="ImportTelemetryClick"  MinHeight="42" Padding="17,10" /><Button x:Name="QuickExport" Content="輸出工程報告" Click="ExportReportClick"  MinHeight="42" Padding="17,10" /><Button Content="問題排查引導" Click="GoGuideClick" MinHeight="42" Padding="17,10" /></StackPanel></StackPanel></Border><Grid ColumnSpacing="14"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
 <Border Grid.Column="0" Padding="18" CornerRadius="12" Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"><StackPanel><TextBlock Text="BATTERY" FontSize="11"/><TextBlock x:Name="OverviewBattery" Text="尚未分析" FontSize="20" FontWeight="SemiBold" TextWrapping="Wrap"/></StackPanel></Border>
 <Border Grid.Column="1" Padding="18" CornerRadius="12" Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"><StackPanel><TextBlock Text="TELEMETRY" FontSize="11"/><TextBlock x:Name="OverviewTelemetry" Text="尚未匯入" FontSize="20" FontWeight="SemiBold" TextWrapping="Wrap"/></StackPanel></Border>
 <Border Grid.Column="2" Padding="18" CornerRadius="12" Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"><StackPanel><TextBlock Text="VALIDATION" FontSize="11"/><TextBlock x:Name="OverviewValidation" Text="尚未匯入" FontSize="20" FontWeight="SemiBold" TextWrapping="Wrap"/></StackPanel></Border></Grid><Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="14" Padding="22"><StackPanel Spacing="13"><TextBlock Text="專案識別" FontSize="18" FontWeight="SemiBold" /><TextBlock Text="可以填入公開或內部專案代碼；資料只會用於本機產出的報告，不會自動上傳。" TextWrapping="Wrap" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
@@ -85,6 +97,121 @@
 </StackPanel><Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="14" Padding="22"><StackPanel Spacing="13"><TextBlock Text="報告內容" FontSize="18" FontWeight="SemiBold" /><TextBlock Text="報告僅包含本次操作中已讀取的資料。會明確列出風險及資料限制，不會宣稱通過安全或認證。" TextWrapping="Wrap" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
 <Button x:Name="PreviewReportButton" Content="產生報告預覽" Click="PreviewReportClick"  MinHeight="42" Padding="17,10" /><Button x:Name="ExportReportButton" Content="儲存 Markdown 報告" Click="ExportReportClick" Style="{StaticResource AccentButtonStyle}" MinHeight="42" Padding="17,10" />
 <TextBox x:Name="ReportPreview" Header="Preview" TextWrapping="Wrap" AcceptsReturn="True" IsReadOnly="True" Height="450" FontFamily="Consolas" FontSize="12" /></StackPanel></Border></StackPanel>
+
+                <StackPanel x:Name="GuidePanel" Spacing="17" Visibility="Collapsed">
+                  <StackPanel Spacing="8" Margin="0,0,0,12">
+                    <TextBlock Text="WORKFLOW / INVESTIGATION" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                    <TextBlock Text="問題排查引導" FontSize="30" FontWeight="SemiBold" />
+                    <TextBlock Text="選症狀 → 看排查原因與資料需求 → 勾選已完成項目 → 匯出可交接的調查清單。" FontSize="13" TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                  </StackPanel>
+                  <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="14" Padding="22">
+                    <StackPanel Spacing="13">
+                      <TextBlock Text="1. 先選擇問題類型" FontSize="18" FontWeight="SemiBold"/>
+                      <ComboBox x:Name="GuideIssue" Header="你遇到了什麼問題？" HorizontalAlignment="Stretch" MinHeight="43" SelectionChanged="GuideIssueChanged">
+                        <ComboBoxItem Tag="sleep-drain" Content="合蓋、睡眠或待機後掉電"/>
+                        <ComboBoxItem Tag="slow-charge" Content="充電慢或電池無法充滿"/>
+                        <ComboBoxItem Tag="shutdown" Content="突然關機、斷電或重啟"/>
+                        <ComboBoxItem Tag="heat" Content="高溫、降頻或風扇持續運轉"/>
+                        <ComboBoxItem Tag="battery-health" Content="電池容量下降或續航變短"/>
+                      </ComboBox>
+                      <TextBlock x:Name="GuideSummary" Text="選擇問題後，會顯示排查清單。" TextWrapping="Wrap"/>
+                    </StackPanel>
+                  </Border>
+                  <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="14" Padding="22">
+                    <StackPanel Spacing="13">
+                      <TextBlock Text="2. 按步驟確認證據" FontSize="18" FontWeight="SemiBold"/>
+                      <TextBlock Text="每一步都會寫清楚『為什麼』以及『要留什麼資料』。完成後可打勾。" FontSize="12" TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                      <StackPanel x:Name="GuideSteps" Spacing="10"/>
+                      <Button Content="開啟 Windows 診斷工具箱" Click="GoDiagnosticsClick" HorizontalAlignment="Left" />
+                    </StackPanel>
+                  </Border>
+                  <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="14" Padding="22">
+                    <StackPanel Spacing="13">
+                      <TextBlock Text="3. 補充測試條件並整理交接" FontSize="18" FontWeight="SemiBold"/>
+                      <TextBox x:Name="GuideNotes" Header="觀察、時間、AC/DC、BIOS/EC、負責人與下一步" AcceptsReturn="True" TextWrapping="Wrap" Height="125" PlaceholderText="例：重現時間、AC/DC、SOC、環境溫度、BIOS 版本、已比對的 Log..." />
+                      <StackPanel Orientation="Horizontal" Spacing="10">
+                        <Button Content="複製排查清單" Click="CopyGuideClick" Style="{StaticResource AccentButtonStyle}"/>
+                        <Button Content="存成 Markdown" Click="SaveGuideClick"/>
+                      </StackPanel>
+                      <InfoBar Title="提醒" Message="排查引導不會自動判定根因；需比對量測資料與專案規格後由工程師確認。" IsOpen="True" IsClosable="False" Severity="Informational"/>
+                    </StackPanel>
+                  </Border>
+                </StackPanel>
+                <StackPanel x:Name="DiagnosticsPanel" Spacing="17" Visibility="Collapsed">
+                  <StackPanel Spacing="8" Margin="0,0,0,12">
+                    <TextBlock Text="SYSTEM / TOOLS" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                    <TextBlock Text="Windows 診斷工具箱" FontSize="30" FontWeight="SemiBold"/>
+                    <TextBlock Text="不用背指令或安裝額外工具。只執行你選擇的 Windows 內建診斷；不會改寫電源設定。" FontSize="13" TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                  </StackPanel>
+                  <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="14" Padding="22">
+                    <StackPanel Spacing="15">
+                      <TextBlock Text="電源與睡眠檢查" FontSize="18" FontWeight="SemiBold"/>
+                      <ComboBox x:Name="DiagnosticChoice" Header="選擇要查的項目" HorizontalAlignment="Stretch" MinHeight="42">
+                        <ComboBoxItem Tag="sleep" Content="支援的睡眠狀態 — powercfg /a"/>
+                        <ComboBoxItem Tag="requests" Content="阻止睡眠的要求 — powercfg /requests"/>
+                        <ComboBoxItem Tag="wake" Content="上次喚醒來源 — powercfg /lastwake"/>
+                        <ComboBoxItem Tag="timers" Content="喚醒計時器 — powercfg /waketimers"/>
+                        <ComboBoxItem Tag="armed" Content="可喚醒裝置 — powercfg /devicequery wake_armed"/>
+                      </ComboBox>
+                      <StackPanel Orientation="Horizontal" Spacing="10">
+                        <Button x:Name="RunDiagnosticButton" Content="執行選取的診斷" Click="RunDiagnosticClick" Style="{StaticResource AccentButtonStyle}"/>
+                        <Button Content="複製結果" Click="CopyDiagnosticClick"/>
+                        <ProgressRing x:Name="DiagnosticProgress" Width="26" Height="26" IsActive="False" Visibility="Collapsed"/>
+                      </StackPanel>
+                      <TextBox x:Name="DiagnosticOutput" Header="Windows 原始回覆（僅顯示於本機）" Text="尚未執行診斷。" AcceptsReturn="True" IsReadOnly="True" TextWrapping="Wrap" MinHeight="180" MaxHeight="350" ScrollViewer.VerticalScrollBarVisibility="Auto" FontFamily="Consolas" FontSize="12"/>
+                    </StackPanel>
+                  </Border>
+                  <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="14" Padding="22">
+                    <StackPanel Spacing="13">
+                      <TextBlock Text="進階報告（由你選擇儲存位置）" FontSize="18" FontWeight="SemiBold"/>
+                      <TextBlock Text="Energy Report 建議在電腦閒置時執行；SleepStudy 僅適用支援的待機模式。某些指令需要系統管理員權限。" TextWrapping="Wrap" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                      <StackPanel Orientation="Horizontal" Spacing="10">
+                        <Button Content="建立 Energy Report" Click="RunEnergyReportClick"/>
+                        <Button Content="建立 SleepStudy" Click="RunSleepStudyClick"/>
+                      </StackPanel>
+                    </StackPanel>
+                  </Border>
+                  <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="14" Padding="22">
+                    <StackPanel Spacing="13">
+                      <TextBlock Text="直接開啟 Windows 工具" FontSize="18" FontWeight="SemiBold"/>
+                      <StackPanel Orientation="Horizontal" Spacing="10">
+                        <Button Content="可靠性監視器" Click="OpenReliabilityClick"/>
+                        <Button Content="事件檢視器" Click="OpenEventViewerClick"/>
+                        <Button Content="DirectX 診斷工具" Click="OpenDxDiagClick"/>
+                      </StackPanel>
+                      <Button Content="查看需額外安裝的進階工具" Click="GoResourcesClick" HorizontalAlignment="Left"/>
+                    </StackPanel>
+                  </Border>
+                </StackPanel>
+                <StackPanel x:Name="ResourcesPanel" Spacing="17" Visibility="Collapsed">
+                  <StackPanel Spacing="8" Margin="0,0,0,12">
+                    <TextBlock Text="RESOURCES / OFFICIAL" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                    <TextBlock Text="需要額外工具時，從這裡開始" FontSize="30" FontWeight="SemiBold"/>
+                    <TextBlock Text="先用 Windows 內建工具；若必須抓 ETL、排查處理程序或看詳細效能，提供官方下載／說明入口。所有安裝均由你決定。" FontSize="13" TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                  </StackPanel>
+                  <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="14" Padding="22">
+                    <StackPanel Spacing="13">
+                      <TextBlock Text="工具安裝狀態" FontSize="18" FontWeight="SemiBold"/>
+                      <TextBlock x:Name="ToolAvailability" Text="點擊檢查後顯示 WPR／WPA／Procmon 是否在已知搜尋路徑。" TextWrapping="Wrap"/>
+                      <Button Content="檢查這台電腦上的工具" Click="CheckExternalToolsClick" HorizontalAlignment="Left"/>
+                    </StackPanel>
+                  </Border>
+                  <Expander Header="WPR / WPA — CPU、耗電、Modern Standby、卡頓與 ETL 分析" IsExpanded="True">
+                    <StackPanel Spacing="11" Padding="16">
+                      <TextBlock Text="Windows 已提供 WPR 命令列工具（部分情況需要權限）；更完整的圖形介面與 WPA 分析器可從微軟 Windows ADK 的 Windows Performance Toolkit 安裝。" TextWrapping="Wrap"/>
+                      <Button Content="Microsoft：Windows ADK 官方下載" Click="OpenAdkDocsClick" HorizontalAlignment="Left"/>
+                      <Button Content="Microsoft：WPR/WPA 操作指南" Click="OpenWprDocsClick" HorizontalAlignment="Left"/>
+                      <TextBlock Text="建議用法：先設定重現步驟，開始錄製 ETW，重現一次，再停止並用 WPA 打開 ETL。請勿在公開 Issue 上傳含敏感資訊的 trace。" TextWrapping="Wrap" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                    </StackPanel>
+                  </Expander>
+                  <Expander Header="Process Monitor — 驅動程式、檔案、登錄與處理序活動">
+                    <StackPanel Spacing="11" Padding="16">
+                      <TextBlock Text="Microsoft Sysinternals 的 Process Monitor 可用於系統異常、存取失敗與背景活動分析，並支援篩選和擷取檔案。" TextWrapping="Wrap"/>
+                      <Button Content="Microsoft：Process Monitor 官方頁面" Click="OpenProcmonDocsClick" HorizontalAlignment="Left"/>
+                    </StackPanel>
+                  </Expander>
+                  <InfoBar Title="安全與權限" Message="這裡只會開啟微軟官方說明網頁；不會自動下載、安裝、執行第三方軟體，也不會繞過公司的資安規則。" Severity="Informational" IsOpen="True" IsClosable="False"/>
+                </StackPanel>
               </StackPanel>
             </ScrollViewer>
           </Grid>
