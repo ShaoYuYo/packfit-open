@@ -67,8 +67,8 @@
 </StackPanel>
 <CheckBox x:Name="DischargeSignCheck" Content="正電流表示放電（如量測設備使用負值，取消勾選）" IsChecked="True" />
 <StackPanel Orientation="Horizontal" Spacing="10">
-  <Button x:Name="TelemetryImportButton" Content="分析 CSV 檔案" Click="ImportTelemetryClick" Style="{StaticResource AccentButtonStyle}" MinHeight="42" Padding="17,10" />
-  <Button x:Name="TelemetryBatchButton" Content="批次匯入多個 Log" Click="ImportTelemetryBatchClick" MinHeight="42" Padding="17,10"/>
+  <Button x:Name="TelemetryImportButton" Content="分析 CSV / TSV" Click="ImportTelemetryClick" Style="{StaticResource AccentButtonStyle}" MinHeight="42" Padding="17,10" />
+  <Button x:Name="TelemetryBatchButton" Content="批次匯入 CSV / TSV" Click="ImportTelemetryBatchClick" MinHeight="42" Padding="17,10"/>
 </StackPanel>
 <TextBlock Text="必要欄位：Timestamp（含時區）；至少再有一個訊號欄位。支援 Voltage_V / Voltage_mV、Current_A / Current_mA、Temp_C、SOC_pct。" TextWrapping="Wrap" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/></StackPanel></Border><Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="14" Padding="22"><StackPanel Spacing="13"><TextBlock Text="異常摘要" FontSize="18" FontWeight="SemiBold" /><TextBlock x:Name="TelemetryResult" Text="尚未匯入 CSV。" FontSize="14" TextWrapping="Wrap"/>
 <ListView x:Name="TelemetryList" MinHeight="175" MaxHeight="370" SelectionMode="None" /><Expander Header="批次分析摘要（同一組門檻）" IsExpanded="True">
