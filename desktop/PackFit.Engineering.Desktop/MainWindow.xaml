@@ -69,6 +69,7 @@
 <StackPanel Orientation="Horizontal" Spacing="10">
   <Button x:Name="TelemetryImportButton" Content="分析 CSV / TSV" Click="ImportTelemetryClick" Style="{StaticResource AccentButtonStyle}" MinHeight="42" Padding="17,10" />
   <Button x:Name="TelemetryBatchButton" Content="批次匯入 CSV / TSV" Click="ImportTelemetryBatchClick" MinHeight="42" Padding="17,10"/>
+  <Button Content="取得 Log 範例" Click="SaveTelemetryExampleClick" MinHeight="42" Padding="17,10"/>
 </StackPanel>
 <TextBlock Text="必要欄位：Timestamp（含時區）；至少再有一個訊號欄位。支援 Voltage_V / Voltage_mV、Current_A / Current_mA、Temp_C、SOC_pct。" TextWrapping="Wrap" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/></StackPanel></Border><Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="14" Padding="22"><StackPanel Spacing="13"><TextBlock Text="異常摘要" FontSize="18" FontWeight="SemiBold" /><TextBlock x:Name="TelemetryResult" Text="尚未匯入 CSV。" FontSize="14" TextWrapping="Wrap"/>
 <ListView x:Name="TelemetryList" MinHeight="175" MaxHeight="370" SelectionMode="None" /><Expander Header="批次分析摘要（同一組門檻）" IsExpanded="True">
@@ -83,7 +84,10 @@
 <TextBlock Text="測試驗證矩陣" FontSize="30" FontWeight="SemiBold" />
 <TextBlock Text="讀入測試標準和量測結果，快速歸類 PASS、FAIL、NOT RUN，避免每次手動整理表格。" FontSize="13" TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
 </StackPanel><Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="14" Padding="22"><StackPanel Spacing="13"><TextBlock Text="CSV 驗證矩陣" FontSize="18" FontWeight="SemiBold" /><TextBlock Text="輸入欄位：TestID, Category, Metric, Measured, Min, Max, Unit, Owner, Notes。Min / Max 至少填一個；未量測的項目會標為 NOT RUN。" TextWrapping="Wrap" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+<StackPanel Orientation="Horizontal" Spacing="10">
 <Button x:Name="ValidationImportButton" Content="匯入驗證矩陣 CSV" Click="ImportValidationClick" Style="{StaticResource AccentButtonStyle}" MinHeight="42" Padding="17,10" />
+<Button Content="取得測試矩陣範例" Click="SaveValidationExampleClick" MinHeight="42" Padding="17,10"/>
+</StackPanel>
 <TextBlock x:Name="ValidationResult" Text="尚未匯入。" FontSize="16" FontWeight="SemiBold" TextWrapping="Wrap"/>
 <ListView x:Name="ValidationList" MinHeight="180" MaxHeight="420" SelectionMode="None" /></StackPanel></Border></StackPanel>
                 <StackPanel x:Name="PackPanel" Spacing="17" Visibility="Collapsed"><StackPanel Spacing="8" Margin="0,0,0,12">
@@ -188,6 +192,7 @@
                         <Button Content="可靠性監視器" Click="OpenReliabilityClick"/>
                         <Button Content="事件檢視器" Click="OpenEventViewerClick"/>
                         <Button Content="DirectX 診斷工具" Click="OpenDxDiagClick"/>
+  <Button Content="系統資訊" Click="OpenSystemInfoClick"/>
                       </StackPanel>
                       <Button Content="查看需額外安裝的進階工具" Click="GoResourcesClick" HorizontalAlignment="Left"/>
                     </StackPanel>
