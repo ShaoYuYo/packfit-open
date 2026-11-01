@@ -6,7 +6,7 @@
 
 [Open the live app](https://shaoyuyo.github.io/packfit-open/) · [Issues](https://github.com/ShaoYuYo/packfit-open/issues) · [Methodology](docs/METHODOLOGY.md)
 
-> **Project status:** v0.5.0 — initial community release. Mathematical feasibility estimates only; not certified engineering analysis.
+> **Project status:** v0.6.0 — initial community release. Mathematical feasibility estimates only; not certified engineering analysis.
 
 ## What you can do
 
@@ -15,6 +15,7 @@
 | **Overview** | Estimate runtime and plan a day of office/video/gaming usage with editable average wattages, current charge and reserve. |
 | **My Battery** | Opt-in browser battery status (where supported), local Windows battery report analysis and manual capacity retention. |
 | **Everyday Tools** | Charging cost, power-bank rated and deliverable Wh, and rough recharge time. |
+| **Device Insights** | Automatic browser hardware hints, opt-in WebGL graphics identification and local browser computation probe; not a Windows hardware inventory or a gaming benchmark. |
 | **Pack Studio** | Model S/P topology, nominal voltage/energy, total cell + overhead mass, rectangular envelope volume, Wh/kg, Wh/L and ideal runtime. |
 | **Compare** | Save four scenarios, compare metrics, export CSV, and back up or restore validated versioned JSON on another device. |
 | **Methodology** | Inspect formulas, assumptions, scope and safety limitations. |
@@ -106,3 +107,13 @@ The v0.5 appearance uses a warm ivory/graphite foundation with a muted plum acti
 For optional enhanced transitions, `src/motion-enhance.js` imports the [MIT-licensed Motion](https://github.com/motiondivision/motion) JavaScript library from a **version-pinned jsDelivr URL (13.2.0)**. This is an asynchronous, nonessential CDN request and does not send battery inputs or reports. When offline, blocked or unavailable, the app uses the native Web Animations API. Essential controls, calculations and local storage work without Motion. Operating-system reduced-motion preferences disable these transitions.
 
 See [design decisions](docs/DESIGN_SYSTEM.md) and [dependency/privacy policy](SECURITY.md).
+
+## Device Insights and automatic color themes (v0.6)
+
+**System appearance is the default.** PackFit follows the browser/OS light/dark preference using `matchMedia('(prefers-color-scheme: dark)')` and reacts when that preference changes. The Appearance selector provides System, Light and Dark overrides. Explicit new choices are stored locally. Legacy pre-v0.6 theme settings automatically migrate to System, because earlier settings could not distinguish user overrides from defaults.
+
+**Basic browser hardware hints** are displayed when the site loads: `navigator.hardwareConcurrency` (possibly reduced logical processors), `navigator.deviceMemory` (coarse memory where supported), platform and WebGPU API presence. Missing hints stay unknown. The resource profile is a **low-confidence descriptive bracket**, not a CPU/GPU or gaming performance score.
+
+**Detailed GPU identification** only runs if you click Check GPU details; it uses WebGL and may return an anonymized renderer or no data. **Computation probe** runs only after you choose Run local test, in a dedicated Worker and reports elapsed milliseconds for a fixed JavaScript task. Thermal conditions, background work and browsers affect the result. Neither test uploads, stores or fingerprints device information; there is no analytics endpoint.
+
+The seven workspaces have a unified responsive layout in `assets/workspace.css`, with larger readable controls, consistent spacing and reflowing columns. See [User Guide](docs/USER_GUIDE.zh-TW.md) and [Device limitations](docs/DEVICE_INSIGHTS.md).
