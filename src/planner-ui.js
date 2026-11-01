@@ -29,7 +29,7 @@ export const PLANNER_TRANSLATIONS={
 };
 const el=id=>document.getElementById(id);
 let locale="zh-TW";
-const t=k=>words[locale][k]||k;
+const t=k=>PLANNER_TRANSLATIONS[locale][k]||k;
 const fmt=(v,n=1)=>formatNumber(v,locale,n);
 function update(){
   const ids=[["plan-work-hours","plan-work-watts"],["plan-video-hours","plan-video-watts"],["plan-game-hours","plan-game-watts"]];
