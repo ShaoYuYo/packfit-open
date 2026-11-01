@@ -1,6 +1,6 @@
 export const DICTIONARY = {
   "zh-TW": {
-    workspace:"工作區",brandCaption:"電池工具",sampleDemo:"示範資料",sampleCapacity:"電池標示容量",sampleType:"鋰電池・示意",ctaBattery:"查看我的電池",ctaEveryday:"常用計算工具",heroNote:"不用登入。輸入的資料都只留在這台裝置。",modelLabel:"依輸入值即時計算",introEyebrow:"先看看你的設備",plannerEyebrow:"用電規劃",navOverview:"總覽",navStudio:"電池設計室",navCompare:"方案比較",navMethod:"計算方法",
+    workspace:"工作區",navDevice:"裝置分析",appearanceLabel:"外觀",themeSystem:"跟隨系統",themeLight:"淺色",themeDark:"深色",deviceDiscoveryTitle:"這台電腦的規格與效能",deviceDiscoveryText:"查看瀏覽器能辨識的硬體，以及可自行啟動的運算測試。",deviceDiscoveryAction:"開啟裝置分析",brandCaption:"電池工具",sampleDemo:"示範資料",sampleCapacity:"電池標示容量",sampleType:"鋰電池・示意",ctaBattery:"查看我的電池",ctaEveryday:"常用計算工具",heroNote:"不用登入。輸入的資料都只留在這台裝置。",modelLabel:"依輸入值即時計算",introEyebrow:"先看看你的設備",plannerEyebrow:"用電規劃",navOverview:"總覽",navStudio:"電池設計室",navCompare:"方案比較",navMethod:"計算方法",
     offlineReady:"計算都在你的裝置上完成",localOnly:"本機計算",heroKicker:"PACKFIT / 電池工具",heroTitle1:"電池還能用多久？",heroTitle2:"算過就知道。",
     heroDesc:"想知道筆電電池的健康度、還能用多久，或充電要花多少錢？這裡都有簡單的算法。工程規格也能另外試算。",pillInstant:"即時計算",pillPrivate:"隱私優先",pillOpen:"開放原始碼",
     quickStart:"續航估算",runtimeTitle:"大概還能用多久？",runtimeIntro:"輸入電池容量與平均耗電，就能先算出一個參考值。",
@@ -40,7 +40,7 @@ export const DICTIONARY = {
     metricRuntime:"理想續航 (h)",metricTopology:"串並聯組態",invalidScenario:"此方案無法正確計算。",download:"下載",statusOk:"輸入已更新"
   },
   en: {
-    workspace:"WORKSPACE",brandCaption:"Battery tools",sampleDemo:"EXAMPLE DATA",sampleCapacity:"Rated capacity",sampleType:"Li-ion · illustrative",ctaBattery:"Check my battery",ctaEveryday:"Everyday calculators",heroNote:"No account required. Your inputs stay on this device.",modelLabel:"Updates as you type",introEyebrow:"START WITH YOUR DEVICE",plannerEyebrow:"DAILY USAGE",navOverview:"Overview",navStudio:"Pack Studio",navCompare:"Compare",navMethod:"Methodology",
+    workspace:"WORKSPACE",navDevice:"Device Insights",appearanceLabel:"Appearance",themeSystem:"System",themeLight:"Light",themeDark:"Dark",deviceDiscoveryTitle:"See what your device can do",deviceDiscoveryText:"View browser-exposed hardware hints and run an optional local test.",deviceDiscoveryAction:"Device insights",brandCaption:"Battery tools",sampleDemo:"EXAMPLE DATA",sampleCapacity:"Rated capacity",sampleType:"Li-ion · illustrative",ctaBattery:"Check my battery",ctaEveryday:"Everyday calculators",heroNote:"No account required. Your inputs stay on this device.",modelLabel:"Updates as you type",introEyebrow:"START WITH YOUR DEVICE",plannerEyebrow:"DAILY USAGE",navOverview:"Overview",navStudio:"Pack Studio",navCompare:"Compare",navMethod:"Methodology",
     offlineReady:"Calculations run on your device",localOnly:"100% local",heroKicker:"PACKFIT / BATTERY TOOLS",heroTitle1:"How long will it last?",heroTitle2:"Run the numbers.",
     heroDesc:"Check battery capacity, estimate runtime, and work out charging costs. Need technical figures? The pack calculator is here too.",
     pillInstant:"Instant calculations",pillPrivate:"Privacy-first",pillOpen:"Open-source",quickStart:"RUNTIME ESTIMATE",runtimeTitle:"How long will it run?",
