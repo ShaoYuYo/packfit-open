@@ -169,7 +169,7 @@ public sealed partial class MainWindow : Window
     {
         try
         {
-            var path = await PickFileAsync(".csv");
+            var path = await PickFileAsync(".csv", ".tsv", ".txt");
             if (path is null) return;
             var thresholds = ReadThresholds();
             string text = await File.ReadAllTextAsync(path);
