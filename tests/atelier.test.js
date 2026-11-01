@@ -12,7 +12,7 @@ test("warm atelier palette is loaded last and cached for offline use",()=>{
  const worker=read("sw.js");
  assert.ok(html.indexOf("./assets/atelier.css")>html.indexOf("./assets/editorial.css"));
  assert.match(worker,/"\.\/assets\/atelier\.css"/);
- assert.match(worker,/"packfit-static-v0\.5\.0"/);
+ assert.match(worker,/"packfit-static-v0\.6\.0"/);
  assert.match(css,/--bg:#f6f3f0/);
  assert.match(css,/--accent:#76515e/);
  assert.match(css,/--accent:#d9aeba/);
