@@ -105,6 +105,7 @@ export function initializeConsumer(getLanguage){
     q("runtime-wh").value=healthResult.fullWh;
     q("runtime-wh").dispatchEvent(new Event("input",{bubbles:true}));
     q("pf-cost-wh").value=healthResult.fullWh;
+    if(q("plan-wh")){q("plan-wh").value=healthResult.fullWh;q("plan-wh").dispatchEvent(new Event("input",{bubbles:true}));}
     q("pf-time-wh").value=healthResult.fullWh;
     showCalculators();
     document.querySelector('.nav-item[data-tab="overview"]').click();
