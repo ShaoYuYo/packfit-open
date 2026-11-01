@@ -4,13 +4,15 @@
 
 [Open the live app](https://shaoyuyo.github.io/packfit-open/) · [Issues](https://github.com/ShaoYuYo/packfit-open/issues) · [Methodology](docs/METHODOLOGY.md)
 
-> **Project status:** v0.1.0 — initial community release. Mathematical feasibility estimates only; not certified engineering analysis.
+> **Project status:** v0.2.0 — initial community release. Mathematical feasibility estimates only; not certified engineering analysis.
 
 ## What you can do
 
 | Workspace | Capabilities |
 | --- | --- |
 | **Overview** | Estimate runtime from battery Wh, average watts, reserve percentage and conversion efficiency; switch example device profiles. |
+| **My Battery** | Opt-in browser battery status (where supported), local Windows battery report analysis and manual capacity retention. |
+| **Everyday Tools** | Charging cost, power-bank rated and deliverable Wh, and rough recharge time. |
 | **Pack Studio** | Model S/P topology, nominal voltage/energy, total cell + overhead mass, rectangular envelope volume, Wh/kg, Wh/L and ideal runtime. |
 | **Compare** | Save up to four scenarios in your browser, compare charts and metrics, load previous inputs, and export UTF-8 BOM CSV for Excel. |
 | **Methodology** | Inspect formulas, assumptions, scope and safety limitations. |
@@ -61,3 +63,12 @@ Pull requests, verified formula corrections, translations and test cases are wel
 ## License
 
 MIT © 2026 ShaoYuYo. See [LICENSE](LICENSE).
+## Personal Battery Lab (v0.2)
+
+Live monitoring requests the optional browser Battery Status API only when the visitor clicks **Check my battery**. Many browsers do not support it; even where available it typically offers current charge level, charging state and approximate time, **not battery health, design capacity or cycle count**. Some browsers may expose default or rounded values.
+
+On Windows, run `powercfg /batteryreport /output "%USERPROFILE%\Desktop\battery-report.html"`, then import the HTML file in **My Battery**. The static application reads the file locally in your browser, extracts design capacity, full-charge capacity and optionally cycle count, and displays the capacity retention ratio. Files are never uploaded or stored. Reports may contain private device identifiers; do not publish original files in GitHub issues. Manual entry works when reporting is unavailable.
+
+New Everyday Tools apply bounded, transparent formulas to charging electricity costs, portable power bank Wh estimates and approximate charge time. All sample values are illustrative. Charging time uses a stated 15% modeling buffer; power bank mAh-to-Wh conversion uses the **cell-side nominal voltage**, not 5V output, and output efficiency is assumed. These numbers are **not physical measurements or safety certifications**.
+
+The premium design layer is `assets/premium.css` with animations, responsive layouts, theme support and `prefers-reduced-motion` handling. Inspired by general contemporary product design principles; no Apple artwork or UI assets are copied.
