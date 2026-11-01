@@ -5,6 +5,7 @@ import {readSettings,writeSettings,readScenarios,writeScenarios,MAX_SCENARIOS} f
 import {scenariosToCsv,downloadCsv} from "./csv.js";
 import {serializeScenarios,parseScenarioFile,MAX_JSON_CHARS} from "./scenario-transfer.js";
 import {setupOfflineSupport} from "./pwa.js";
+import {initializePlanner,setPlanLocale} from "./planner-ui.js";
 import {translate} from "./i18n.js";
 import {initializeConsumer,translateConsumer,consumerSectionTitle} from "./consumer-ui.js";
 
@@ -144,7 +145,7 @@ function updateLocale() {
   }
   setText("language-toggle",settings.language==="en"?"繁":"EN");
   el("language-toggle").setAttribute("aria-label",settings.language==="en"?"切換成繁體中文":"Switch to English");
-  renderRuntime();renderPack();renderCompare();translateConsumer(settings.language);
+  renderRuntime();renderPack();renderCompare();translateConsumer(settings.language);setPlanLocale(settings.language);
   setText("current-section",panelTitle($(".nav-item.is-active")?.dataset.tab||"overview"));
 }
 function updateTheme() {
@@ -301,4 +302,5 @@ function setup() {
 }
 setup();
 initializeConsumer(()=>settings.language);
+initializePlanner(()=>settings.language);
 setupOfflineSupport();
