@@ -57,6 +57,14 @@ public sealed partial class MainWindow : Window
         return value;
     }
 
+    private static int ReadInteger(TextBox box)
+    {
+        double n = ReadNumber(box);
+        if (n != Math.Truncate(n) || n < 1 || n > 32)
+            throw new FormatException($"「{box.Header}」需要 1–32 的整數。");
+        return checked((int)n);
+    }
+
     private static double? ReadOptional(TextBox box)
         => string.IsNullOrWhiteSpace(box.Text) ? null : ReadNumber(box);
 
