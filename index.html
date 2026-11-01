@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#080f1b">
+  <meta name="description" content="PackFit Open — a privacy-first battery runtime estimator and battery pack feasibility laboratory. Free, open-source, bilingual.">
+  <meta name="color-scheme" content="dark light">
+  <title>PackFit Open — Battery Intelligence, Made Accessible.</title>
+  <link rel="icon" type="image/svg+xml" href="./assets/logo.svg">
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./src/app.js"></script>
+</head>
+<body data-theme="dark">
+  <a class="skip-link" href="#content">Skip to content</a>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Main navigation">
+      <a class="brand" href="#overview" aria-label="PackFit Open home">
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none"><path d="M22.3 4 10.5 21.3h10l-2.4 14.6 12.4-18.6H20.2L22.3 4Z" fill="currentColor"/></svg></span>
+        <span><strong>packfit<span class="brand-dot">.</span></strong><small>OPEN SOURCE LAB</small></span>
+      </a>
+      <div class="nav-label" data-i18n="workspace">WORKSPACE</div>
+      <nav class="nav" aria-label="Primary">
+        <button class="nav-item is-active" data-tab="overview" type="button" aria-selected="true"><span class="nav-icon" aria-hidden="true">◫</span><span data-i18n="navOverview">Overview</span><span class="nav-shortcut">01</span></button>
+        <button class="nav-item" data-tab="studio" type="button" aria-selected="false"><span class="nav-icon" aria-hidden="true">⌘</span><span data-i18n="navStudio">Pack Studio</span><span class="nav-shortcut">02</span></button>
+        <button class="nav-item" data-tab="compare" type="button" aria-selected="false"><span class="nav-icon" aria-hidden="true">▥</span><span data-i18n="navCompare">Compare</span><span class="nav-shortcut">03</span></button>
+        <button class="nav-item" data-tab="method" type="button" aria-selected="false"><span class="nav-icon" aria-hidden="true">◎</span><span data-i18n="navMethod">Methodology</span><span class="nav-shortcut">04</span></button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="sidebar-note"><span class="pulse" aria-hidden="true"></span><span data-i18n="offlineReady">All calculations run on your device</span></div>
+        <a class="github-link" href="https://github.com/ShaoYuYo/packfit-open" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">↗</span> GitHub <span class="external-arrow" aria-hidden="true">↗</span></a>
+        <div class="sidebar-foot">VERSION 0.1.0 <span>·</span> MIT LICENSE</div>
+      </div>
+    </aside>
+    <div class="app-body">
+      <header class="topbar">
+        <div class="breadcrumb"><span class="crumb-muted">PACKFIT</span><span class="crumb-slash">/</span><span id="current-section">Overview</span></div>
+        <div class="topbar-actions">
+          <span class="status-chip"><span class="status-dot" aria-hidden="true"></span><span data-i18n="localOnly">100% local</span></span>
+          <button id="language-toggle" class="icon-button lang-button" type="button" aria-label="Switch language">EN</button>
+          <button id="theme-toggle" class="icon-button" type="button" aria-label="Toggle color theme">☼</button>
+        </div>
+      </header>
+      <main id="content" class="main-content">
+        <section id="overview" data-panel="overview" aria-labelledby="overview-title">
+          <div class="hero hero-overview">
+            <div class="hero-content">
+              <div class="eyebrow"><span class="eyebrow-line"></span><span data-i18n="heroKicker">ENERGY, UNDERSTOOD.</span></div>
+              <h1 id="overview-title"><span data-i18n="heroTitle1">Know your battery.</span><br><span class="gradient-text" data-i18n="heroTitle2">Power your decisions.</span></h1>
+              <p class="hero-desc" data-i18n="heroDesc">從續航時間到工程數據，把複雜的電池資訊變得直覺、透明，而且人人都能用。</p>
+              <div class="hero-pills"><span class="hero-pill">⚡ <span data-i18n="pillInstant">Instant calculations</span></span><span class="hero-pill">◇ <span data-i18n="pillPrivate">Privacy-first</span></span><span class="hero-pill">↗ <span data-i18n="pillOpen">Open-source</span></span></div>
+            </div>
+            <div class="hero-visual" aria-hidden="true"><div class="orbit orbit-a"></div><div class="orbit orbit-b"></div><div class="visual-battery"><div class="battery-top"></div><div class="battery-fill"></div><div class="battery-bolt">ϟ</div></div><div class="float-chip chip-a">+ ENERGY</div><div class="float-chip chip-b">POWER / INSIGHT</div></div>
+          </div>
+          <div class="section-head"><div><div class="overline" data-i18n="quickStart">01 / QUICK START</div><h2 data-i18n="runtimeTitle">Battery runtime estimator</h2><p class="muted" data-i18n="runtimeIntro">不需要工程背景，輸入電池容量與平均耗電就能估算續航。</p></div><span class="feature-chip">LIVE CALCULATION <span class="live-dot"></span></span></div>
+          <div class="overview-grid">
+            <div class="panel form-panel">
+              <div class="panel-top"><div><div class="overline" data-i18n="inputs">INPUT PARAMETERS</div><h3 data-i18n="yourDevice">Your device</h3></div><span class="corner-index">A—01</span></div>
+              <label class="field"><span class="field-title" data-i18n="preset">Quick preset</span><select id="device-preset"><option value="custom" data-i18n="presetCustom">Custom device</option><option value="ultrabook" data-i18n="presetUltra">Ultrabook · light use</option><option value="workstation" data-i18n="presetWork">Workstation · active use</option><option value="tablet" data-i18n="presetTablet">Tablet · browsing</option><option value="powerbank" data-i18n="presetPower">USB power bank · 10 W load</option></select></label>
+              <div class="field-grid">
+                <label class="field"><span class="field-title" data-i18n="batteryEnergy">Battery capacity</span><div class="input-wrap"><input id="runtime-wh" type="number" inputmode="decimal" min="0.01" max="2000" step="0.1" value="56" required><span>Wh</span></div></label>
+                <label class="field"><span class="field-title" data-i18n="avgLoad">Average power draw</span><div class="input-wrap"><input id="runtime-watts" type="number" inputmode="decimal" min="0.01" max="5000" step="0.1" value="12" required><span>W</span></div></label>
+              </div>
+              <div class="field-grid">
+                <label class="field"><span class="field-title" data-i18n="reserve">Reserved capacity</span><div class="input-wrap"><input id="runtime-reserve" type="number" inputmode="decimal" min="0" max="90" step="1" value="10" required><span>%</span></div></label>
+                <label class="field"><span class="field-title" data-i18n="efficiency">Conversion efficiency</span><div class="input-wrap"><input id="runtime-efficiency" type="number" inputmode="decimal" min="1" max="100" step="1" value="90" required><span>%</span></div></label>
+              </div>
+              <div class="helper"><span aria-hidden="true">ⓘ</span><span data-i18n="runtimeHelper">估算採用恆定平均功耗；溫度、電池老化與動態負載可能讓實際續航不同。</span></div>
+              <div id="runtime-error" class="error-message" role="alert" hidden></div>
+            </div>
+            <div class="panel result-panel">
+              <div class="panel-top"><div><div class="overline" data-i18n="prediction">ESTIMATED ENDURANCE</div><h3 data-i18n="runtimeResult">Expected runtime</h3></div><span class="result-status"><span class="live-dot"></span><span data-i18n="estimated">ESTIMATE</span></span></div>
+              <div class="runtime-main"><div><div id="runtime-display" class="hero-number" aria-live="polite">4h 12m</div><div class="sub-number" data-i18n="runtimeCaption">Estimated operating time</div></div><div class="ring" id="runtime-ring"><div class="ring-center"><span>Wh</span><strong id="usable-wh">45.4</strong></div></div></div>
+              <div class="result-divider"></div>
+              <div class="metric-row"><span data-i18n="usableEnergy">Usable energy after losses</span><strong id="usable-energy">45.4 Wh</strong></div>
+              <div class="track"><div id="energy-track" class="track-fill"></div></div>
+              <div class="metric-row"><span data-i18n="originalEnergy">Rated battery energy</span><strong id="rated-energy">56 Wh</strong></div>
+              <div class="result-footer"><span data-i18n="estimatedFormula">Runtime = Wh × usable % × efficiency ÷ W</span><button class="text-link" type="button" data-goto="method"><span data-i18n="seeMethod">See methodology</span> ↗</button></div>
+            </div>
+          </div>
+          <div class="mini-grid">
+            <button class="mini-card" type="button" data-goto="studio"><span class="mini-icon">⌘</span><span><strong data-i18n="studioCardTitle">Engineering-grade metrics</strong><small data-i18n="studioCardDesc">Series / parallel, energy density, pack dimensions</small></span><span class="mini-arrow">↗</span></button>
+            <button class="mini-card" type="button" data-goto="compare"><span class="mini-icon">▥</span><span><strong data-i18n="compareCardTitle">Compare configurations</strong><small data-i18n="compareCardDesc">Save scenarios and export your results</small></span><span class="mini-arrow">↗</span></button>
+          </div>
+        </section>
+        <section id="studio" data-panel="studio" aria-labelledby="studio-title" hidden>
+          <div class="page-heading"><div class="overline" data-i18n="labKicker">02 / PACK ENGINEERING</div><h1 id="studio-title" data-i18n="labTitle">Pack Studio <span class="gradient-text">/ design sandbox</span></h1><p class="muted" data-i18n="labDesc">在同一個工作區評估串並聯、能量、重量、體積密度與估算續航。不代表實體設計或安規已驗證。</p></div>
+          <div class="preset-strip" role="group" aria-label="Pack templates"><span data-i18n="startingPoint">STARTING POINT</span><button type="button" data-pack-preset="slim" class="preset-button is-selected" data-i18n="presetSlim">Slim notebook</button><button type="button" data-pack-preset="performance" class="preset-button" data-i18n="presetPerf">Performance</button><button type="button" data-pack-preset="compact" class="preset-button" data-i18n="presetCompact">Compact device</button></div>
+          <div class="studio-grid">
+            <div class="panel form-panel">
+              <div class="panel-top"><div><div class="overline" data-i18n="configuration">CELL & PACK INPUTS</div><h3 data-i18n="architecture">Architecture</h3></div><span class="corner-index">B—01</span></div>
+              <div class="subhead" data-i18n="topology">Cell configuration</div>
+              <div class="field-grid">
+                <label class="field"><span class="field-title" data-i18n="series">Series (S)</span><div class="input-wrap"><input id="pack-series" type="number" min="1" max="32" step="1" value="3" required><span>S</span></div></label>
+                <label class="field"><span class="field-title" data-i18n="parallel">Parallel (P)</span><div class="input-wrap"><input id="pack-parallel" type="number" min="1" max="32" step="1" value="1" required><span>P</span></div></label>
+                <label class="field"><span class="field-title" data-i18n="cellVoltage">Cell nominal voltage</span><div class="input-wrap"><input id="pack-cell-v" type="number" min="1" max="5" step="0.01" value="3.85" required><span>V</span></div></label>
+                <label class="field"><span class="field-title" data-i18n="cellCapacity">Cell capacity</span><div class="input-wrap"><input id="pack-cell-mah" type="number" min="10" max="50000" step="10" value="5000" required><span>mAh</span></div></label>
+              </div>
+              <div class="subhead" data-i18n="packPhysical">Physical parameters</div>
+              <div class="field-grid">
+                <label class="field"><span class="field-title" data-i18n="cellMass">Cell mass</span><div class="input-wrap"><input id="pack-cell-mass" type="number" min="0.1" max="2000" step="0.1" value="57" required><span>g</span></div></label>
+                <label class="field"><span class="field-title" data-i18n="overheadMass">Pack non-cell mass</span><div class="input-wrap"><input id="pack-overhead" type="number" min="0" max="10000" step="0.1" value="65" required><span>g</span></div></label>
+              </div>
+              <div class="subhead" data-i18n="externalDimensions">External pack envelope</div>
+              <div class="field-grid field-grid-3">
+                <label class="field"><span class="field-title">X <span data-i18n="length">Length</span></span><div class="input-wrap"><input id="pack-x" type="number" min="0.1" max="10000" step="0.1" value="240" required><span>mm</span></div></label>
+                <label class="field"><span class="field-title">Y <span data-i18n="width">Width</span></span><div class="input-wrap"><input id="pack-y" type="number" min="0.1" max="10000" step="0.1" value="70" required><span>mm</span></div></label>
+                <label class="field"><span class="field-title">Z <span data-i18n="height">Height</span></span><div class="input-wrap"><input id="pack-z" type="number" min="0.1" max="10000" step="0.1" value="6.8" required><span>mm</span></div></label>
+              </div>
+              <label class="field"><span class="field-title" data-i18n="targetLoad">Assumed average output load</span><div class="input-wrap"><input id="pack-power" type="number" min="0.01" max="5000" step="0.5" value="16" required><span>W</span></div></label>
+              <div class="helper"><span aria-hidden="true">ⓘ</span><span data-i18n="packHelper">外型體積是整個電池組的包絡體積，並非電芯可安裝空間；本工具不驗證電芯排布與安全性。</span></div>
+              <div id="pack-error" class="error-message" role="alert" hidden></div>
+            </div>
+            <div class="studio-results">
+              <div class="panel pack-visual-panel">
+                <div class="panel-top"><div><div class="overline" data-i18n="liveSchematic">LIVE TOPOLOGY</div><h3 data-i18n="cellMap">Cell architecture</h3></div><span id="pack-topology" class="topology-label">3S1P</span></div>
+                <div id="cell-diagram" class="cell-diagram" role="img" aria-label="Conceptual cell architecture diagram"></div>
+                <div class="concept-tag" data-i18n="conceptualOnly">SCHEMATIC ONLY · NOT A PACK LAYOUT</div>
+              </div>
+              <div class="kpi-grid">
+                <div class="kpi"><span data-i18n="packEnergy">NOMINAL ENERGY</span><div><strong id="pack-energy">57.75</strong><small>Wh</small></div><span class="kpi-footer" id="pack-capacity-display">5.00 Ah</span></div>
+                <div class="kpi"><span data-i18n="packVoltage">NOMINAL VOLTAGE</span><div><strong id="pack-voltage">11.55</strong><small>V</small></div><span class="kpi-footer" id="pack-cells-display">3 cells</span></div>
+                <div class="kpi"><span data-i18n="massDensity">GRAVIMETRIC DENSITY</span><div><strong id="pack-whkg">244.7</strong><small>Wh/kg</small></div><span class="kpi-footer" data-i18n="wholePack">Whole pack</span></div>
+                <div class="kpi"><span data-i18n="volumeDensity">VOLUMETRIC DENSITY</span><div><strong id="pack-whl">505.5</strong><small>Wh/L</small></div><span class="kpi-footer" data-i18n="externalVolume">External envelope</span></div>
+              </div>
+              <div class="panel detail-panel">
+                <div class="panel-top"><div><div class="overline" data-i18n="technicalReadout">TECHNICAL READOUT</div><h3 data-i18n="metrics">Calculated metrics</h3></div><span class="corner-index">B—02</span></div>
+                <div class="metric-row"><span data-i18n="massTotal">Estimated total mass</span><strong id="pack-mass">236 g</strong></div>
+                <div class="metric-row"><span data-i18n="volumeTotal">External volume</span><strong id="pack-volume">0.114 L</strong></div>
+                <div class="metric-row"><span data-i18n="packRuntime">Ideal runtime at selected load</span><strong id="pack-runtime">3h 36m</strong></div>
+                <div class="metric-row"><span data-i18n="cellCount">Cell count</span><strong id="pack-count">3</strong></div>
+                <div id="pack-warnings" class="warnings" aria-live="polite"></div>
+                <div class="detail-actions"><button id="save-scenario" class="primary-button" type="button"><span data-i18n="saveScenario">+ Save to comparison</span> ↗</button><button id="export-single" type="button" class="secondary-button" data-i18n="exportCSV">Export CSV</button></div>
+                <p id="save-feedback" class="save-feedback" role="status" aria-live="polite"></p>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section id="compare" data-panel="compare" aria-labelledby="compare-title" hidden>
+          <div class="page-heading"><div class="overline" data-i18n="compareKicker">03 / SCENARIO ANALYSIS</div><h1 id="compare-title" data-i18n="compareTitle">Design comparison<span class="gradient-text"> / side by side</span></h1><p class="muted" data-i18n="compareDesc">儲存最多四組設計，評估名目能量、重量能量密度、體積能量密度與重量差異。</p></div>
+          <div class="comparison-toolbar"><span id="scenario-count" class="status-chip">0 / 4 saved</span><div><button id="export-comparison" class="secondary-button" type="button" data-i18n="exportAll">Export comparison CSV</button><button id="clear-scenarios" class="danger-button" type="button" data-i18n="clearAll">Clear saved</button></div></div>
+          <div id="compare-empty" class="empty-state"><div class="empty-symbol">▤</div><h2 data-i18n="emptyTitle">No saved designs yet</h2><p data-i18n="emptyDesc">Go to Pack Studio, adjust parameters, then save a configuration to compare it here.</p><button class="primary-button" type="button" data-goto="studio"><span data-i18n="openStudio">Open Pack Studio</span> ↗</button></div>
+          <div id="compare-content" hidden><div id="scenario-cards" class="scenario-cards"></div><div class="panel chart-panel"><div class="panel-top"><div><div class="overline" data-i18n="visualCompare">VISUAL BENCHMARK</div><h3 data-i18n="normalized">Comparison by metric</h3></div></div><div id="comparison-bars" class="comparison-bars"></div></div><div class="panel table-panel"><div class="panel-top"><div><div class="overline" data-i18n="dataTable">DATA TABLE</div><h3 data-i18n="detailComparison">Detailed comparison</h3></div></div><div class="table-scroll"><table id="comparison-table"><caption class="sr-only">Pack comparison metrics</caption><thead></thead><tbody></tbody></table></div></div></div>
+        </section>
+        <section id="method" data-panel="method" aria-labelledby="method-title" hidden>
+          <div class="page-heading"><div class="overline" data-i18n="methodKicker">04 / TRANSPARENCY</div><h1 id="method-title" data-i18n="methodTitle">Behind the numbers<span class="gradient-text"> / methodology</span></h1><p class="muted" data-i18n="methodDesc">每個公式都有可追溯的定義。這是規格估算工具，不是電池電氣、機械或安規簽核系統。</p></div>
+          <div class="method-grid">
+            <article class="panel method-card"><div class="overline">01 / RUNTIME</div><h3 data-i18n="methodRuntime">續航估算</h3><div class="formula">t (h) = E (Wh) × (1 − r) × η / P (W)</div><p data-i18n="methodRuntimeBody">r 是預留容量百分比；η 是輸出效率。假設固定平均功耗，無法預測老化、溫度、負載峰值或關機門檻。</p></article>
+            <article class="panel method-card"><div class="overline">02 / CAPACITY</div><h3 data-i18n="methodEnergy">電池組名目能量</h3><div class="formula">E (Wh) = S × P × Vcell × Ahcell</div><p data-i18n="methodEnergyBody">S 為串聯數、P 為並聯數；使用單顆電芯的名目電壓與容量。結果不等於可用能量。</p></article>
+            <article class="panel method-card"><div class="overline">03 / MASS</div><h3 data-i18n="methodMass">重量能量密度</h3><div class="formula">Wh/kg = E / ((N × mcell + moverhead) / 1000)</div><p data-i18n="methodMassBody">重量包含全部電芯與手動輸入的非電芯重量；不驗證 PCB、線束、外殼或保護設計。</p></article>
+            <article class="panel method-card"><div class="overline">04 / VOLUME</div><h3 data-i18n="methodVolume">體積能量密度</h3><div class="formula">Wh/L = E / (X × Y × Z / 1,000,000)</div><p data-i18n="methodVolumeBody">X/Y/Z 使用 mm，算的是矩形外部包絡體積，不代表真實可利用體積或可組裝性。</p></article>
+          </div>
+          <div class="disclaimer-panel"><div class="disclaimer-mark">!</div><div><h3 data-i18n="safetyTitle">Engineering & safety disclaimer</h3><p data-i18n="safetyText">不可用於電池組製造、充電策略、熱設計、運輸合規或安全性判定。實際產品需經專業設計、電芯資料驗證與適用法規測試。</p></div></div>
+          <div class="method-footer"><a href="https://github.com/ShaoYuYo/packfit-open/blob/main/docs/METHODOLOGY.md" target="_blank" rel="noopener noreferrer" data-i18n="readFull">Read full engineering documentation ↗</a><a href="https://github.com/ShaoYuYo/packfit-open/issues" target="_blank" rel="noopener noreferrer" data-i18n="reportIssue">Report a calculation issue ↗</a></div>
+        </section>
+      </main>
+      <footer class="footer"><span>© 2026 PackFit Open · <span data-i18n="footerTag">Built for curious minds and responsible engineering.</span></span><span>OPEN BY DESIGN <span class="footer-spark">✳</span></span></footer>
+    </div>
+  </div>
+</body>
+</html>
