@@ -60,3 +60,15 @@ Follow-up priorities include browser-level visual tests, more detailed user guid
 - examples/sample-scenarios.json — completely synthetic test and onboarding data, not customer hardware specifications.
 
 New model and transfer modules are unit-tested by Node.js built-in test runner. Offline and manifest tests verify that each precached file is present; full browser offline behavior must still be verified on actual platforms.
+
+
+## v0.6 theme and hardware modules
+
+- `src/theme.js`: pure automatic/system theme resolution; `src/app.js` observes `prefers-color-scheme` and persists explicit overrides.
+- `src/storage.js`: v2 appearance preference with safe legacy migration to `system` mode.
+- `src/device.js`: normalized browser hardware hints and optional WebGL capability inspection with strict label sanitization.
+- `src/device-ui.js`: bilingual, privacy-minded device overview, opt-in diagnostics and Worker lifecycle handling.
+- `src/device-benchmark-worker.js`: isolated deterministic JavaScript arithmetic workload; measured elapsed time is not a standardized score.
+- `assets/workspace.css`: responsive final layout layer for all seven workspaces.
+
+Hardware hints are limited, browser-dependent, and never uploaded or stored. Full CPU/GPU/RAM inventories cannot be obtained from an ordinary public website.
