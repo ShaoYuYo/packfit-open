@@ -11,7 +11,9 @@
         <RowDefinition Height="Auto" />
         <RowDefinition Height="*" />
       </Grid.RowDefinitions>
-      <TitleBar Grid.Row="0" x:Name="AppTitleBar" Title="PackFit Engineering" Subtitle="Battery validation · Local workstation" />
+      <TitleBar Grid.Row="0" x:Name="AppTitleBar"
+                Title="PackFit Engineering" Subtitle="Battery validation · Local workstation"
+                IsPaneToggleButtonVisible="True" PaneToggleRequested="AppTitleBar_PaneToggleRequested" />
       <NavigationView x:Name="Navigation" Grid.Row="1" PaneDisplayMode="Left"
           OpenPaneLength="252" IsBackButtonVisible="Collapsed"
           IsPaneToggleButtonVisible="False" IsSettingsVisible="False" SelectionChanged="Navigation_SelectionChanged">
