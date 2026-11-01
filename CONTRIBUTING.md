@@ -31,3 +31,13 @@ No runtime framework or dependencies are needed.
 Requires Node.js 20 or newer for tests. Serve project root over HTTP for ES modules. Follow the README.
 
 Please use a clear PR description: what changed, why, how tested, and which assumptions were affected.
+
+## v0.3 contribution entry points
+
+- For new numerical calculators: add a pure function under src/calc.js, src/consumer.js, or src/planner.js; include units, assumptions and reproducible tests.
+- For editable scenario data: change src/scenario-transfer.js and add versioned migration tests. Never silently accept unknown or malformed input.
+- For UI work: check zh-TW/en strings, keyboard focus, mobile sizing and reduced-motion behavior.
+- For offline changes: update sw.js asset list and cache version, then actually verify offline reloading.
+- Before substantial changes, review [AGENTS.md](AGENTS.md), [Release Checklist](docs/RELEASE_CHECKLIST.md) and [Community Guidelines](CODE_OF_CONDUCT.md).
+
+Useful issues for contributors include [browser validation](https://github.com/ShaoYuYo/packfit-open/issues/1) and [Windows report parser fixtures](https://github.com/ShaoYuYo/packfit-open/issues/2). Please avoid attaching real battery report files containing identifiers.
