@@ -1,5 +1,15 @@
 # PackFit Open
 
+## New: Engineering Desktop — WinUI 3 for laptop engineers
+
+**Battery Validation & Diagnostics Workbench** is a native Windows app written in C# and WinUI 3. It helps with recurring engineering work: `powercfg` battery reports, anomaly screening of voltage/current/temperature/SOC CSV logs, PASS/FAIL/NOT RUN validation matrix summaries, nominal battery pack calculations, and Markdown handoff reports.
+
+**[Desktop usage / engineering rationale / build and EXE instructions](desktop/README.md)** · **[Windows Actions build & download](https://github.com/ShaoYuYo/packfit-open/actions/workflows/desktop-winui.yml)** · **[Synthetic test logs](desktop/samples/telemetry-sample.csv)**
+
+> **EXE availability is conditional on a successful Windows Actions build.** The workflow creates a ZIP with `PackFit.Engineering.exe` and its runtime dependencies; it also attempts an optional standalone single-file EXE. Do not claim it is downloadable or verified before the build passes. The desktop app is a developer preview, not a certified battery diagnostic or approval tool.
+
+The existing browser-based application remains available below.
+
 ![CI](https://github.com/ShaoYuYo/packfit-open/actions/workflows/ci.yml/badge.svg)
 
 **A battery calculator for everyday questions and early engineering estimates.** Bilingual, privacy-conscious and offline-capable.
