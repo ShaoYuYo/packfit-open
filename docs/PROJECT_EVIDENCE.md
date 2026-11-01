@@ -8,6 +8,8 @@
 - 2026-11-01, v0.2: local Windows batteryreport import, everyday charging estimates and responsive interface.
 - 2026-11-01, v0.3: daily usage planner, scoped offline caching, portable validated JSON scenarios, open example data and onboarding improvements.
 
+- 2026-11-02, first public beta: [v0.7.0-beta.1](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.1) is a **real published GitHub Prerelease** with Windows ZIP, single-file EXE and SHA256 file. The Windows release workflow passed browser tests, pure C# engineering checks and WinUI publication. Real hardware launch testing and external adoption remain unverified.
+
 These entries describe code changes; **they do not assert external adoption, downloads, users, or community contributions**.
 
 ## Evidence still needed
@@ -19,7 +21,7 @@ These entries describe code changes; **they do not assert external adoption, dow
 | Independent contributors | PRs and contributors list | Not yet documented |
 | Independent bug reports | Public issues with reproducible evidence | Not yet documented |
 | Downstream real use | Cited sites, learning materials or consented feedback | Not yet documented |
-| Release maintenance | Tags, Actions results, release notes | Code and changelog exist; verify published releases |
+| Release maintenance | Tags, Actions results, release notes | First public beta is published; subsequent releases and long-term maintenance remain to be demonstrated |
 | Independent formula review | External engineer or reproducible public test cases | Not yet documented |
 
 ## Ethical project growth
