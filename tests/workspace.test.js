@@ -34,12 +34,12 @@ test("theme defaults to OS mode and follows user changes",()=>{
 test("new layout and worker modules are included in offline precache",()=>{
  const html=read("index.html"),sw=read("sw.js");
  assert.equal((html.match(/href="\.\/assets\/workspace\.css"/g)||[]).length,1);
- for(const path of ["assets/workspace.css","src/theme.js","src/device.js",
+ for(const path of ["assets/workspace.css","src/theme.js","src/device.js","src/dxdiag.js",
    "src/device-ui.js","src/device-benchmark-worker.js"]){
    assert.ok(existsSync(resolve(root,path)),path);
    assert.ok(sw.includes('"./'+path+'"'),path+" absent from cache");
  }
- assert.match(sw,/packfit-static-v0\.6\.0/);
+ assert.match(sw,/packfit-static-v0\.6\.1/);
 });
 test("GPU identification and the benchmark are user-initiated and never uploaded",()=>{
  const ui=read("src/device-ui.js");
