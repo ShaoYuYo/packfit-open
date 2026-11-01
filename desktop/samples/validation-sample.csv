@@ -1,0 +1,5 @@
+TestID,Category,Metric,Measured,Min,Max,Unit,Owner,Notes
+THERM-001,Thermal,Surface peak,49,,60,C,EE,Public illustrative threshold
+ELEC-002,Electrical,Charge voltage,13.4,12.4,13.2,V,EE,Illustrative failure
+SYS-003,System,Sleep drop,,0,3,percent,System,Not measured yet
+PACK-004,Mechanical,Mass,235,0,240,g,ME,Illustrative
