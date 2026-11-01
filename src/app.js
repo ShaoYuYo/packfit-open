@@ -138,7 +138,7 @@ function setPanel(panel) {
     if(chosen) button.setAttribute("aria-current","page");
     else button.removeAttribute("aria-current");
   }
-  for (const section of $("[data-panel]")) section.hidden = section.dataset.panel!==active;
+  for (const section of $$("[data-panel]")) section.hidden = section.dataset.panel!==active;
   const shown = document.querySelector(`[data-panel="${active}"]`);
   if(shown)animatePanelEntry(shown);
   setText("current-section",panelTitle(active));
