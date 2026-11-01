@@ -220,8 +220,8 @@ public sealed partial class MainWindow : Window
         try
         {
             var design = new PackDesign(
-                Series: checked((int)ReadNumber(SeriesBox)),
-                Parallel: checked((int)ReadNumber(ParallelBox)),
+                Series: ReadInteger(SeriesBox),
+                Parallel: ReadInteger(ParallelBox),
                 CellVoltageV: ReadNumber(CellVoltageBox),
                 CellCapacityAh: ReadNumber(CellCapacityBox),
                 CellMassG: ReadNumber(CellMassBox),
