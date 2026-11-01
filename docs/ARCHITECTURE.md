@@ -50,3 +50,13 @@ Follow-up priorities include browser-level visual tests, more detailed user guid
 - `src/consumer-ui.js`: browser-only UI controller, opt-in live Battery API, local file reader, formula rendering.
 - `src/consumer-i18n.js`: bilingual beginner labels and explanations.
 - `assets/premium.css`: light-first design refinement with graceful reduced motion.
+
+
+## Portable and offline modules (v0.3)
+
+- src/scenario-transfer.js — format-versioned JSON validation, numeric field whitelisting and canonicalization.
+- src/planner.js / src/planner-ui.js — pure energy budget model and bilingual everyday planner UI.
+- src/pwa.js, sw.js, manifest.webmanifest — optional service worker registration and scoped static precache, with no remote APIs.
+- examples/sample-scenarios.json — completely synthetic test and onboarding data, not customer hardware specifications.
+
+New model and transfer modules are unit-tested by Node.js built-in test runner. Offline and manifest tests verify that each precached file is present; full browser offline behavior must still be verified on actual platforms.
