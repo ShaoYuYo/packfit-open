@@ -5,6 +5,7 @@ import {readSettings,writeSettings,readScenarios,writeScenarios,MAX_SCENARIOS} f
 import {scenariosToCsv,downloadCsv} from "./csv.js";
 import {serializeScenarios,parseScenarioFile,MAX_JSON_CHARS} from "./scenario-transfer.js";
 import {setupOfflineSupport} from "./pwa.js";
+import {animatePanelEntry,animateCalculation,setupMotionLibrary} from "./motion-enhance.js";
 import {initializePlanner,setPlanLocale} from "./planner-ui.js";
 import {translate} from "./i18n.js";
 import {initializeConsumer,translateConsumer,consumerSectionTitle} from "./consumer-ui.js";
@@ -20,7 +21,7 @@ const packIds = {
   series:"pack-series",parallel:"pack-parallel",nominalCellV:"pack-cell-v",cellCapacityMah:"pack-cell-mah",
   cellMassG:"pack-cell-mass",overheadMassG:"pack-overhead",xMm:"pack-x",yMm:"pack-y",zMm:"pack-z",loadW:"pack-power"
 };
-const swatches = ["#7ce4b4","#a7adff","#f2c47f","#f29cbe"];
+const swatches = ["#76515e","#b39372","#666169","#a78590"];
 const t = (key) => translate(settings.language,key);
 const num = (value,digits=1) => formatNumber(value,settings.language,digits);
 const dur = (value) => formatDuration(value,settings.language);
@@ -33,15 +34,7 @@ function setText(id,text) {
   const value=String(text);
   if(element.textContent===value)return;
   element.textContent=value;
-  // A brief response to changed calculations, not an always-running animation.
-  // Honor the operating-system motion preference, including live changes.
-  if(!metricMotionIds.has(id)||document.hidden||!element.getClientRects().length||
-     typeof element.animate!=="function"||
-     window.matchMedia?.("(prefers-reduced-motion: reduce)").matches)return;
-  element.animate(
-    [{opacity:.58,transform:"translateY(2px)"},{opacity:1,transform:"translateY(0)"}],
-    {duration:170,easing:"cubic-bezier(.22,.82,.28,1)"}
-  );
+  if(metricMotionIds.has(id))animateCalculation(element);
 }
 function getInputs() { return Object.fromEntries(Object.entries(packIds).map(([key,id]) => [key,el(id).value])); }
 function clearNumbers(ids) { ids.forEach((id)=>setText(id,"—")); }
@@ -142,7 +135,9 @@ function setPanel(panel) {
     if(chosen) button.setAttribute("aria-current","page");
     else button.removeAttribute("aria-current");
   }
-  for (const section of $$("[data-panel]")) section.hidden = section.dataset.panel!==active;
+  for (const section of $("[data-panel]")) section.hidden = section.dataset.panel!==active;
+  const shown = document.querySelector(`[data-panel="${active}"]`);
+  if(shown)animatePanelEntry(shown);
   setText("current-section",panelTitle(active));
   if (location.hash!=="#"+active) history.replaceState(null,"","#"+active);
   window.scrollTo({top:0,behavior:"instant"});
@@ -168,7 +163,7 @@ function updateLocale() {
 }
 function updateTheme() {
   document.body.dataset.theme = settings.theme;
-  document.querySelector('meta[name="theme-color"]')?.setAttribute("content",settings.theme==="dark"?"#111917":"#f7f8f7");
+  document.querySelector('meta[name="theme-color"]')?.setAttribute("content",settings.theme==="dark"?"#19171a":"#f6f3f0");
   el("theme-toggle").textContent = settings.theme==="dark"?"☼":"☾";
   el("theme-toggle").setAttribute("aria-label",settings.theme==="dark"?"Switch to light theme":"Switch to dark theme");
 }
@@ -322,4 +317,5 @@ function setup() {
 setup();
 initializeConsumer(()=>settings.language);
 initializePlanner(()=>settings.language);
+setupMotionLibrary();
 setupOfflineSupport();
