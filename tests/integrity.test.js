@@ -5,6 +5,7 @@ import {fileURLToPath} from "node:url";
 import {resolve,dirname} from "node:path";
 import {DICTIONARY} from "../src/i18n.js";
 import {CONSUMER_I18N} from "../src/consumer-i18n.js";
+import {PLANNER_TRANSLATIONS} from "../src/planner-ui.js";
 
 const root=resolve(dirname(fileURLToPath(import.meta.url)),"..");
 const read=(path)=>readFileSync(resolve(root,path),"utf8");
