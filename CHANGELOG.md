@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.5.0 — 2026-11-01
+
+- New warm ivory, graphite, muted plum and champagne palette in both themes, replacing green- and blue-heavy elements.
+- Recolored battery ring, sample battery, input states, active navigation, chart series and result highlights consistently.
+- Integrated optional MIT-licensed Motion animations for brief panel and calculation updates; native Web Animations API remains the offline fallback.
+- Preserved reduced-motion behavior, pinned the optional external module version and extended regression checks.
+
 ## 0.4.0 — 2026-11-01
 
 - Replaced abstract promotional headings with plain-language, task-first bilingual copy.
