@@ -1,26 +1,58 @@
 # PackFit Open
 
-## New: Engineering Desktop — WinUI 3 for laptop engineers
+**Battery questions, answered with practical tools.**  
+*A free, privacy-conscious project for everyday laptop users and battery development engineers.*
 
-**Battery Validation & Diagnostics Workbench** is a native Windows app written in C# and WinUI 3. It helps with recurring engineering work: `powercfg` battery reports, anomaly screening of voltage/current/temperature/SOC CSV logs, PASS/FAIL/NOT RUN validation matrix summaries, nominal battery pack calculations, and Markdown handoff reports.
+[Try the web app](https://shaoyuyo.github.io/packfit-open/) · [Windows desktop beta / Releases](https://github.com/ShaoYuYo/packfit-open/releases) · [Desktop guide](desktop/README.md) · [Report an issue](https://github.com/ShaoYuYo/packfit-open/issues) · [Contribute](CONTRIBUTING.md)
 
-**[Desktop usage / engineering rationale / build and EXE instructions](desktop/README.md)** · **[Windows Actions build & download](https://github.com/ShaoYuYo/packfit-open/actions/workflows/desktop-winui.yml)** · **[Synthetic test logs](desktop/samples/telemetry-sample.csv)**
+![Web CI](https://github.com/ShaoYuYo/packfit-open/actions/workflows/ci.yml/badge.svg) ![Windows desktop CI](https://github.com/ShaoYuYo/packfit-open/actions/workflows/desktop-winui.yml/badge.svg) ![MIT license](https://img.shields.io/badge/license-MIT-neutral)
 
-> **EXE availability is conditional on a successful Windows Actions build.** The workflow creates a ZIP with `PackFit.Engineering.exe` and its runtime dependencies; it also attempts an optional standalone single-file EXE. Do not claim it is downloadable or verified before the build passes. The desktop app is a developer preview, not a certified battery diagnostic or approval tool.
+## Why I started PackFit
 
-The native desktop now includes a **Windows 11 Fluent shell** (Mica, integrated TitleBar/navigation, InfoBar and progressive help), a guided investigation assistant for common notebook issues, a **read-only Windows diagnostic toolbox** and links to optional official Microsoft tools. It can also batch-screen up to 12 CSV/TSV logs at once and produce a consolidated review handoff.
+I'm a **battery development engineer**. In laptop development, some of the most time-consuming work isn't designing the battery itself: it's repeatedly collecting diagnostic reports, cleaning voltage/current/temperature/SOC logs, comparing test results, checking limits, and writing a handoff that another engineer can actually reproduce.
 
-[Desktop troubleshooting guide](desktop/docs/TROUBLESHOOTING.md) · [Fluent UI implementation](desktop/docs/FLUENT.md) · [Windows build workflow](https://github.com/ShaoYuYo/packfit-open/actions/workflows/desktop-winui.yml)
+Outside engineering work, people face simpler but equally real questions: *How long will my laptop last today? Has its battery aged? How much does charging cost? Why does it drain overnight?* Battery information should not require an electrical engineering background to understand.
 
-The existing browser-based application remains available below.
+**PackFit Open connects those two worlds:** a simple browser app for everyday battery decisions, and a native Windows engineering workbench for repetitive diagnostic and validation tasks.
 
-![CI](https://github.com/ShaoYuYo/packfit-open/actions/workflows/ci.yml/badge.svg)
+I also believe AI is a powerful **development assistant**, particularly for turning domain experience into working prototypes, tests, accessible explanations, and maintainable open-source code. AI helps me move faster; it does **not** replace checking equations, verifying measurements, reviewing code, or making engineering safety decisions. I want to show how an engineer can use AI responsibly to build something useful for other people.
 
-**A battery calculator for everyday questions and early engineering estimates.** Bilingual, privacy-conscious and offline-capable.
+This project is independent, MIT-licensed, and built with **public or synthetic examples**. It does not represent my employer, a battery supplier, or an official certification body. No confidential design specifications or private product data belong in this repository.
 
-[Open the live app](https://shaoyuyo.github.io/packfit-open/) · [Issues](https://github.com/ShaoYuYo/packfit-open/issues) · [Methodology](docs/METHODOLOGY.md)
+## Two ways to use PackFit
 
-> **Project status:** v0.6.1 — initial community release. Mathematical feasibility estimates only; not certified engineering analysis.
+| | Everyday battery tools | Engineering desktop beta |
+| --- | --- | --- |
+| **For** | Laptop owners, learners, repair enthusiasts | Battery, power, systems and validation engineers |
+| **Platform** | Any modern desktop/mobile browser | Windows 10/11 x64 · native C# / WinUI 3 |
+| **Start** | [Open the website](https://shaoyuyo.github.io/packfit-open/) · no sign-up | [Download a beta build from Releases](https://github.com/ShaoYuYo/packfit-open/releases) when the release build succeeds |
+| **Typical use** | Runtime and charging cost, battery capacity reports, daily energy budget | Batch log screening, test matrices, sleep/wake troubleshooting, native diagnostics, engineering reports |
+| **Privacy** | Calculations and file analysis stay local | Local-only processing, explicit file selection, no telemetry or cloud backend |
+| **Scope** | Informational estimates | Engineering **screening**, not certified validation |
+
+### Engineering Desktop — what it can do
+
+- **Read Windows battery capacity:** use the built-in \`powercfg\` report or import an HTML report, with a clear distinction between capacity retention and overall battery safety.
+- **Process multiple test logs:** import up to 12 supported CSV/TSV/semicolon logs, normalize explicitly labeled mV/mA units, check user-configured voltage, current, temperature, SOC and timing conditions, and compare findings.
+- **Organize validation work:** turn measured values and Min/Max thresholds into PASS / FAIL / NOT RUN matrices, rather than maintaining ad hoc spreadsheet formulas.
+- **Investigate laptop problems:** follow guided checklists for sleep drain, slow charging, unexpected shutdown, thermal throttling and capacity loss; run selected read-only Windows diagnostics without memorizing commands.
+- **Explain optional specialist tools:** find official Microsoft documentation for WPR/WPA and Procmon; never auto-install them.
+- **Prepare engineering handoffs:** save reproducible Markdown summaries, the thresholds used, unresolved flags and reviewer checklists.
+
+**Windows EXE status:** This is an initial **beta / developer preview**. The build workflow publishes a self-contained WinUI ZIP, and also attempts a single-file executable. A successful CI build confirms compilation; it **does not prove** that every workflow has been smoke-tested on physical Windows devices. See the [desktop download and build instructions](desktop/README.md), [Fluent design notes](desktop/docs/FLUENT.md), and [troubleshooting guide](desktop/docs/TROUBLESHOOTING.md).
+
+## Project status and maintenance
+
+- **Browser app:** v0.6.1 — browser-based, Chinese/English, available on GitHub Pages.
+- **First repository beta:** \`v0.7.0-beta.1\` — intended to document the two-product project and package the Windows workbench, pending an actual successful release build.
+- **Maintainer:** [ShaoYuYo](https://github.com/ShaoYuYo), primary maintainer.
+- **Engineering integrity:** formulas and input assumptions are documented; source tests, CI configuration and synthetic examples are included.
+- **Community adoption:** still early. We do **not** claim users, downloads, independent contributions, certification or operational readiness without evidence.
+- **Looking for:** genuine browser test feedback, privacy-safe Windows battery-report fixtures, test vectors, accessibility feedback, code review and bug reports.
+
+[Public calculation methodology](docs/METHODOLOGY.md) · [Maintenance and adoption evidence](docs/PROJECT_EVIDENCE.md) · [Security policy](SECURITY.md) · [Release checklist](docs/RELEASE_CHECKLIST.md)
+
+---
 
 ## What you can do
 
