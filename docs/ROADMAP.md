@@ -22,12 +22,17 @@ This roadmap records *planned* work rather than claiming implemented features or
 - Replaced generic visual effects, rebuilt first-visit language and reduced continuous animation.
 - Preserved calculation behavior and reduced-motion support.
 
-## v0.5 — Quality improvements (proposed)
+## v0.5 — Warm palette and motion library (implemented)
+- Replaced green/blue-dominant accents with graphite, ivory, plum and brass.
+- Integrated optional open-source Motion while retaining native offline fallback.
+- Expanded color and interaction regression checks.
+
+## v0.6 — Quality improvements (proposed)
 - Browser-level visual/accessibility integration tests, supported Windows battery report fixture cases.
 - Independent review of math and language clarity; explicit load measurement guidance.
 - Improve PWA icon compatibility and real-world offline validation.
 
-## v0.6 — Deeper analysis (proposed; research required)
+## v0.7 — Deeper analysis (proposed; research required)
 - Optional variable-workload timelines and sensitivity plots with public reproducible assumptions.
 - Sensitivity plots for efficiency, reserve and average load, with reproducible calculations.
 - Portable version migrations for JSON backups, with explicit backward compatibility tests.
