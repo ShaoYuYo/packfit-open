@@ -3,7 +3,7 @@ import {formatNumber} from "./format.js";
 
 export const PLANNER_TRANSLATIONS={
   "zh-TW":{
-    title:"今天的電量夠用嗎？",intro:"輸入預計使用時間、平均耗電和目前電量，看看今天夠不夠用。所有數值都能調整。",
+    title:"今天的電量夠不夠？",intro:"輸入現在的電量，以及等等要做哪些事，就能估計需不需要先充電。",
     capacity:"電池容量",starting:"目前電量",reserve:"最低保留電量",
     activity:"預計使用活動",assumption:"以下耗電為示範數值",
     office:"文書／網頁",video:"影音娛樂",game:"遊戲／高負載",
@@ -15,7 +15,7 @@ export const PLANNER_TRANSLATIONS={
     error:"輸入不正確，請檢查電量百分比、使用時數和平均功率。"
   },
   en:{
-    title:"Will your battery last today?",intro:"Enter your battery charge, planned usage time and average power to see whether your day fits.",
+    title:"Enough battery for today?",intro:"Set your current charge and what you plan to do. See whether you should plug in first.",
     capacity:"Battery size",starting:"Current charge",reserve:"Minimum reserve",
     activity:"Planned activities",assumption:"Power values are illustrative",
     office:"Office / web",video:"Streaming / video",game:"Gaming / heavy use",
