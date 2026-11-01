@@ -4,6 +4,7 @@ import {PACK_PRESETS,DEVICE_PRESETS} from "./presets.js";
 import {readSettings,writeSettings,readScenarios,writeScenarios,MAX_SCENARIOS} from "./storage.js";
 import {scenariosToCsv,downloadCsv} from "./csv.js";
 import {serializeScenarios,parseScenarioFile,MAX_JSON_CHARS} from "./scenario-transfer.js";
+import {setupOfflineSupport} from "./pwa.js";
 import {translate} from "./i18n.js";
 import {initializeConsumer,translateConsumer,consumerSectionTitle} from "./consumer-ui.js";
 
@@ -300,3 +301,4 @@ function setup() {
 }
 setup();
 initializeConsumer(()=>settings.language);
+setupOfflineSupport();
