@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.4.0 — 2026-11-01
+
+- Replaced abstract promotional headings with plain-language, task-first bilingual copy.
+- Updated typography to Inter and Noto Sans TC with local system fallbacks and improved form readability.
+- Simplified the palette, card surfaces, sidebar hierarchy and demo data illustration for a calmer interface.
+- Removed persistent floating/glowing animations; added short motion feedback for changed calculation values, honoring reduced-motion settings.
+- Updated offline CSS precache, manifest and documentation for the visual release.
+
 ## 0.3.0 — 2026-11-01
 
 - Daily energy planning: editable usage duration and power by activity, available energy above reserve, charge estimate and energy shortfall.
