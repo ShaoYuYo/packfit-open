@@ -9,11 +9,14 @@ import {animatePanelEntry,animateCalculation,setupMotionLibrary} from "./motion-
 import {initializePlanner,setPlanLocale} from "./planner-ui.js";
 import {translate} from "./i18n.js";
 import {initializeConsumer,translateConsumer,consumerSectionTitle} from "./consumer-ui.js";
+import {initializeDevice,translateDevice} from "./device-ui.js";
+import {resolveTheme,normalizeTheme} from "./theme.js";
 
 const el = (id) => document.getElementById(id);
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
 const settings = readSettings();
+const systemColor = window.matchMedia?.("(prefers-color-scheme: dark)");
 let scenarios = readScenarios();
 let packResult = null;
 let currentPackInput = null;
@@ -124,9 +127,9 @@ function renderPack() {
   el("save-scenario").disabled = !packResult;
   el("export-single").disabled = !packResult;
 }
-function panelTitle(key) { return key==="health"||key==="everyday" ? consumerSectionTitle(key,settings.language) : t({overview:"navOverview",studio:"navStudio",compare:"navCompare",method:"navMethod"}[key]); }
+function panelTitle(key) { return key==="health"||key==="everyday" ? consumerSectionTitle(key,settings.language) : t({overview:"navOverview",device:"navDevice",studio:"navStudio",compare:"navCompare",method:"navMethod"}[key]); }
 function setPanel(panel) {
-  const allowed = ["overview","health","everyday","studio","compare","method"];
+  const allowed = ["overview","health","device","everyday","studio","compare","method"];
   const active = allowed.includes(panel) ? panel : "overview";
   for (const button of $$("[data-tab]")) {
     const chosen = button.dataset.tab===active;
@@ -158,14 +161,18 @@ function updateLocale() {
   }
   setText("language-toggle",settings.language==="en"?"繁":"EN");
   el("language-toggle").setAttribute("aria-label",settings.language==="en"?"切換成繁體中文":"Switch to English");
-  renderRuntime();renderPack();renderCompare();translateConsumer(settings.language);setPlanLocale(settings.language);
+  renderRuntime();renderPack();renderCompare();translateConsumer(settings.language);setPlanLocale(settings.language);translateDevice(settings.language);
   setText("current-section",panelTitle($(".nav-item.is-active")?.dataset.tab||"overview"));
 }
 function updateTheme() {
-  document.body.dataset.theme = settings.theme;
-  document.querySelector('meta[name="theme-color"]')?.setAttribute("content",settings.theme==="dark"?"#19171a":"#f6f3f0");
-  el("theme-toggle").textContent = settings.theme==="dark"?"☼":"☾";
-  el("theme-toggle").setAttribute("aria-label",settings.theme==="dark"?"Switch to light theme":"Switch to dark theme");
+  const effective=resolveTheme(settings.theme,Boolean(systemColor?.matches));
+  document.body.dataset.theme=effective;
+  document.documentElement.style.colorScheme=effective;
+  document.querySelector('meta[name="theme-color"]')?.setAttribute(
+    "content",effective==="dark"?"#19171a":"#f6f3f0"
+  );
+  el("theme-mode").value=normalizeTheme(settings.theme);
+  el("theme-mode").setAttribute("aria-label",t("appearanceLabel"));
 }
 function scenarioRows() {
   return scenarios.map((s)=>({scenario:s,result:calculatePack(s.input)}));
@@ -274,7 +281,11 @@ function setup() {
     el("save-feedback").textContent="";
   }));
   el("language-toggle").addEventListener("click",()=>{settings.language=settings.language==="en"?"zh-TW":"en";writeSettings(settings);updateLocale();});
-  el("theme-toggle").addEventListener("click",()=>{settings.theme=settings.theme==="dark"?"light":"dark";writeSettings(settings);updateTheme();});
+  el("theme-mode").addEventListener("change",(event)=>{
+    settings.theme=normalizeTheme(event.target.value);
+    writeSettings(settings);updateTheme();
+  });
+  systemColor?.addEventListener?.("change",()=>{if(settings.theme==="system")updateTheme();});
   el("save-scenario").addEventListener("click",saveScenario);
   el("export-single").addEventListener("click",()=>{
     if(currentPackInput)downloadCsv(scenariosToCsv([{name:"PackFit Studio",input:currentPackInput}]),"packfit-scenario.csv");
@@ -317,5 +328,6 @@ function setup() {
 setup();
 initializeConsumer(()=>settings.language);
 initializePlanner(()=>settings.language);
+initializeDevice(()=>settings.language);
 setupMotionLibrary();
 setupOfflineSupport();
