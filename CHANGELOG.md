@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.3.0 — 2026-11-01
+
+- Daily energy planning: editable usage duration and power by activity, available energy above reserve, charge estimate and energy shortfall.
+- Validated and versioned portable JSON backup/restore for up to four editable scenarios, plus synthetic example files.
+- Same-origin offline application caching with Service Worker and PWA manifest (browser support varies).
+- Expanded mathematical, data interchange and offline asset-integrity tests.
+- Bilingual quick-start documentation, contribution and adoption evidence guidance.
+
 ## 0.2.0 — 2026-11-01
 
 - New My Battery workspace: opt-in browser status, offline Windows batteryreport and manual battery capacity retention.
