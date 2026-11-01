@@ -2,7 +2,7 @@
 const CACHE = "packfit-static-v0.3.0";
 const RESOURCES = [
   "./", "./index.html", "./styles.css", "./assets/premium.css",
-  "./assets/logo.svg", "./manifest.webmanifest",
+  "./assets/logo.svg", "./manifest.webmanifest", "./examples/sample-scenarios.json",
   "./src/app.js", "./src/calc.js", "./src/format.js",
   "./src/presets.js", "./src/storage.js", "./src/csv.js",
   "./src/i18n.js", "./src/consumer.js", "./src/consumer-ui.js",
