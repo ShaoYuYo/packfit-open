@@ -6,7 +6,7 @@
 
 [Open the live app](https://shaoyuyo.github.io/packfit-open/) · [Issues](https://github.com/ShaoYuYo/packfit-open/issues) · [Methodology](docs/METHODOLOGY.md)
 
-> **Project status:** v0.4.0 — initial community release. Mathematical feasibility estimates only; not certified engineering analysis.
+> **Project status:** v0.5.0 — initial community release. Mathematical feasibility estimates only; not certified engineering analysis.
 
 ## What you can do
 
@@ -98,3 +98,11 @@ For potential Codex for Open Source participation, see [maintainer readiness](do
 ## Visual update (v0.4)
 
 The UI has a more restrained visual hierarchy, rewritten user-facing copy, Inter + Noto Sans TC with system font fallbacks, and short interaction-led motion instead of continuous decorative animation. The interface respects system reduced-motion settings. All functionality from v0.3 is retained. See [design guidelines](docs/DESIGN_SYSTEM.md).
+
+## Warm Graphite design and motion (v0.5)
+
+The v0.5 appearance uses a warm ivory/graphite foundation with a muted plum action color and restrained champagne-brass accents. Both light and dark themes share the same semantic variables; comparison bars are now plum, brass and neutral gray instead of green/blue. The palette overrides are isolated in `assets/atelier.css`.
+
+For optional enhanced transitions, `src/motion-enhance.js` imports the [MIT-licensed Motion](https://github.com/motiondivision/motion) JavaScript library from a **version-pinned jsDelivr URL (13.2.0)**. This is an asynchronous, nonessential CDN request and does not send battery inputs or reports. When offline, blocked or unavailable, the app uses the native Web Animations API. Essential controls, calculations and local storage work without Motion. Operating-system reduced-motion preferences disable these transitions.
+
+See [design decisions](docs/DESIGN_SYSTEM.md) and [dependency/privacy policy](SECURITY.md).
