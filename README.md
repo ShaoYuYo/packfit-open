@@ -3,7 +3,7 @@
 **Battery questions, answered with practical tools.**  
 *A free, privacy-conscious project for everyday laptop users and battery development engineers.*
 
-[Try the web app](https://shaoyuyo.github.io/packfit-open/) · [Windows desktop beta / Releases](https://github.com/ShaoYuYo/packfit-open/releases) · [Desktop guide](desktop/README.md) · [Report an issue](https://github.com/ShaoYuYo/packfit-open/issues) · [Contribute](CONTRIBUTING.md)
+[Try the web app](https://shaoyuyo.github.io/packfit-open/) · [Download first Windows beta](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.1) · [Desktop guide](desktop/README.md) · [Report an issue](https://github.com/ShaoYuYo/packfit-open/issues) · [Contribute](CONTRIBUTING.md)
 
 ![Web CI](https://github.com/ShaoYuYo/packfit-open/actions/workflows/ci.yml/badge.svg) ![Windows desktop CI](https://github.com/ShaoYuYo/packfit-open/actions/workflows/desktop-winui.yml/badge.svg) ![MIT license](https://img.shields.io/badge/license-MIT-neutral)
 
@@ -25,26 +25,26 @@ This project is independent, MIT-licensed, and built with **public or synthetic 
 | --- | --- | --- |
 | **For** | Laptop owners, learners, repair enthusiasts | Battery, power, systems and validation engineers |
 | **Platform** | Any modern desktop/mobile browser | Windows 10/11 x64 · native C# / WinUI 3 |
-| **Start** | [Open the website](https://shaoyuyo.github.io/packfit-open/) · no sign-up | [Download a beta build from Releases](https://github.com/ShaoYuYo/packfit-open/releases) when the release build succeeds |
+| **Start** | [Open the website](https://shaoyuyo.github.io/packfit-open/) · no sign-up | [Download the v0.7.0-beta.1 release](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.1) |
 | **Typical use** | Runtime and charging cost, battery capacity reports, daily energy budget | Batch log screening, test matrices, sleep/wake troubleshooting, native diagnostics, engineering reports |
 | **Privacy** | Calculations and file analysis stay local | Local-only processing, explicit file selection, no telemetry or cloud backend |
 | **Scope** | Informational estimates | Engineering **screening**, not certified validation |
 
 ### Engineering Desktop — what it can do
 
-- **Read Windows battery capacity:** use the built-in \`powercfg\` report or import an HTML report, with a clear distinction between capacity retention and overall battery safety.
+- **Read Windows battery capacity:** use the built-in `powercfg` report or import an HTML report, with a clear distinction between capacity retention and overall battery safety.
 - **Process multiple test logs:** import up to 12 supported CSV/TSV/semicolon logs, normalize explicitly labeled mV/mA units, check user-configured voltage, current, temperature, SOC and timing conditions, and compare findings.
 - **Organize validation work:** turn measured values and Min/Max thresholds into PASS / FAIL / NOT RUN matrices, rather than maintaining ad hoc spreadsheet formulas.
 - **Investigate laptop problems:** follow guided checklists for sleep drain, slow charging, unexpected shutdown, thermal throttling and capacity loss; run selected read-only Windows diagnostics without memorizing commands.
 - **Explain optional specialist tools:** find official Microsoft documentation for WPR/WPA and Procmon; never auto-install them.
 - **Prepare engineering handoffs:** save reproducible Markdown summaries, the thresholds used, unresolved flags and reviewer checklists.
 
-**Windows EXE status:** This is an initial **beta / developer preview**. The build workflow publishes a self-contained WinUI ZIP, and also attempts a single-file executable. A successful CI build confirms compilation; it **does not prove** that every workflow has been smoke-tested on physical Windows devices. See the [desktop download and build instructions](desktop/README.md), [Fluent design notes](desktop/docs/FLUENT.md), and [troubleshooting guide](desktop/docs/TROUBLESHOOTING.md).
+**Windows EXE status:** The first public **beta / developer preview** is [published](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.1), with a self-contained WinUI ZIP, optional single-file EXE and SHA-256 checksums. GitHub Actions passed browser and C# checks and compiled both Windows distributions. A successful CI build **does not establish successful real-device launch, full accessibility or engineering certification**. See the [desktop download and build instructions](desktop/README.md), [Fluent design notes](desktop/docs/FLUENT.md), and [troubleshooting guide](desktop/docs/TROUBLESHOOTING.md).
 
 ## Project status and maintenance
 
 - **Browser app:** v0.6.1 — browser-based, Chinese/English, available on GitHub Pages.
-- **First repository beta:** \`v0.7.0-beta.1\` — intended to document the two-product project and package the Windows workbench, pending an actual successful release build.
+- **First repository beta:** [`v0.7.0-beta.1`](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.1) — published as a GitHub Prerelease with Windows downloads and checksums; physical-device smoke testing remains open.
 - **Maintainer:** [ShaoYuYo](https://github.com/ShaoYuYo), primary maintainer.
 - **Engineering integrity:** formulas and input assumptions are documented; source tests, CI configuration and synthetic examples are included.
 - **Community adoption:** still early. We do **not** claim users, downloads, independent contributions, certification or operational readiness without evidence.
