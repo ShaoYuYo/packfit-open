@@ -47,3 +47,22 @@ test("consumer routes have matching navigation controls and panels",()=>{
     assert.ok(html.includes('data-panel="'+route+'"'));
   }
 });
+
+
+test("daily planner labels and DOM hooks remain consistent",()=>{
+  const a=Object.keys(PLANNER_TRANSLATIONS["zh-TW"]).sort();
+  const b=Object.keys(PLANNER_TRANSLATIONS.en).sort();
+  assert.deepEqual(a,b);
+  const labels=[...html.matchAll(/data-plan="([^"]+)"/g)].map((m)=>m[1]);
+  assert.deepEqual([...new Set(labels.filter((key)=>!(key in PLANNER_TRANSLATIONS.en)))],[]);
+  const planner=read("src/planner-ui.js");
+  const ids=new Set([...html.matchAll(/\bid="([^"]+)"/g)].map((m)=>m[1]));
+  const used=[...planner.matchAll(/\bel\("([^"]+)"\)/g)].map((m)=>m[1]);
+  assert.deepEqual([...new Set(used.filter((id)=>!ids.has(id)))],[]);
+});
+test("consumer controller can only reference present HTML controls",()=>{
+  const consumer=read("src/consumer-ui.js");
+  const ids=new Set([...html.matchAll(/\bid="([^"]+)"/g)].map((m)=>m[1]));
+  const used=[...consumer.matchAll(/\bq\("([^"]+)"\)/g)].map((m)=>m[1]);
+  assert.deepEqual([...new Set(used.filter((id)=>!ids.has(id)))],[]);
+});
