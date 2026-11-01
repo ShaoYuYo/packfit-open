@@ -84,7 +84,36 @@
               <div class="result-footer"><span data-i18n="estimatedFormula">Runtime = Wh × usable % × efficiency ÷ W</span><button class="text-link" type="button" data-goto="method"><span data-i18n="seeMethod">See methodology</span> ↗</button></div>
             </div>
           </div>
-          <div class="pf-intro-banner"><div class="pf-intro-symbol">✳</div><div><div class="overline">NEW · PERSONAL BATTERY LAB</div><h3 data-pf="healthTitle">電池狀態，一眼看懂。</h3><p data-pf="healthIntro">完全不懂電池也能開始。</p></div><button class="primary-button" data-goto="health" type="button"><span data-pf="goHealth">看我的電池</span> ↗</button></div><div class="mini-grid">
+          <div class="pf-intro-banner"><div class="pf-intro-symbol">✳</div><div><div class="overline">NEW · PERSONAL BATTERY LAB</div><h3 data-pf="healthTitle">電池狀態，一眼看懂。</h3><p data-pf="healthIntro">完全不懂電池也能開始。</p></div><button class="primary-button" data-goto="health" type="button"><span data-pf="goHealth">看我的電池</span> ↗</button></div>
+          <section class="panel plan-panel" aria-labelledby="plan-title">
+            <div class="panel-top"><div><div class="overline">ENERGY PROFILE / NEW</div>
+              <h2 id="plan-title" data-plan="title">今天的電量夠用嗎？</h2>
+              <p class="muted" data-plan="intro">填入今天預計使用多久，以及每種活動的平均耗電。看看電池是否足夠，避免出門後才發現電量不夠。</p>
+            </div><span class="plan-symbol" aria-hidden="true">✳</span></div>
+            <div class="plan-layout"><div>
+              <div class="field-grid plan-settings">
+                <label class="field"><span class="field-title" data-plan="capacity">capacity</span><div class="input-wrap"><input id="plan-wh" type="number" inputmode="decimal" min="0.1" max="2000" step="0.1" value="56"><span>Wh</span></div></label>
+                <label class="field"><span class="field-title" data-plan="starting">starting</span><div class="input-wrap"><input id="plan-start" type="number" inputmode="decimal" min="0" max="100" step="1" value="80"><span>%</span></div></label>
+                <label class="field"><span class="field-title" data-plan="reserve">reserve</span><div class="input-wrap"><input id="plan-reserve" type="number" inputmode="decimal" min="0" max="90" step="1" value="10"><span>%</span></div></label>
+              </div>
+              <div class="plan-subtitle"><span data-plan="activity">預計使用活動</span><span data-plan="assumption">數值僅是範例，可自由修改</span></div>
+              <div class="plan-activity"><strong data-plan="office">文書／網頁</strong><label class="field"><span class="field-title" data-plan="hours">hours</span><div class="input-wrap"><input id="plan-work-hours" type="number" inputmode="decimal" min="0" max="24" step="0.25" value="2"><span>h</span></div></label><label class="field"><span class="field-title" data-plan="watts">watts</span><div class="input-wrap"><input id="plan-work-watts" type="number" inputmode="decimal" min="0" max="1000" step="0.5" value="10"><span>W</span></div></label></div>
+              <div class="plan-activity"><strong data-plan="video">影音娛樂</strong><label class="field"><span class="field-title" data-plan="hours">hours</span><div class="input-wrap"><input id="plan-video-hours" type="number" inputmode="decimal" min="0" max="24" step="0.25" value="1"><span>h</span></div></label><label class="field"><span class="field-title" data-plan="watts">watts</span><div class="input-wrap"><input id="plan-video-watts" type="number" inputmode="decimal" min="0" max="1000" step="0.5" value="14"><span>W</span></div></label></div>
+              <div class="plan-activity"><strong data-plan="game">遊戲／高負載</strong><label class="field"><span class="field-title" data-plan="hours">hours</span><div class="input-wrap"><input id="plan-game-hours" type="number" inputmode="decimal" min="0" max="24" step="0.25" value="0"><span>h</span></div></label><label class="field"><span class="field-title" data-plan="watts">watts</span><div class="input-wrap"><input id="plan-game-watts" type="number" inputmode="decimal" min="0" max="1000" step="0.5" value="45"><span>W</span></div></label></div>
+              <p class="pf-small" data-plan="explain">假設每項活動使用固定平均功耗，不計待機與老化。請把這些功率當作可修改的示範值。</p>
+            </div>
+            <div class="plan-output" aria-live="polite">
+              <div class="overline" data-plan="estimate">你的今日電量預算</div>
+              <strong id="plan-main">—</strong>
+              <div class="plan-track" role="presentation"><div id="plan-fill"></div></div>
+              <div class="metric-row"><span data-plan="required">預計需要</span><b id="plan-used">—</b></div>
+              <div class="metric-row"><span data-plan="available">目前可用（保留底線後）</span><b id="plan-available">—</b></div>
+              <div class="metric-row"><span data-plan="ending">用完後預估電量</span><b id="plan-ending">—</b></div>
+              <p id="plan-status" class="plan-status"></p>
+              <div class="plan-error" id="plan-error" role="alert" hidden></div>
+            </div></div>
+          </section>
+          <div class="mini-grid">
             <button class="mini-card" type="button" data-goto="studio"><span class="mini-icon">⌘</span><span><strong data-i18n="studioCardTitle">Engineering-grade metrics</strong><small data-i18n="studioCardDesc">Series / parallel, energy density, pack dimensions</small></span><span class="mini-arrow">↗</span></button>
             <button class="mini-card" type="button" data-goto="compare"><span class="mini-icon">▥</span><span><strong data-i18n="compareCardTitle">Compare configurations</strong><small data-i18n="compareCardDesc">Save scenarios and export your results</small></span><span class="mini-arrow">↗</span></button>
           </div>
