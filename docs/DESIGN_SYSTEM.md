@@ -52,3 +52,26 @@ PackFit is a practical calculator. Users should understand where inputs go and w
 - [Noto Sans TC metadata and OFL](https://github.com/google/fonts/blob/main/ofl/notosanstc/METADATA.pb)
 
 Visual appearance still requires independent desktop/mobile and assistive technology QA; code changes alone do not prove accessibility compliance.
+
+
+## v0.5: Warm Graphite / Atelier
+
+Previous versions leaned too strongly toward cool green. This revision uses neutral, legible surfaces with a single subdued plum accent rather than multiple competing brand colors.
+
+| Role | Light theme | Dark theme |
+| --- | --- | --- |
+| Background | `#F6F3F0` warm ivory | `#19171A` charcoal |
+| Primary text | `#302D32` graphite | `#F4EEED` ivory |
+| Action/result | `#76515E` plum | `#D9AEBA` pale plum |
+| Secondary decorative | `#B39372` brass | brass used sparingly |
+| Cards | `#FFFDFB` | `#262226` |
+
+The final override stylesheet is `assets/atelier.css`. Earlier CSS files remain for layout compatibility, but their green and blue decorative rules are superseded. This is a staged visual refactor; style consolidation remains future work.
+
+### Optional Motion (MIT)
+
+After checking [Motion](https://motion.dev/), [Anime.js](https://animejs.com/) and [Popmotion](https://github.com/Popmotion/popmotion), Motion was selected because it works in vanilla JavaScript without converting the project to React and offers a simple hardware-accelerated `animate` API. We keep a native Web Animations API fallback, and disable animations for users who prefer reduced motion. External module loading is version-pinned and never blocks primary functions.
+
+**No decorative infinite movement:** motion is limited to a 240 ms page reveal and 170 ms changed-number response. The chosen accent is not used as the sole way to distinguish values.
+
+References: [Apple HIG Color](https://developer.apple.com/design/human-interface-guidelines/color), [Apple HIG Motion](https://developer.apple.com/design/human-interface-guidelines/motion), [Motion MIT License](https://github.com/motiondivision/motion/blob/main/LICENSE.md).
