@@ -1,0 +1,12 @@
+bin/
+obj/
+.vs/
+*.user
+*.suo
+dist/
+TestResults/
+*.pfx
+*.snk
+*.appx
+*.msix
+*.msixbundle
