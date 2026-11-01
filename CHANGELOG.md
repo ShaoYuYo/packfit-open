@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.7.0-beta.1 — 2026-11-02
+
+- First public **repository beta**, combining the v0.6.1 browser app and the WinUI 3 engineering desktop preview.
+- Introduced a clearer README explaining the battery engineer's motivation, everyday laptop use cases, responsible AI-assisted development and the limits of an early open-source project.
+- Added release notes, publication automation requiring both web tests and Windows engineering core tests, Windows binaries with SHA-256 checksums, and a transparent beta designation.
+- Fixed a stale service-worker cache assertion that had been causing website CI failures despite 72/73 assertions passing.
+- Added a complete, current Codex for Open Source application pack with only substantiated claims.
+- Actual desktop hardware smoke-testing and third-party adoption evidence remain open.
+
 ## Desktop Fluent + diagnostics workflow update — 2026-11-01
 
 - Replaced the original plain WinUI shell with Mica, native TitleBar/pane toggle, Fluent navigation icons, layered cards and pinned InfoBar.
@@ -30,8 +39,6 @@
 - Optional user-triggered WebGL GPU identification and local Worker JavaScript computation probe; no telemetry or hardware fingerprint persistence.
 - Fixed a previous navigation bug that only selected the first panel instead of all panels.
 - Added tests for theme resolution, device hint boundaries, UI wiring and offline resources.
-
-# Changelog
 
 ## 0.5.0 — 2026-11-01
 
