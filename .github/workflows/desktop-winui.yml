@@ -1,0 +1,82 @@
+name: Build Windows WinUI Desktop
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'desktop/**'
+      - '.github/workflows/desktop-winui.yml'
+  pull_request:
+    paths:
+      - 'desktop/**'
+      - '.github/workflows/desktop-winui.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  windows-x64:
+    runs-on: windows-latest
+    timeout-minutes: 35
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Set up .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Check standalone engineering calculations
+        shell: pwsh
+        run: dotnet run --project desktop/PackFit.Engineering.Checks/PackFit.Engineering.Checks.csproj --configuration Release
+
+      - name: Publish self-contained WinUI 3 application folder
+        shell: pwsh
+        run: |
+          dotnet publish desktop/PackFit.Engineering.Desktop/PackFit.Engineering.Desktop.csproj `
+            --configuration Release --runtime win-x64 --self-contained true `
+            --output "dist/PackFit-Engineering-WinUI" `
+            -p:Platform=x64 -p:WindowsPackageType=None `
+            -p:WindowsAppSDKSelfContained=true -p:PublishSingleFile=false
+          if ($LASTEXITCODE -ne 0) { throw "WinUI 3 publish failed" }
+          if (!(Test-Path "dist/PackFit-Engineering-WinUI/PackFit.Engineering.exe")) {
+            throw "Expected native WinUI executable was not produced"
+          }
+
+      - name: Package complete desktop application
+        shell: pwsh
+        run: |
+          Compress-Archive -Path "dist/PackFit-Engineering-WinUI/*" `
+            -DestinationPath "dist/PackFit-Engineering-win-x64.zip" -Force
+
+      - name: Upload working Windows executable and dependencies
+        uses: actions/upload-artifact@v4
+        with:
+          name: PackFit-Engineering-WinUI-win-x64
+          path: dist/PackFit-Engineering-win-x64.zip
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Try Microsoft's optional single-file WinUI publishing mode
+        id: portable_exe
+        continue-on-error: true
+        shell: pwsh
+        run: |
+          dotnet publish desktop/PackFit.Engineering.Desktop/PackFit.Engineering.Desktop.csproj `
+            --configuration Release --runtime win-x64 --self-contained true `
+            --output "dist/portable" `
+            -p:Platform=x64 -p:WindowsPackageType=None `
+            -p:WindowsAppSDKSelfContained=true -p:PublishSingleFile=true `
+            -p:EnableMsixTooling=true -p:IncludeAllContentForSelfExtract=true
+          if ($LASTEXITCODE -ne 0) { throw "Optional single-file publication failed" }
+
+      - name: Upload optional single-file EXE if generated
+        if: steps.portable_exe.outcome == 'success'
+        uses: actions/upload-artifact@v4
+        with:
+          name: PackFit-Engineering-single-EXE-win-x64
+          path: dist/portable/PackFit.Engineering.exe
+          if-no-files-found: warn
+          retention-days: 30
