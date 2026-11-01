@@ -40,7 +40,6 @@ function update(){
       reservePct:el("plan-reserve").value,tasks
     });
     el("plan-error").hidden=true;
-    el("plan-output");
     el("plan-main").textContent=t(result.fits?"enough":"short");
     el("plan-used").textContent=fmt(result.totalWh,2)+" Wh";
     el("plan-available").textContent=fmt(result.usableWh,2)+" Wh";
