@@ -1,0 +1,42 @@
+# Real-world evidence and adoption log
+
+**Purpose:** preserve honest, verifiable evidence of community impact. This is not a marketing scoreboard.
+
+## Implementation milestones (source-code claims only)
+
+- 2026-11-01, v0.1: public runtime and pack feasibility calculators, bilingual interface, methodology and unit tests.
+- 2026-11-01, v0.2: local Windows batteryreport import, everyday charging estimates and responsive interface.
+- 2026-11-01, v0.3: daily usage planner, scoped offline caching, portable validated JSON scenarios, open example data and onboarding improvements.
+
+These entries describe code changes; **they do not assert external adoption, downloads, users, or community contributions**.
+
+## Evidence still needed
+
+| Signal | Verification path | What can currently be claimed |
+| --- | --- | --- |
+| Stars and forks | GitHub repository | Must verify live counts |
+| Unique clones and traffic | GitHub Insights / Traffic | Not yet documented |
+| Independent contributors | PRs and contributors list | Not yet documented |
+| Independent bug reports | Public issues with reproducible evidence | Not yet documented |
+| Downstream real use | Cited sites, learning materials or consented feedback | Not yet documented |
+| Release maintenance | Tags, Actions results, release notes | Code and changelog exist; verify published releases |
+| Independent formula review | External engineer or reproducible public test cases | Not yet documented |
+
+## Ethical project growth
+
+- Do not buy or automate GitHub Stars, forks or traffic.
+- Do not invent testimonials, community activity, code reviews or adoption.
+- Do not count AI-generated commits as independent community contributions.
+- Never expose employer, vendor or customer confidential battery data in fixtures or issues.
+- Protect contributors and user's private Windows battery reports.
+
+## Practical next steps
+
+1. Test on multiple real laptops and browsers; record anonymous, consented feedback.
+2. Add public synthetic fixtures for unsupported battery report formats.
+3. Track reproducible issues and actually resolve them.
+4. Request independent reviews of equations, boundary handling and accessibility.
+5. Publish versioned releases after CI and hands-on browser checks.
+6. Update this file only when new evidence can be verified.
+
+Official Codex for Open Source application: https://openai.com/form/codex-for-oss/ . A newly created repository is not automatically eligible.
