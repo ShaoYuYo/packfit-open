@@ -9,9 +9,10 @@
   <title>PackFit Open — Battery Intelligence, Made Accessible.</title>
   <link rel="icon" type="image/svg+xml" href="./assets/logo.svg">
   <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./assets/premium.css">
   <script type="module" src="./src/app.js"></script>
 </head>
-<body data-theme="dark">
+<body data-theme="light">
   <a class="skip-link" href="#content">Skip to content</a>
   <div class="app-shell">
     <aside class="sidebar" aria-label="Main navigation">
@@ -22,6 +23,8 @@
       <div class="nav-label" data-i18n="workspace">WORKSPACE</div>
       <nav class="nav" aria-label="Primary">
         <button class="nav-item is-active" data-tab="overview" type="button" aria-selected="true"><span class="nav-icon" aria-hidden="true">◫</span><span data-i18n="navOverview">Overview</span><span class="nav-shortcut">01</span></button>
+        <button class="nav-item" data-tab="health" type="button" aria-selected="false"><span class="nav-icon">◉</span><span data-pf="navHealth">我的電池</span><span class="nav-shortcut">02</span></button>
+        <button class="nav-item" data-tab="everyday" type="button" aria-selected="false"><span class="nav-icon">✳</span><span data-pf="navEveryday">生活工具</span><span class="nav-shortcut">03</span></button>
         <button class="nav-item" data-tab="studio" type="button" aria-selected="false"><span class="nav-icon" aria-hidden="true">⌘</span><span data-i18n="navStudio">Pack Studio</span><span class="nav-shortcut">02</span></button>
         <button class="nav-item" data-tab="compare" type="button" aria-selected="false"><span class="nav-icon" aria-hidden="true">▥</span><span data-i18n="navCompare">Compare</span><span class="nav-shortcut">03</span></button>
         <button class="nav-item" data-tab="method" type="button" aria-selected="false"><span class="nav-icon" aria-hidden="true">◎</span><span data-i18n="navMethod">Methodology</span><span class="nav-shortcut">04</span></button>
@@ -78,10 +81,83 @@
               <div class="result-footer"><span data-i18n="estimatedFormula">Runtime = Wh × usable % × efficiency ÷ W</span><button class="text-link" type="button" data-goto="method"><span data-i18n="seeMethod">See methodology</span> ↗</button></div>
             </div>
           </div>
-          <div class="mini-grid">
+          <div class="pf-intro-banner"><div class="pf-intro-symbol">✳</div><div><div class="overline">NEW · PERSONAL BATTERY LAB</div><h3 data-pf="healthTitle">電池狀態，一眼看懂。</h3><p data-pf="healthIntro">完全不懂電池也能開始。</p></div><button class="primary-button" data-goto="health" type="button"><span data-pf="goHealth">看我的電池</span> ↗</button></div><div class="mini-grid">
             <button class="mini-card" type="button" data-goto="studio"><span class="mini-icon">⌘</span><span><strong data-i18n="studioCardTitle">Engineering-grade metrics</strong><small data-i18n="studioCardDesc">Series / parallel, energy density, pack dimensions</small></span><span class="mini-arrow">↗</span></button>
             <button class="mini-card" type="button" data-goto="compare"><span class="mini-icon">▥</span><span><strong data-i18n="compareCardTitle">Compare configurations</strong><small data-i18n="compareCardDesc">Save scenarios and export your results</small></span><span class="mini-arrow">↗</span></button>
           </div>
+        </section>
+        
+        <section id="health" data-panel="health" aria-labelledby="health-heading" hidden>
+          <div class="page-heading pf-page-title"><div class="overline" data-pf="healthTag">PERSONAL / 01</div><h1 id="health-heading" data-pf="healthTitle">電池狀態，一眼看懂。</h1><p class="muted" data-pf="healthIntro">不需要工程背景。</p></div>
+          <div class="pf-two">
+            <article class="panel pf-surface">
+              <div class="pf-card-heading"><span class="overline">LIVE / MONITOR</span><h3 data-pf="liveTitle">目前電量</h3><p data-pf="liveDesc">瀏覽器支援時可以查看目前電量與充電狀態。</p></div>
+              <div class="pf-live"><div id="pf-ring" class="pf-ring" style="--ring:0%"><div class="pf-ring-inner"><strong id="pf-level">—</strong><small>BATTERY</small></div></div><div class="pf-live-detail"><span class="overline">POWER STATUS</span><strong id="pf-charge">—</strong><span id="pf-time" class="muted">—</span></div></div>
+              <p class="pf-message" id="pf-status" role="status" data-pf="notChecked">尚未偵測</p>
+              <button type="button" class="primary-button" id="pf-connect"><span data-pf="connect">偵測我的電池</span> ↗</button>
+              <p class="pf-small" data-pf="liveNotice">瀏覽器讀值可能是概略值，不代表健康度。</p>
+            </article>
+            <article class="panel pf-surface">
+              <div class="pf-card-heading"><span class="overline">HEALTH / CAPACITY</span><h3 data-pf="reportTitle">電池健康度分析</h3><p data-pf="reportDesc">匯入 Windows 報告或手動輸入容量。</p></div>
+              <div class="pf-steps"><p data-pf="winSteps">Windows：按 Win + R，輸入 cmd，貼上指令並按 Enter。</p>
+                <div class="pf-command"><code id="pf-command">powercfg /batteryreport /output "%USERPROFILE%\Desktop\battery-report.html"</code><button id="pf-copy" type="button" data-pf="copy">複製指令</button></div>
+              </div>
+              <label for="pf-report" class="pf-upload"><span>↥</span><span data-pf="import">匯入 Windows 電池報告</span></label><input id="pf-report" class="sr-only" type="file" accept=".html,.htm,text/html">
+              <p class="pf-small" data-pf="local">報告只在瀏覽器內處理，不會上傳。</p>
+              <div class="subhead" data-pf="orManual">或手動輸入容量（Wh）</div>
+              <div class="field-grid">
+                <label class="field"><span class="field-title" data-pf="design">設計容量</span><div class="input-wrap"><input id="pf-design" type="number" inputmode="decimal" min="0.1" max="2000" step="0.1" value="56"><span>Wh</span></div></label>
+                <label class="field"><span class="field-title" data-pf="full">滿充容量</span><div class="input-wrap"><input id="pf-full" type="number" inputmode="decimal" min="0.01" max="2500" step="0.1" value="49"><span>Wh</span></div></label>
+              </div>
+              <button id="pf-analyze" class="secondary-button" type="button" data-pf="analyze">計算健康度</button>
+              <p class="pf-message" id="pf-report-status" role="status" aria-live="polite"></p>
+            </article>
+          </div>
+          <article class="panel pf-retention" id="pf-retention" hidden aria-live="polite">
+            <div class="overline" data-pf="capacityScore">容量保留率</div>
+            <div class="pf-health-layout"><div id="pf-health-ring" class="pf-ring" style="--ring:0%"><div class="pf-ring-inner"><strong id="pf-health-percent">—</strong><small>RETENTION</small></div></div>
+            <div class="pf-health-metrics"><div><span data-pf="design">設計容量</span><b id="pf-out-design">—</b></div><div><span data-pf="full">滿充容量</span><b id="pf-out-full">—</b></div><div><span data-pf="cycles">循環次數</span><b id="pf-out-cycles">—</b></div></div></div>
+            <p id="pf-health-advice" class="pf-small"></p>
+          </article>
+        </section>
+
+        <section id="everyday" data-panel="everyday" aria-labelledby="everyday-heading" hidden>
+          <div class="page-heading pf-page-title"><div class="overline" data-pf="everydayTag">EVERYDAY / 02</div><h1 id="everyday-heading" data-pf="everydayTitle">日常電力，算得明白。</h1><p class="muted" data-pf="everydayIntro">充電電費、行動電源、充電時間，三個生活中最實用的計算機。</p></div>
+          <div class="pf-three">
+            <article class="panel pf-tool"><div class="pf-tool-icon">＄</div><div class="pf-card-heading"><span class="overline">01 / CHARGE</span><h3 data-pf="costTitle">充電要花多少錢？</h3><p data-pf="costDesc">每次充電和每月大約花多少電費。</p></div>
+              <div class="field-grid">
+                <label class="field"><span class="field-title" data-pf="batteryWh">電池容量</span><div class="input-wrap"><input id="pf-cost-wh" type="number" inputmode="decimal" min="0.1" max="2000" step="1" value="56"><span>Wh</span></div></label>
+                <label class="field"><span class="field-title" data-pf="efficiency">效率</span><div class="input-wrap"><input id="pf-cost-eff" type="number" inputmode="decimal" min="1" max="100" step="1" value="85"><span>%</span></div></label>
+                <label class="field"><span class="field-title" data-pf="rate">每度電價</span><div class="input-wrap"><input id="pf-cost-rate" type="number" inputmode="decimal" min="0" max="100" step="0.1" value="4"><span>元/kWh</span></div></label>
+                <label class="field"><span class="field-title" data-pf="times">每月充電次數</span><div class="input-wrap"><input id="pf-cost-times" type="number" inputmode="decimal" min="0" max="300" step="1" value="30"><span>次</span></div></label>
+              </div>
+              <p id="pf-cost-error" class="pf-error" role="alert" hidden></p>
+              <div class="pf-result"><span data-pf="perMonth">每月電費</span><strong id="pf-cost-month">—</strong><div><span data-pf="perCharge">每次電費</span><b id="pf-cost-once">—</b></div><div><span data-pf="fromGrid">插座取電量</span><b id="pf-cost-kwh">—</b></div></div>
+            </article>
+            <article class="panel pf-tool"><div class="pf-tool-icon">ϟ</div><div class="pf-card-heading"><span class="overline">02 / POWER BANK</span><h3 data-pf="bankTitle">行動電源能充幾次？</h3><p data-pf="bankDesc">把 mAh 換成 Wh，再考慮輸出效率。</p></div>
+              <div class="field-grid">
+                <label class="field"><span class="field-title" data-pf="bankMah">標示容量</span><div class="input-wrap"><input id="pf-bank-mah" type="number" inputmode="decimal" min="100" max="1000000" step="100" value="20000"><span>mAh</span></div></label>
+                <label class="field"><span class="field-title" data-pf="cellV">電芯電壓</span><div class="input-wrap"><input id="pf-bank-v" type="number" inputmode="decimal" min="2" max="5" step="0.05" value="3.7"><span>V</span></div></label>
+                <label class="field"><span class="field-title" data-pf="efficiency">效率</span><div class="input-wrap"><input id="pf-bank-eff" type="number" inputmode="decimal" min="1" max="100" step="1" value="80"><span>%</span></div></label>
+                <label class="field"><span class="field-title" data-pf="targetWh">設備容量</span><div class="input-wrap"><input id="pf-bank-target" type="number" inputmode="decimal" min="0.1" max="1000" step="0.1" value="15"><span>Wh</span></div></label>
+              </div>
+              <p id="pf-bank-error" class="pf-error" role="alert" hidden></p>
+              <div class="pf-result"><span data-pf="charges">約可充滿次數</span><strong><span id="pf-bank-charges">—</span><small> ×</small></strong><div><span data-pf="rated">標稱能量</span><b id="pf-bank-rated">—</b></div><div><span data-pf="delivered">估計可用能量</span><b id="pf-bank-delivered">—</b></div></div>
+            </article>
+            <article class="panel pf-tool"><div class="pf-tool-icon">◷</div><div class="pf-card-heading"><span class="overline">03 / TIME</span><h3 data-pf="timeTitle">大約多久充好？</h3><p data-pf="timeDesc">估算部分充電時間，額外加入 15% 緩衝。</p></div>
+              <div class="field-grid">
+                <label class="field"><span class="field-title" data-pf="batteryWh">電池容量</span><div class="input-wrap"><input id="pf-time-wh" type="number" inputmode="decimal" min="0.1" max="2000" step="1" value="56"><span>Wh</span></div></label>
+                <label class="field"><span class="field-title" data-pf="power">平均入電功率</span><div class="input-wrap"><input id="pf-time-w" type="number" inputmode="decimal" min="0.1" max="1000" step="1" value="35"><span>W</span></div></label>
+                <label class="field"><span class="field-title" data-pf="from">從</span><div class="input-wrap"><input id="pf-time-start" type="number" inputmode="decimal" min="0" max="99" step="1" value="20"><span>%</span></div></label>
+                <label class="field"><span class="field-title" data-pf="to">充到</span><div class="input-wrap"><input id="pf-time-end" type="number" inputmode="decimal" min="1" max="100" step="1" value="80"><span>%</span></div></label>
+                <label class="field"><span class="field-title" data-pf="efficiency">效率</span><div class="input-wrap"><input id="pf-time-eff" type="number" inputmode="decimal" min="1" max="100" step="1" value="90"><span>%</span></div></label>
+              </div>
+              <p id="pf-time-error" class="pf-error" role="alert" hidden></p>
+              <div class="pf-result"><span data-pf="duration">預估充電時間</span><strong id="pf-time-duration">—</strong><div><span data-pf="delta">需要補充能量</span><b id="pf-time-energy">—</b></div></div>
+            </article>
+          </div>
+          <div class="pf-tips"><details><summary data-pf="whatIsWh">Wh 是什麼？</summary><p data-pf="whExpl">Wh 是能量單位。</p></details><details><summary data-pf="whatIsMah">mAh 是什麼？</summary><p data-pf="mahExpl">mAh 需要搭配標稱電壓換算 Wh。</p></details></div>
+          <p class="pf-small pf-wide-note" data-pf="caution">所有數值是簡化估算，不是實際量測。</p>
         </section>
         <section id="studio" data-panel="studio" aria-labelledby="studio-title" hidden>
           <div class="page-heading"><div class="overline" data-i18n="labKicker">02 / PACK ENGINEERING</div><h1 id="studio-title" data-i18n="labTitle">Pack Studio <span class="gradient-text">/ design sandbox</span></h1><p class="muted" data-i18n="labDesc">在同一個工作區評估串並聯、能量、重量、體積密度與估算續航。不代表實體設計或安規已驗證。</p></div>
