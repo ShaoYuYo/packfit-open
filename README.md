@@ -2,11 +2,11 @@
 
 ![CI](https://github.com/ShaoYuYo/packfit-open/actions/workflows/ci.yml/badge.svg)
 
-**Battery intelligence, made accessible.** A bilingual, responsive, offline-capable battery runtime estimator and battery pack engineering sandbox.
+**A battery calculator for everyday questions and early engineering estimates.** Bilingual, privacy-conscious and offline-capable.
 
 [Open the live app](https://shaoyuyo.github.io/packfit-open/) · [Issues](https://github.com/ShaoYuYo/packfit-open/issues) · [Methodology](docs/METHODOLOGY.md)
 
-> **Project status:** v0.3.0 — initial community release. Mathematical feasibility estimates only; not certified engineering analysis.
+> **Project status:** v0.4.0 — initial community release. Mathematical feasibility estimates only; not certified engineering analysis.
 
 ## What you can do
 
@@ -34,6 +34,7 @@
 - [English Quick Start](docs/USER_GUIDE.en.md)
 - [Synthetic, downloadable scenario examples](examples/sample-scenarios.json)
 - [Developer module reference](docs/DEVELOPER_API.md)
+- [Design, typography and motion decisions](docs/DESIGN_SYSTEM.md)
 - [Release quality checklist](docs/RELEASE_CHECKLIST.md)
 - [Open-source adoption evidence (only verified claims)](docs/PROJECT_EVIDENCE.md)
 
@@ -93,3 +94,7 @@ Design comparison JSON exports are explicitly versioned (packfit.scenarios v1). 
 Daily energy planning uses simple duration × average power sums; it does not simulate time-varying hardware load, BMS cutoffs, charging and discharge curves or thermal behavior.
 
 For potential Codex for Open Source participation, see [maintainer readiness](docs/MAINTAINER_APPLICATION.md). We have not claimed outside adoption or an approval.
+
+## Visual update (v0.4)
+
+The UI has a more restrained visual hierarchy, rewritten user-facing copy, Inter + Noto Sans TC with system font fallbacks, and short interaction-led motion instead of continuous decorative animation. The interface respects system reduced-motion settings. All functionality from v0.3 is retained. See [design guidelines](docs/DESIGN_SYSTEM.md).
