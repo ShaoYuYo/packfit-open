@@ -11,16 +11,21 @@ This roadmap records *planned* work rather than claiming implemented features or
 - Premium visual refresh, animations and reduced-motion support.
 - Opt-in live battery status, offline Windows report parsing and three everyday calculators.
 
-## v0.3 — Reliability and accessibility (proposed)
-- Browser-level responsive screenshots and accessibility checks in CI.
-- More comprehensive screen-reader and keyboard testing.
-- Documented numerical test vectors from fully public or synthetic inputs.
-- More explicit labels for load measurement conventions and estimation error.
+## v0.3 — User utility and reliability (implemented)
+- Daily energy planning with user-supplied average loads and explicit assumptions.
+- Versioned, validated JSON import/export and synthetic example data.
+- Scoped offline cache and web app manifest.
+- More tests and beginner/user support documentation.
 
-## v0.4 — Deeper analysis (proposed; research required)
-- Editable load-profile segments (light/active/standby) with clear non-physical assumptions.
+## v0.4 — Quality improvements (proposed)
+- Browser-level visual/accessibility integration tests, supported Windows battery report fixture cases.
+- Independent review of math and language clarity; explicit load measurement guidance.
+- Improve PWA icon compatibility and real-world offline validation.
+
+## v0.5 — Deeper analysis (proposed; research required)
+- Optional variable-workload timelines and sensitivity plots with public reproducible assumptions.
 - Sensitivity plots for efficiency, reserve and average load, with reproducible calculations.
-- Import/export of human-readable scenario JSON (validated and migration-aware).
+- Portable version migrations for JSON backups, with explicit backward compatibility tests.
 
 ## Community process
 Please file issues with examples or anonymized data. No confidential cell/vendor/customer specifications. New formulas require references, units, assumptions and automated tests. Feature development should be driven by actual user feedback, not artificial GitHub activity.
