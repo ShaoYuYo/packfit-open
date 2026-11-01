@@ -100,5 +100,14 @@ export function initializeConsumer(getLanguage){
       renderHealth();set("pf-report-status","");}
     catch{set("pf-report-status",t("badInput"));}
   });
+  q("pf-use-capacity").addEventListener("click",()=>{
+    if(!healthResult)return;
+    q("runtime-wh").value=healthResult.fullWh;
+    q("runtime-wh").dispatchEvent(new Event("input",{bubbles:true}));
+    q("pf-cost-wh").value=healthResult.fullWh;
+    q("pf-time-wh").value=healthResult.fullWh;
+    showCalculators();
+    document.querySelector('.nav-item[data-tab="overview"]').click();
+  });
   translateConsumer(getLanguage());
 }
