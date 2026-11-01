@@ -59,3 +59,15 @@ Report issues at https://github.com/ShaoYuYo/packfit-open/issues .
 - **Charge time**: rated battery Wh × (target SOC − start SOC) / 100 / (assumed battery charging power in W × efficiency) × 1.15 (heuristic buffer). **A 65W adapter does not mean the battery always charges at 65W.** Charging current tapers, especially near full charge.
 - **Capacity retention**: Windows full-charge capacity Wh ÷ design capacity Wh × 100. This is not a comprehensive health or safety diagnostic.
 - **Browser Battery Status API**: optional live percentage/charging state; browser-limited, may be rounded or absent; never exposes capacity retention reliably.
+
+
+## 9. Daily energy plan / 每日電力規劃
+
+The user provides nominal battery energy in Wh, starting battery percentage, desired reserve percentage, and up to eight segments of estimated **constant average power** (W) and duration (h).
+
+- Required energy (Wh) = sum of each task's hours × average W.
+- Energy available above reserve (Wh) = max(0, nominal Wh × (starting percentage − reserve percentage)/100).
+- Predicted ending percentage = 100 × max(0, starting Wh − required Wh) / nominal Wh.
+- Shortfall (Wh) = max(0, required Wh − energy available above reserve).
+
+The initial app example uses 2 h office at 10 W + 1 h video at 14 W + 0 h gaming at 45 W = 34 Wh. These values are **illustrative, not sourced device measurements**. The model excludes background consumption outside entered segments, discharge-rate effects, sleep, ambient temperature, power spikes and battery aging.
