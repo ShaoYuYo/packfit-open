@@ -52,3 +52,10 @@ For regressions run Node.js 20+: npm test. Model tests include 3S1P, parallel/se
 Do not use PackFit Open to design, construct, charge, repair or certify a physical battery pack, to establish flight/transport eligibility, or to determine safe operating limits. Physical products require qualified engineers, manufacturer datasheets, relevant standards and proper validation.
 
 Report issues at https://github.com/ShaoYuYo/packfit-open/issues .
+## 8. Consumer models
+
+- **Charging cost**: nominal battery Wh / charging efficiency / 1000 × user-entered currency per kWh. Multiply by monthly full-charge equivalents for monthly cost.
+- **Power bank**: cell-side rated mAh / 1000 × nominal cell voltage (V) yields Wh. Multiply by assumed conversion efficiency for estimated usable output; divide by target device battery Wh for full-charge equivalents. Real charging losses beyond power-bank output may further reduce charges.
+- **Charge time**: rated battery Wh × (target SOC − start SOC) / 100 / (assumed battery charging power in W × efficiency) × 1.15 (heuristic buffer). **A 65W adapter does not mean the battery always charges at 65W.** Charging current tapers, especially near full charge.
+- **Capacity retention**: Windows full-charge capacity Wh ÷ design capacity Wh × 100. This is not a comprehensive health or safety diagnostic.
+- **Browser Battery Status API**: optional live percentage/charging state; browser-limited, may be rounded or absent; never exposes capacity retention reliably.
