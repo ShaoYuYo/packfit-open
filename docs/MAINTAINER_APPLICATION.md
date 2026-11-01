@@ -22,7 +22,8 @@ These are independent self-reports, **not an official OpenAI list of approved re
 - [x] Public formulas, limitations and synthetic sample input.
 - [x] Regression tests and CI configuration.
 - [x] Contributions, privacy and versioned backup design.
-- [ ] Verify successful CI run and deployment after each update.
+- [x] Verify the first public beta release and CI gate: [`v0.7.0-beta.1`](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.1) is published with Windows artifacts; browser and engineering core checks passed.
+- [ ] Re-verify CI and deployment on **future updates** and validate actual WinUI functionality on Windows hardware.
 - [ ] Verify end-to-end user experience in real browsers.
 - [ ] Collect permissioned, verifiable user feedback or adoption.
 - [ ] Demonstrate ongoing issue triage, PR reviews and meaningful releases.
