@@ -6,7 +6,7 @@ const RESOURCES = [
   "./src/app.js", "./src/calc.js", "./src/format.js",
   "./src/presets.js", "./src/storage.js", "./src/csv.js",
   "./src/i18n.js", "./src/consumer.js", "./src/consumer-ui.js",
-  "./src/consumer-i18n.js", "./src/scenario-transfer.js"
+  "./src/consumer-i18n.js", "./src/scenario-transfer.js", "./src/pwa.js"
 ];
 const cacheUrls = new Set(RESOURCES.map((path)=>new URL(path,self.registration.scope).pathname));
 
