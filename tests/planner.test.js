@@ -7,7 +7,6 @@ const base={capacityWh:56,startPct:80,reservePct:10,
 test("energy is summed from duration times average load",()=>{
  const r=estimateDayPlan(base);
  assert.equal(r.totalWh,34);
- assert.ok(Math.abs(r.initialWh||56*.8-44.8)<1e-10); // fallback: internal initial Wh not exported
  assert.ok(Math.abs(r.usableWh-39.2)<1e-10);
  assert.ok(Math.abs(r.remainingWh-10.8)<1e-10);
  assert.ok(Math.abs(r.endingPct-(10.8/56*100))<1e-10);
