@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.6.0 — 2026-11-01
+
+- Automatic OS-driven light/dark theme, updated live on system preference changes, plus explicit theme override selector and safe settings migration.
+- Unified all seven workspaces with a responsive visual/layout system, consistent forms and card hierarchy.
+- New Device Insights workspace: browser-exposed CPU thread count, coarse device memory, platform and graphics API availability.
+- Optional user-triggered WebGL GPU identification and local Worker JavaScript computation probe; no telemetry or hardware fingerprint persistence.
+- Fixed a previous navigation bug that only selected the first panel instead of all panels.
+- Added tests for theme resolution, device hint boundaries, UI wiring and offline resources.
+
+# Changelog
+
 ## 0.5.0 — 2026-11-01
 
 - New warm ivory, graphite, muted plum and champagne palette in both themes, replacing green- and blue-heavy elements.
