@@ -134,6 +134,7 @@ export function initializeDevice(getLanguage){
       diagnostic=parseDxDiagReport(await file.text());
       reportMessage="reportDone";
     }catch{
+      diagnostic=null;
       reportMessage="reportError";
     }finally{
       input.value="";
