@@ -1,0 +1,17 @@
+{
+  "id": "./",
+  "name": "PackFit Open — Personal Battery Lab",
+  "short_name": "PackFit",
+  "description": "Private, bilingual battery insights, runtime estimates and engineering tools.",
+  "lang": "zh-Hant",
+  "dir": "ltr",
+  "start_url": "./#overview",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f7fa",
+  "theme_color": "#f5f7fa",
+  "categories": ["utilities", "productivity"],
+  "icons": [
+    {"src":"./assets/logo.svg","sizes":"any","type":"image/svg+xml","purpose":"any"}
+  ]
+}
