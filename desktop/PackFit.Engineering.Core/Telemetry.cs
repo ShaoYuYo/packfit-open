@@ -162,7 +162,7 @@ public static class TelemetryAnalyzer
     }
 
     private static bool HasTimeZone(string text)
-        => text.EndsWith('Z',StringComparison.OrdinalIgnoreCase) ||
+        => text.EndsWith("Z",StringComparison.OrdinalIgnoreCase) ||
            System.Text.RegularExpressions.Regex.IsMatch(text,@"[+-]\d{2}:?\d{2}$");
 
     private static string Normalize(string name) => new(name.ToLowerInvariant()
