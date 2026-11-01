@@ -1,20 +1,20 @@
 # PackFit Open
 
-**Battery intelligence, made accessible.** A bilingual, responsive, browser-only battery runtime estimator and battery pack engineering sandbox.
+**Battery intelligence, made accessible.** A bilingual, responsive, offline-capable battery runtime estimator and battery pack engineering sandbox.
 
 [Open the live app](https://shaoyuyo.github.io/packfit-open/) · [Issues](https://github.com/ShaoYuYo/packfit-open/issues) · [Methodology](docs/METHODOLOGY.md)
 
-> **Project status:** v0.2.0 — initial community release. Mathematical feasibility estimates only; not certified engineering analysis.
+> **Project status:** v0.3.0 — initial community release. Mathematical feasibility estimates only; not certified engineering analysis.
 
 ## What you can do
 
 | Workspace | Capabilities |
 | --- | --- |
-| **Overview** | Estimate runtime from battery Wh, average watts, reserve percentage and conversion efficiency; switch example device profiles. |
+| **Overview** | Estimate runtime and plan a day of office/video/gaming usage with editable average wattages, current charge and reserve. |
 | **My Battery** | Opt-in browser battery status (where supported), local Windows battery report analysis and manual capacity retention. |
 | **Everyday Tools** | Charging cost, power-bank rated and deliverable Wh, and rough recharge time. |
 | **Pack Studio** | Model S/P topology, nominal voltage/energy, total cell + overhead mass, rectangular envelope volume, Wh/kg, Wh/L and ideal runtime. |
-| **Compare** | Save up to four scenarios in your browser, compare charts and metrics, load previous inputs, and export UTF-8 BOM CSV for Excel. |
+| **Compare** | Save four scenarios, compare metrics, export CSV, and back up or restore validated versioned JSON on another device. |
 | **Methodology** | Inspect formulas, assumptions, scope and safety limitations. |
 
 ### Design principles
@@ -25,6 +25,13 @@
 - **Bilingual:** Traditional Chinese and English.
 - **Modular and testable:** pure calculation functions are independent of the interface; node built-in test runner provides regressions.
 - **Safety-aware:** advisory messages for certain idealized inputs; avoids presenting estimates as validation or regulatory certification.
+
+## First-time user guides
+
+- [繁體中文使用指南](docs/USER_GUIDE.zh-TW.md)
+- [English Quick Start](docs/USER_GUIDE.en.md)
+- [Synthetic, downloadable scenario examples](examples/sample-scenarios.json)
+- [Open-source adoption evidence (only verified claims)](docs/PROJECT_EVIDENCE.md)
 
 ## Run
 
@@ -72,3 +79,13 @@ On Windows, run `powercfg /batteryreport /output "%USERPROFILE%\Desktop\battery-
 New Everyday Tools apply bounded, transparent formulas to charging electricity costs, portable power bank Wh estimates and approximate charge time. All sample values are illustrative. Charging time uses a stated 15% modeling buffer; power bank mAh-to-Wh conversion uses the **cell-side nominal voltage**, not 5V output, and output efficiency is assumed. These numbers are **not physical measurements or safety certifications**.
 
 The premium design layer is `assets/premium.css` with animations, responsive layouts, theme support and `prefers-reduced-motion` handling. Inspired by general contemporary product design principles; no Apple artwork or UI assets are copied.
+
+## Offline use and portable scenarios (v0.3)
+
+A scoped Service Worker precaches same-origin static modules after the first successful HTTPS visit. Browsers may provide install-to-home-screen options; offline availability and cache persistence depend on the platform. Google Fonts are external, with system font fallbacks. The application contains no analytics or upload endpoint.
+
+Design comparison JSON exports are explicitly versioned (packfit.scenarios v1). Import validates every numeric field and canonicalizes the result; it replaces locally stored scenarios **only after user confirmation**. Files never leave the browser. CSV is read-only spreadsheet export; JSON is the editable interchange format.
+
+Daily energy planning uses simple duration × average power sums; it does not simulate time-varying hardware load, BMS cutoffs, charging and discharge curves or thermal behavior.
+
+For potential Codex for Open Source participation, see [maintainer readiness](docs/MAINTAINER_APPLICATION.md). We have not claimed outside adoption or an approval.
