@@ -40,7 +40,7 @@ test("Motion integration is optional and never blocks the calculator",()=>{
 test("version number, theme color and app stylesheet agree",()=>{
  const pkg=JSON.parse(read("package.json"));
  const html=read("index.html");
- assert.equal(pkg.version,"0.6.0");
- assert.match(html,/VERSION 0\.6\.0/);
+ assert.equal(pkg.version,"0.6.1");
+ assert.match(html,/VERSION 0\.6\.1/);
  assert.match(html,/name="theme-color" content="#f6f3f0"/);
 });
