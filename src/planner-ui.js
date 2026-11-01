@@ -1,7 +1,7 @@
 import {estimateDayPlan} from "./planner.js";
 import {formatNumber} from "./format.js";
 
-const words={
+export const PLANNER_TRANSLATIONS={
   "zh-TW":{
     title:"今天的電量夠用嗎？",intro:"輸入預計使用時間、平均耗電和目前電量，看看今天夠不夠用。所有數值都能調整。",
     capacity:"電池容量",starting:"目前電量",reserve:"最低保留電量",
