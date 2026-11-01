@@ -142,7 +142,8 @@ public static class TelemetryAnalyzer
                         if (rate>limits.MaxSocRatePctPerMinute)
                             Find("SOC_JUMP","Warning",$"SOC slope {rate:F2}%/min exceeds {limits.MaxSocRatePctPerMinute:F2}%/min.");
                     }
-                    if (current.VoltageV is double newV && previous.VoltageV is double oldV &&
+                    if (seconds <= limits.MaximumGapSeconds &&
+                        current.VoltageV is double newV && previous.VoltageV is double oldV &&
                         current.CurrentA is double newA && previous.CurrentA is double oldA)
                     {
                         // Trapezoid integration of DC discharge energy.
