@@ -13,7 +13,8 @@ const main=[
  read("desktop/PackFit.Engineering.Desktop/MainWindow.Batch.cs"),
  read("desktop/PackFit.Engineering.Desktop/MainWindow.Insights.cs"),
  read("desktop/PackFit.Engineering.Desktop/MainWindow.Premium.cs"),
- read("desktop/PackFit.Engineering.Desktop/MainWindow.Layout.cs")
+ read("desktop/PackFit.Engineering.Desktop/MainWindow.Layout.cs"),
+ read("desktop/PackFit.Engineering.Desktop/MainWindow.DimensionFirst.cs")
 ].join("\n");
 
 test("native WinUI events have C# handlers and every named control is unique",()=>{
@@ -188,4 +189,33 @@ test("native irregular-space fit is a real selectable visualization with explici
  assert.match(core,/MaxThicknessMm/);
  assert.match(core,/NOT AN OPTIMALITY CERTIFICATE/);
  assert.match(core,/MaxSearchNodes/);
+});
+
+test("dimension-first battery pack planning can start from an outer L/W/H without CAD or JSON",()=>{
+ const core=read("desktop/PackFit.Engineering.Core/DimensionFirstLayout.cs");
+ const ui=read("desktop/PackFit.Engineering.Desktop/MainWindow.DimensionFirst.cs");
+ const insight=read("desktop/PackFit.Engineering.Desktop/MainWindow.Insights.cs");
+ for(const id of ["QuickPackLength","QuickPackWidth","QuickPackHeight",
+   "QuickCellALength","QuickCellAWidth","QuickCellAHeight",
+   "QuickCellACapacity","QuickCellAMass","QuickCellBLength",
+   "QuickCellBWidth","QuickCellBHeight","QuickCellBCapacity",
+   "QuickCellBMass","QuickSeries","QuickParallel","QuickNominalV",
+   "QuickEdge","QuickZReserve","QuickCellGap","QuickOverhead","QuickTargetWh",
+   "QuickAllowRotation","QuickLayoutRunButton","QuickLayoutStatus"])
+   assert.match(source,new RegExp('x:Name="'+id+'"'));
+ for(const handler of ["QuickLayoutSampleClick","QuickLayoutRunClick",
+   "QuickLayoutChanged","QuickLayoutOptionChanged"])
+   assert.match(ui,new RegExp("\\b"+handler+"\\s*\\("));
+ assert.match(ui,/DimensionFirstLayout\.Build\(ReadQuickRequest\(\)\)/);
+ assert.match(ui,/GeometryJsonBox\.Text=JsonSerializer\.Serialize/);
+ assert.match(ui,/CalculateGeometryClick\(sender,e\)/);
+ assert.match(ui,/provided>0 && provided!=optionalB\.Length/);
+ assert.match(ui,/Allow90DegreeRotation:QuickAllowRotation\.IsChecked==true/);
+ assert.match(core,/OUTER PACK L\/W\/H ONLY/);
+ assert.match(core,/TotalThicknessReserveMm/);
+ assert.match(core,/RequiredSeries/);
+ assert.match(ui,/RunDimensionFirstSmokeTest/);
+ assert.match(insight,/RunDimensionFirstSmokeTest\(\)/);
+ assert.match(source,/進階模式：不規則 XY 區域、禁放區與 JSON/);
+ assert.match(source,/QuickAllowRotation"[^>]*IsChecked="False"/);
 });
