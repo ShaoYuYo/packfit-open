@@ -41,3 +41,22 @@ Please use a clear PR description: what changed, why, how tested, and which assu
 - Before substantial changes, review [AGENTS.md](AGENTS.md), [Release Checklist](docs/RELEASE_CHECKLIST.md) and [Community Guidelines](CODE_OF_CONDUCT.md).
 
 Useful issues for contributors include [browser validation](https://github.com/ShaoYuYo/packfit-open/issues/1) and [Windows report parser fixtures](https://github.com/ShaoYuYo/packfit-open/issues/2). Please avoid attaching real battery report files containing identifiers.
+
+## Contributing to the native Windows engineering workbench
+
+The pure engineering library is at `desktop/PackFit.Engineering.Core`; regression vectors are a standalone .NET console project at `desktop/PackFit.Engineering.Checks`. The native WinUI 3 client is in `desktop/PackFit.Engineering.Desktop`.
+
+If you change a formula, parser, local file reader, telemetry flag or generated report:
+
+- Document the input units, intended interpretation, invalid cases and limits.
+- Add a synthetic reproducible C# check. For Windows-only behavior, ensure the native GitHub Actions job builds the app and exercises **both** the full XAML and compatible workspace.
+- Keep unit conversions, time-zone handling, input size limits and battery count interpretation explicit. A truncated list of flags must never lead to a misleading aggregate diagnosis.
+- Prefer a focused branch and Pull Request to a direct main-branch push. Leave honest comments on what was tested and what still needs physical-device verification.
+
+If you change a desktop UI, verify high DPI, narrower widths, keyboard operation, reduced-motion settings and the separate `--safe-ui` view. When uploading screenshots, remove user identifiers and proprietary platform data.
+
+## Real maintenance and community feedback
+
+The [maintainer workflow](docs/MAINTAINER_WORKFLOW.md) explains issue intake, reproduction, PR checks and releases. The [15-minute trial](docs/TRY_PACKFIT.md) can be completed with synthetic data. Please report **actual** errors, supported formats and observations, not only a Star or a generic testimonial.
+
+Project evidence is tracked in [docs/PROJECT_EVIDENCE.md](docs/PROJECT_EVIDENCE.md); no external contributors, users or test results are inferred from CI or GitHub activity.
