@@ -82,7 +82,7 @@
     <ListView x:Name="BatchTelemetryList" MinHeight="90" MaxHeight="240" SelectionMode="None"/>
   </StackPanel>
 </Expander>
-<TextBlock Text="異常清單最多顯示 1,000 筆；報告會註明其餘筆數，方便追查完整原始資料。" FontSize="11" TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/></StackPanel></Border></StackPanel>
+<TextBlock Text="異常清單最多顯示 1,000 筆；報告會註明其餘筆數，方便追查完整原始資料。" FontSize="12" TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/></StackPanel></Border></StackPanel>
                 <StackPanel x:Name="ValidationPanel" Spacing="20" Visibility="Collapsed"><StackPanel Spacing="8" Margin="0,0,0,12">
 <TextBlock Text="03 / TEST MATRIX" Style="{StaticResource PfEyebrowText}" />
 <TextBlock Text="測試驗證矩陣" Style="{StaticResource PfPageHeading}" />
