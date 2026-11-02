@@ -440,4 +440,66 @@ var thickCell=dimensionRequest with { Cells=[
 Assert(LayoutOptimizer.Optimize(DimensionFirstLayout.Build(thickCell)).Options.Count==0,
     "Cell thicker than reserved Z clearance is rejected even with enough XY area");
 
+
+// A user-marked 2D keepout must participate in geometry fit, not just appear on
+// the diagram. No employer geometry or battery specifications are used.
+var withKeepout=dimensionRequest with {
+    Keepouts=[new LayoutKeepout(86,25,20,22)],
+    KeepoutMarginMm=1
+};
+var excludedProblem=DimensionFirstLayout.Build(withKeepout);
+var excludedResult=LayoutOptimizer.Optimize(excludedProblem);
+Assert(excludedProblem.Keepouts.Count==1 &&
+    Close(excludedProblem.KeepoutMarginMm,1) &&
+    excludedProblem.InputBasis?.Contains("1 user-marked 2D FULL-HEIGHT keepout")==true,
+    "Dimension-first keepouts and clearance enter the core and its source provenance");
+Assert(excludedResult.Options.Count>0,
+    "Synthetic obstruction preserves some geometrically feasible cell comparisons");
+foreach(var option in excludedResult.Options)
+foreach(var placed in option.Placements)
+{
+    var block=excludedProblem.Keepouts[0];
+    double m=excludedProblem.KeepoutMarginMm;
+    Assert(placed.XMm+placed.WidthMm<=block.XMm-m+1e-7 ||
+        placed.XMm>=block.XMm+block.WidthMm+m-1e-7 ||
+        placed.YMm+placed.HeightMm<=block.YMm-m+1e-7 ||
+        placed.YMm>=block.YMm+block.HeightMm+m-1e-7,
+        "Every actual placement remains outside the keepout plus user margin");
+}
+Assert(excludedResult.ToMarkdown(excludedProblem).Contains("keepouts: 1") &&
+    excludedResult.ToMarkdown(excludedProblem).Contains("FULL-HEIGHT keepout"),
+    "Engineering report states block count and simplified 2D extrusion assumption");
+
+var fullyBlocked=dimensionRequest with {
+    Keepouts=[new LayoutKeepout(0,0,200,118)],
+    KeepoutMarginMm=0
+};
+Assert(LayoutOptimizer.Optimize(DimensionFirstLayout.Build(fullyBlocked)).Options.Count==0,
+    "A no-cell rectangle covering the entire outer envelope leaves no false fit");
+try
+{
+    DimensionFirstLayout.Build(dimensionRequest with {
+        Keepouts=[new LayoutKeepout(193,10,15,15)]
+    });
+    throw new Exception("FAIL: a no-cell rectangle outside L/W must be rejected.");
+}
+catch(ArgumentException){Console.WriteLine("PASS: out-of-envelope keepout rejected");}
+try
+{
+    DimensionFirstLayout.Build(dimensionRequest with {
+        Keepouts=[new LayoutKeepout(double.NaN,5,8,8)]
+    });
+    throw new Exception("FAIL: a nonfinite keepout must be rejected.");
+}
+catch(ArgumentException){Console.WriteLine("PASS: nonfinite keepout rejected");}
+try
+{
+    DimensionFirstLayout.Build(dimensionRequest with {
+        Keepouts=Enumerable.Range(0,13).Select(i=>
+            new LayoutKeepout(1+i,1,2,2)).ToArray()
+    });
+    throw new Exception("FAIL: excessive user keepouts must be bounded.");
+}
+catch(ArgumentException){Console.WriteLine("PASS: excessive keepouts rejected");}
+
 Console.WriteLine("All PackFit engineering core checks passed.");
