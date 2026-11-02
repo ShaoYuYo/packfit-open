@@ -39,6 +39,19 @@ The browser build uses **system fonts and native browser animations**, not third
 | **Data handling** | Local calculations and file parsing | Files processed locally; no analytics/backend |
 | **Scope** | Estimates and education | First-pass screening and handoff, **not** certified validation |
 
+### Irregular laptop battery-space layout explorer (source preview)
+
+A real pre-design question from a battery engineer: **how can different pouch-cell outlines and S/P combinations fit a small, irregular allocation, with local Z restrictions and keepout zones?** PackFit now has an experimental **offline geometry-first layout engine** and native Windows candidate diagrams. It screens XY fit, per-zone height, 90° rotation, required gaps and forbidden areas, then compares nominal Wh, assumed Wh/kg, gross-zone Wh/L and a limited Wh-vs-mass Pareto frontier.
+
+[PR #11](https://github.com/ShaoYuYo/packfit-open/pull/11) tracks the first source implementation. It uses **invented geometry**, does not import CAD yet, does not certify manufacturability/safety, and **does not prove a global optimum**. It is not part of the old v0.8.0-beta.1 binary.
+
+```bash
+dotnet run --project desktop/PackFit.Engineering.Cli -- layout \
+  desktop/samples/irregular-layout-synthetic.json --format json
+```
+
+Read the [reproducible irregular-space geometry method](docs/IRREGULAR_LAYOUT_OPTIMIZER.md) before interpreting density results; `Wh/L` here is nominal energy divided by **gross allowed-zone volume**, not a real finished-pack ED number.
+
 ### Engineering A/B comparison and cross-platform CLI (merged source)
 
 PackFit's shared C# engine can compare two battery telemetry logs under the **same user-defined screening limits**. Engineers can inspect voltage and temperature extrema, per-code anomaly deltas, and normalized flags per 1,000 samples — without pretending those results establish safety or root cause.
