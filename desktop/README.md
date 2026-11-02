@@ -24,6 +24,23 @@ Earlier beta releases renamed the self-contained single-file WinUI executable to
 
 The file the user launched for the previously reported failure is unknown, so the exact on-device root cause is not yet proven. Read [GitHub issue #4](https://github.com/ShaoYuYo/packfit-open/issues/4) for evidence and status.
 
+## v0.8 Engineering Visual Workbench
+
+The new desktop v0.8 experience is built around **real engineering workflows**, not a gallery of static images:
+
+- **Battery Visuals:** per-battery capacity bars and parsed historical full-charge trends, without inventing data for missing history or mixing separate batteries.
+- **Telemetry Charts:** independent voltage, current, temperature and SOC native WinUI line charts from imported CSV/TSV. Preview traces are downsampled; users review full source logs for precise findings.
+- **Pack Topology Studio:** dynamically draw S/P cell groups with calculated V/Ah/Wh; structure is conceptual, not an electrical schematic or mechanical CAD layout.
+- **Sleep & Drain:** user-entered before/after SOC, elapsed hours and optional actual full-charge Wh show a timeline and estimated hourly drain; use read-only Windows powercfg commands for evidence collection.
+- **Symptom-first Workflow:** select sleep drain, slow charging, unexpected shutdown, heat/throttling or capacity decline; review why each test matters, missing evidence and potential next owners.
+- **Basic / Engineering mode:** hide complex pages without deleting data. Basic still provides official Windows tool help.
+- **Try it without hardware data:** **載入合成示範資料** provides synthetic history, log, validation and pack inputs. No proprietary measurement data is included.
+- **Safe mode parity:** the independent C# `--safe-ui` window renders charts, sample data and a standby estimate without loading the full XAML shell.
+
+Every visualization is rendered by **native WinUI Canvas, Line, ProgressBar, Border and Viewbox controls** — no external graphing package, Python or WebView required. Images in this release are actual UI elements that respond to your inputs.
+
+**[Complete diagram and workflow guide](docs/ENGINEERING_VISUALS.md)** documents the calculations, data limits, evidence hierarchy, and official Microsoft references.
+
 ## Windows 11 Fluent UI and guided workflow refresh
 
 The native window now follows Microsoft's [modern WinUI 3 app structure](https://learn.microsoft.com/en-us/windows/apps/develop/ui/windows-app-sdk-app-structure): **Mica** background (with Windows 10 fallback), a built-in **TitleBar** integrated with the system caption buttons, icon-based **NavigationView**, Fluent cards, **InfoBar** status messages, **Expander** help sections and native keyboard-focus behavior. This is a real WinUI UI, not a WebView theme.
