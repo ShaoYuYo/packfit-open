@@ -5,7 +5,7 @@
 ## Public repository snapshot (2026-11-02)
 
 - **4 GitHub Stars**, **0 forks**, and **no independent PRs** at the time of verification. A Star is not proof of usage; no conversion from stars to users is claimed.
-- **1 published prerelease**: v0.7.0-beta.1, with Windows EXE, ZIP and hash file; subsequent builds are not automatically new releases.
+- **2 published prereleases**: [beta.1](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.1) and [beta.2](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.2). Both have downloadable Windows EXE, ZIP and SHA-256 files, subject to their build provenance; they are not proof of physical-device compatibility.
 - **3 open maintainer-raised issues** addressing browser QA, battery report variants and native Windows QA; these are **not** external bug reports.
 - Windows and browser CI have passed on recent commits. CI does **not** replace first-hand device testing.
 - The maintainer has started a [15-minute trial](TRY_PACKFIT.md) and an issue template to collect verified external feedback. **There are not yet published independent trial reports.**
@@ -54,3 +54,6 @@ Official Codex for Open Source application: https://openai.com/form/codex-for-os
 ## Battery report reliability progress (2026-11-02)
 
 A real parser risk was found: Windows capacity-history tables could be confused with current battery data. The native Windows parser now scopes to the installed-battery section and separates supported multiple batteries. Synthetic regression tests cover history, localization, malformed units and two-battery reports. See [issue #2](https://github.com/ShaoYuYo/packfit-open/issues/2) for remaining real-device and format validation. This is **maintenance work**, not evidence of independent adoption.
+
+
+The beta.2 release was built only after browser tests, C# engineering tests, native WinUI packaging and checksum generation passed. [Release workflow](https://github.com/ShaoYuYo/packfit-open/actions/workflows/publish-beta2.yml). As of this update there are no independent user testimonials or external PRs to claim.
