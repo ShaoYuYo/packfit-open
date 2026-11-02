@@ -57,3 +57,8 @@ A real parser risk was found: Windows capacity-history tables could be confused 
 
 
 The beta.2 release was built only after browser tests, C# engineering tests, native WinUI packaging and checksum generation passed. [Release workflow](https://github.com/ShaoYuYo/packfit-open/actions/workflows/publish-beta2.yml). As of this update there are no independent user testimonials or external PRs to claim.
+
+
+## Browser and native parser parity (2026-11-02)
+
+The browser-side Windows battery importer was separately audited after the native Windows beta. It now confines capacity extraction to the installed-battery section, exposes a per-battery selector for supported multi-battery reports and clears stale results when imports fail. Regression tests cover separate battery records, Chinese headings, capacity history, invalid units and ambiguous columns. The two independent parsers are **not yet proven equivalent across all Windows report formats**; manual cross-browser and real-device checks remain open. Automated web tests and GitHub Pages deployment should be reviewed on each final commit.
