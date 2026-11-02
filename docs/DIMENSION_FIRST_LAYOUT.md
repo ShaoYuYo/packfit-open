@@ -53,7 +53,7 @@ The model **does not infer internal shape** from outer dimensions. With only L/W
 
 Thus **“the software found a fit” means only “rigid cell footprints fit the user's simplified constraints.”** It is not evidence a battery can be produced, that the pack is electrically viable, or that it achieves actual pack Wh/L.
 
-The report explicitly labels `OUTER PACK L/W/H ONLY` and retains the user's entered reserve and clearance parameters. The reported energy per gross zone volume is **not finished-pack volumetric ED**. Nominal Wh and assumed Wh/kg do not incorporate charge/discharge efficiency, de-rating, aging or environmental effects.
+The report explicitly labels `OUTER PACK L/W/H ONLY` and retains the user's entered reserve and clearance parameters. It also separately calculates a **nominal outer-envelope Wh/L**, using the user-entered external `L × W × H` as its denominator (not the internally reserved Z). This is a comparison reference *conditional on actual fit*, not a guaranteed delivered pack energy density. The reported energy per gross zone volume is **not finished-pack volumetric ED**. Nominal Wh and assumed Wh/kg do not incorporate charge/discharge efficiency, de-rating, aging or environmental effects.
 
 ## Engineering acceptance criteria
 
