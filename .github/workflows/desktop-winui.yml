@@ -81,6 +81,29 @@ jobs:
             throw "XAML-independent compatibility workbench failed"
           }
 
+      - name: Assert native diagrams and demo workflows actually construct
+        shell: pwsh
+        run: |
+          $exe = (Resolve-Path "dist/PackFit-Engineering-WinUI/PackFit.Engineering.exe").Path
+          $folder = Split-Path $exe -Parent
+          $log = Join-Path $env:LOCALAPPDATA "PackFitOpen/Logs/startup.log"
+          foreach ($check in @(
+            @{ Arg = '--selftest-visuals'; Marker = 'Engineering visuals self-test: VISUALS_OK' },
+            @{ Arg = '--selftest-compat-visuals'; Marker = 'Compatibility visuals self-test: COMPAT_VISUALS_OK' }
+          )) {
+            Remove-Item $log -ErrorAction SilentlyContinue
+            $proc = Start-Process -FilePath $exe -WorkingDirectory $folder -ArgumentList $check.Arg -PassThru
+            if (!$proc.WaitForExit(30000)) {
+              Stop-Process -Id $proc.Id -Force -ErrorAction SilentlyContinue
+              throw "Visual smoke test timed out: $($check.Arg)"
+            }
+            if (Test-Path $log) { Get-Content $log -Tail 32 }
+            if ($proc.ExitCode -ne 0 -or !(Test-Path $log) -or
+                !(Select-String -Path $log -Pattern $check.Marker -SimpleMatch -Quiet)) {
+              throw "Native data chart or demo workflow failed: $($check.Arg) code $($proc.ExitCode)"
+            }
+          }
+
       - name: Package complete desktop application
         shell: pwsh
         run: |
