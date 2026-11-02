@@ -1,12 +1,12 @@
 /* Offline-first static assets; navigations are network-first to allow updates. */
-const CACHE = "packfit-static-v0.6.4";
+const CACHE = "packfit-static-v0.6.5";
 const RESOURCES = [
   "./", "./index.html", "./styles.css", "./assets/premium.css", "./assets/editorial.css",
   "./assets/atelier.css", "./assets/workspace.css", "./assets/logo.svg", "./manifest.webmanifest", "./examples/sample-scenarios.json",
   "./src/app.js", "./src/calc.js", "./src/format.js",
   "./src/presets.js", "./src/storage.js", "./src/csv.js",
   "./src/i18n.js", "./src/consumer.js", "./src/consumer-ui.js",
-  "./src/consumer-i18n.js", "./src/scenario-transfer.js", "./src/pwa.js",
+  "./src/consumer-i18n.js", "./src/battery-triage.js", "./src/scenario-transfer.js", "./src/pwa.js",
   "./src/planner.js", "./src/planner-ui.js", "./src/motion-enhance.js",
   "./src/theme.js", "./src/device.js", "./src/dxdiag.js", "./src/device-ui.js", "./src/device-benchmark-worker.js"
 ];
