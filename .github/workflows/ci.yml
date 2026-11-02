@@ -79,7 +79,7 @@ jobs:
           assert compact["MeetsEnergyTarget"] is False
           assert len(long["Placements"])==3
           assert not any(o["CellId"]=="SYNTH-LONG-65x55" and o["Topology"]["Series"]==4 for o in opts)
-          assert "NOT a global optimum" in data["status"]
+          assert "not a global optimum" in data["status"].lower()
           assert data["result"]["TotalZoneVolumeL"]>0
           PY
           dotnet run --project desktop/PackFit.Engineering.Cli --configuration Release -- layout \
