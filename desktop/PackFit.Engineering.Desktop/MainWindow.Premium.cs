@@ -21,12 +21,14 @@ public sealed partial class MainWindow
         (_batteryRecords.Count > 0 && _batterySynthetic) ||
         (_telemetry is not null && _telemetrySynthetic) ||
         (_matrix is not null && _validationSynthetic) ||
-        (_pack is not null && _packSynthetic);
+        (_pack is not null && _packSynthetic) ||
+        (_geometryResult is not null && _layoutSynthetic);
 
     private bool HasSessionData =>
         _batteryRecords.Count > 0 || _telemetry is not null ||
         _matrix is not null || _pack is not null || _batches.Count > 0 ||
-        _batchImportErrors.Count > 0 || _sleepDrain is not null;
+        _batchImportErrors.Count > 0 || _sleepDrain is not null ||
+        _geometryResult is not null;
 
     private static string SourceLabel(bool exists, bool demo) =>
         !exists ? "尚無資料" : demo ? "合成示範資料" : "本機資料 / 計算";
@@ -40,6 +42,7 @@ public sealed partial class MainWindow
             (_telemetry is not null && !_telemetrySynthetic) ||
             (_matrix is not null && !_validationSynthetic) ||
             (_pack is not null && !_packSynthetic) ||
+            (_geometryResult is not null && !_layoutSynthetic) ||
             _batches.Count > 0 || _sleepDrain is not null;
 
         DataModeText.Text = !HasSessionData ? "尚未建立分析工作階段" :
@@ -161,6 +164,7 @@ public sealed partial class MainWindow
         _batches.Clear();
         _batchImportErrors.Clear();
         ResetComparison();
+        InvalidateGeometry(clearText:true);
         OverviewBattery.Text = "尚未分析";
         OverviewTelemetry.Text = "尚未匯入";
         OverviewValidation.Text = "尚未匯入";
@@ -189,12 +193,13 @@ public sealed partial class MainWindow
         body.AppendLine("- Telemetry: " + SourceLabel(_telemetry is not null, _telemetrySynthetic));
         body.AppendLine("- Validation: " + SourceLabel(_matrix is not null, _validationSynthetic));
         body.AppendLine("- Pack calculation: " + SourceLabel(_pack is not null, _packSynthetic));
+        body.AppendLine("- Geometry pre-screen: " + SourceLabel(_geometryResult is not null, _layoutSynthetic));
         body.AppendLine("- Batch logs: " + (_batches.Count > 0
             ? _batches.Count.ToString(CultureInfo.InvariantCulture) + " local files"
             : "none"));
         body.AppendLine("- Standby: " + (_sleepDrain is null ? "not calculated" : "manual SOC inputs"));
         body.AppendLine();
-        body.AppendLine("Threshold flags are screening observations, not a certified safety or release verdict.");
+        body.AppendLine("Threshold flags and geometry fit are screening observations, not CAD clearance, electrical feasibility or a certified safety/release verdict.");
         return body.ToString();
     }
 }
