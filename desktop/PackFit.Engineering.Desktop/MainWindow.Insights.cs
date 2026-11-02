@@ -133,6 +133,9 @@ public sealed partial class MainWindow
     {
         try
         {
+            // Validate user-defined screening limits BEFORE replacing an existing session.
+            // Invalid text input must not silently discard an engineer's prior results.
+            var demoThresholds = ReadThresholds();
             if (!await ConfirmReplaceSessionAsync()) return;
             ClearAnalysisData();
             const string report = "<html><h2>Installed batteries</h2><table>" +
@@ -160,7 +163,7 @@ public sealed partial class MainWindow
             _batteryRecords=BatteryReportParser.ParseAll(report);
             _batteryHistory=BatteryHistoryParser.Parse(report);
             _battery=_batteryRecords.Count==1?_batteryRecords[0]:null;
-            _limits=ReadThresholds();
+            _limits=demoThresholds;
             _telemetry=TelemetryAnalyzer.Analyze(sample,_limits);
             _matrix=ValidationMatrix.Parse(SampleMatrix);
             _batterySynthetic = _telemetrySynthetic = _validationSynthetic = true;
