@@ -1,6 +1,6 @@
 # Irregular laptop battery-space layout explorer
 
-**Status:** Experimental geometry pre-screen on [PR #11](https://github.com/ShaoYuYo/packfit-open/pull/11) until its tests pass and the feature is merged. Not yet included in the tagged v0.8.0-beta.1 Windows release.
+**Status:** Experimental geometry pre-screen merged into `main` via [PR #11](https://github.com/ShaoYuYo/packfit-open/pull/11). [Linux CI](https://github.com/ShaoYuYo/packfit-open/actions/runs/41460502989), [native Windows](https://github.com/ShaoYuYo/packfit-open/actions/runs/41460502991), and [CodeQL](https://github.com/ShaoYuYo/packfit-open/actions/runs/41460502972) passed on the reviewed final PR head. This does not establish actual CAD clearance or independent user adoption. Not included in the tagged v0.8.0-beta.1 Windows release.
 
 ## Problem definition
 
