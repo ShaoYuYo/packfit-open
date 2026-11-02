@@ -33,6 +33,38 @@ public partial class App : Application
     protected override void OnLaunched(LaunchActivatedEventArgs args)
     {
         StartupDiagnostics.Record("OnLaunched");
+        StartupDiagnostics.RecordEnvironment();
+        var commandLine = Environment.GetCommandLineArgs();
+        if (commandLine.Any(a => a.Equals("--selftest-compat", StringComparison.OrdinalIgnoreCase)))
+        {
+            try
+            {
+                _mainWindow = new RecoveryWindow(null);
+                StartupDiagnostics.Record("Compatibility self-test: COMPAT_WINDOW_OK");
+                Environment.Exit(0);
+            }
+            catch (Exception ex)
+            {
+                StartupDiagnostics.Record("Compatibility self-test: COMPAT_WINDOW_FAILED", ex);
+                Environment.Exit(24);
+            }
+            return;
+        }
+        if (commandLine.Any(a => a.Equals("--safe-ui", StringComparison.OrdinalIgnoreCase)))
+        {
+            try
+            {
+                _mainWindow = new RecoveryWindow(null);
+                _mainWindow.Activate();
+                StartupDiagnostics.Record("Safe compatibility workspace activated");
+            }
+            catch (Exception ex)
+            {
+                StartupDiagnostics.Fatal("Safe compatibility workspace failed", ex);
+                Exit();
+            }
+            return;
+        }
         // Automated native XAML-load check: unlike a process-liveness test, this
         // fails if MainWindow falls back to RecoveryWindow. No user data is read.
         if (Environment.GetCommandLineArgs().Any(a =>
