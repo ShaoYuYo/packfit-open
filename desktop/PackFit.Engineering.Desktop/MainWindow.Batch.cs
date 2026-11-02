@@ -56,6 +56,7 @@ public sealed partial class MainWindow
             }
             var totalFlags=_batches.Sum(x=>x.Analysis.TotalFindings);
             OverviewTelemetry.Text=$"{_batches.Count} files / {totalFlags} flags";
+            UpdateSessionStatus();
             Notice($"批次分析完成：成功 {_batches.Count} 份，需處理 {_batchImportErrors.Count} 份。" +
                 " 每個檔案需確認時間範圍、單位與測試門檻。",_batches.Count==0);
         }
