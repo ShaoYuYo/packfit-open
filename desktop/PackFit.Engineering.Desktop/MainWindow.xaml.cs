@@ -17,6 +17,8 @@ public sealed partial class MainWindow : Window
     private IReadOnlyList<ValidationItem>? _matrix;
     private PackResult? _pack;
     private static readonly CultureInfo Culture = CultureInfo.InvariantCulture;
+    private static readonly bool SafeUiMode = Environment.GetCommandLineArgs()
+        .Any(x => x.Equals("--safe-ui", StringComparison.OrdinalIgnoreCase));
 
     public MainWindow()
     {
@@ -25,8 +27,16 @@ public sealed partial class MainWindow : Window
         // possible on devices where custom nonclient UI initialization fails.
         try
         {
-            ExtendsContentIntoTitleBar = true;
-            SetTitleBar(AppTitleBar);
+            if (SafeUiMode)
+            {
+                AppTitleBar.Visibility = Visibility.Collapsed;
+                StartupDiagnostics.Record("Safe UI mode: custom title bar disabled");
+            }
+            else
+            {
+                ExtendsContentIntoTitleBar = true;
+                SetTitleBar(AppTitleBar);
+            }
         }
         catch (Exception ex)
         {
@@ -81,6 +91,7 @@ public sealed partial class MainWindow : Window
     {
         try
         {
+            if (SafeUiMode) return;
             // Obey Windows "Show animations in Windows" accessibility setting.
             if (!new Windows.UI.ViewManagement.UISettings().AnimationsEnabled)
                 return;
