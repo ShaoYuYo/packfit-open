@@ -292,7 +292,7 @@ internal sealed class RecoveryWindow : Window
             "2026-11-01T00:02:30Z,11.31,1.85,53,75\n" +
             "2026-11-01T00:03:00Z,11.28,1.62,46,74\n";
         _batteryRecords=BatteryReportParser.ParseAll(batteryHtml);
-        _batteryHistory=BatteryHistoryParser.Parse(batteryHtml);
+        _capacityHistory=BatteryHistoryParser.Parse(batteryHtml);
         _battery=_batteryRecords[0];
         _telemetry=TelemetryAnalyzer.Analyze(telemetryCsv,_limits);
         _matrix=ValidationMatrix.Parse("TestID,Category,Metric,Measured,Min,Max,Unit,Owner,Notes\n" +
