@@ -3,6 +3,7 @@
 ## Unreleased source — dimension-first battery layouts (merged PR #13)
 
 - Add a native WinUI form for outer battery L/W/H, cell A and optional cell B (L/W/H, Ah, mass), fixed series S, parallel options, user-defined edge/gap/Z reserves and target Wh without needing CAD or JSON.
+- Add a 2D no-cell-region editor: pointer-drag rectangles, keyboard coordinates, undo/clear, configurable clearance, 12-zone cap, synthesized sample and engineering-report provenance. Exclusions become actual geometry constraints, not merely visual annotations.
 - Keep per-cell 90-degree rotation opt-in and preserve all manual parameters in the resulting geometry JSON. Put irregular-zone JSON behind an optional advanced expander.
 - Distinguish nominal Wh per **outer** L×W×H envelope from gross-zone energy loading; neither is verified finished-pack ED.
 - Fix delayed WinUI TextChanged notifications so programmatic synthetic examples are not mistaken for user edits, while genuine changes invalidate stale layout diagrams.
