@@ -81,7 +81,7 @@ export function parseWindowsReportRecords(html){
     throw new Error("Invalid size or format");
   const section=installedSection(html);
   const tables=[...section.matchAll(/<table\b[^>]*>([\s\S]*?)<\/table\s*>/gi)];
-  if(!tables.length)throw new Error("Installed battery table missing");
+  if(!tables.length)throw new Error("Missing installed battery table");
   const results=[];
   function parseTable(table){
     let current={design:null,full:null,cycles:null},started=false;
