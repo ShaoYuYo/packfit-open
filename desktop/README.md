@@ -4,7 +4,19 @@
 
 PackFit Engineering Desktop is a companion to the [browser edition](https://shaoyuyo.github.io/packfit-open/). The web app helps consumers estimate runtime; the desktop app is intended for **laptop battery, power, validation, reliability and system engineers** who need to turn scattered test measurements into clear, reproducible follow-up items.
 
-> **Public beta available:** [v0.7.0-beta.2](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.2). Automated browser and C# tests passed; GitHub Actions successfully built both Windows distributions. **Real Windows hardware smoke-testing and enterprise code signing remain unverified.** No engineering safety or regulatory certification is implied.
+> **Public beta available:** [v0.7.0-beta.3](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.3). Automated browser and C# tests passed; GitHub Actions built both Windows distributions and passed an exploratory native process startup probe on a hosted Windows runner. **Real Windows hardware smoke-testing and enterprise code signing remain unverified.** No engineering safety or regulatory certification is implied.
+
+## Important: troubleshooting when Windows does not launch the app
+
+A user reported that the earlier WinUI beta did not launch on their PC. The cause has **not been reproduced on that device**, so beta.3 provides a better way to obtain evidence instead of pretending the problem is fixed:
+
+- **Recommended:** download the complete `win-x64.zip` and extract the entire folder, including native DLLs. Start with `Start-PackFit.cmd` to retain the exit code.
+- **Safe UI:** from a terminal in that folder run `.\\PackFit.Engineering.exe --safe-ui` to temporarily disable the custom title bar and optional transitions.
+- **Startup log:** `%LOCALAPPDATA%\\PackFitOpen\\Logs\\startup.log`, generated when managed app initialization is reached.
+- **Diagnostic script:** `.\\Diagnostics\\Diagnose-PackFit.ps1`, which collects **local-only** process and Windows application event details. It does not upload data or bypass PowerShell execution policies.
+- **Complete instructions:** [繁體中文 Windows 無法啟動排查指南](docs/STARTUP.zh-TW.md).
+
+Official Microsoft documentation confirms that single-file WinUI 3 executables extract native dependencies on first launch; the self-contained folder distribution avoids that extraction step. A successful hosted CI process run is **not a substitute for your own Windows startup test**.
 
 ## Windows 11 Fluent UI and guided workflow refresh
 
@@ -58,13 +70,13 @@ This desktop edition targets those repetitive steps:
 
 ## Download and run the latest public beta
 
-**[Open GitHub Releases — v0.7.0-beta.2](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.2)**
+**[Open GitHub Releases — v0.7.0-beta.3](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.3)**
 
 The initial beta release has three verified attached assets:
 
-1. [**PackFit-Engineering-win-x64.zip**](https://github.com/ShaoYuYo/packfit-open/releases/download/v0.7.0-beta.2/PackFit-Engineering-win-x64.zip) — recommended. Download, extract every file, then run `PackFit.Engineering.exe` within the extracted folder.
-2. [**PackFit-Engineering-portable-win-x64.exe**](https://github.com/ShaoYuYo/packfit-open/releases/download/v0.7.0-beta.2/PackFit-Engineering-portable-win-x64.exe) — a larger, optional single-file build. It may extract runtime files at startup; do not assume it is zero-extraction.
-3. [**SHA256SUMS.txt**](https://github.com/ShaoYuYo/packfit-open/releases/download/v0.7.0-beta.2/SHA256SUMS.txt) — checksums for confirming the downloaded file matches the published artifact.
+1. [**PackFit-Engineering-win-x64.zip**](https://github.com/ShaoYuYo/packfit-open/releases/download/v0.7.0-beta.3/PackFit-Engineering-win-x64.zip) — recommended. Download, extract every file, then run `Start-PackFit.cmd` in the extracted folder (or `PackFit.Engineering.exe` directly).
+2. [**PackFit-Engineering-portable-win-x64.exe**](https://github.com/ShaoYuYo/packfit-open/releases/download/v0.7.0-beta.3/PackFit-Engineering-portable-win-x64.exe) — a larger, optional single-file build. It may extract runtime files at startup; do not assume it is zero-extraction.
+3. [**SHA256SUMS.txt**](https://github.com/ShaoYuYo/packfit-open/releases/download/v0.7.0-beta.3/SHA256SUMS.txt) — checksums for confirming the downloaded file matches the published artifact.
 
 The release workflow performed web tests, engineering core tests and native WinUI compilation, then published the binaries from the **same commit**. Compilation and artifact presence are verified; **manual Windows 10/11 launch, hardware diagnostics, accessibility and performance are not yet independently validated**.
 
