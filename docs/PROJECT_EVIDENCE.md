@@ -2,6 +2,14 @@
 
 **Purpose:** preserve honest, verifiable evidence of community impact. This is not a marketing scoreboard.
 
+## Public repository snapshot (2026-11-02)
+
+- **4 GitHub Stars**, **0 forks**, and **no independent PRs** at the time of verification. A Star is not proof of usage; no conversion from stars to users is claimed.
+- **1 published prerelease**: v0.7.0-beta.1, with Windows EXE, ZIP and hash file; subsequent builds are not automatically new releases.
+- **3 open maintainer-raised issues** addressing browser QA, battery report variants and native Windows QA; these are **not** external bug reports.
+- Windows and browser CI have passed on recent commits. CI does **not** replace first-hand device testing.
+- The maintainer has started a [15-minute trial](TRY_PACKFIT.md) and an issue template to collect verified external feedback. **There are not yet published independent trial reports.**
+
 ## Implementation milestones (source-code claims only)
 
 - 2026-11-01, v0.1: public runtime and pack feasibility calculators, bilingual interface, methodology and unit tests.
@@ -42,3 +50,7 @@ These entries describe code changes; **they do not assert external adoption, dow
 6. Update this file only when new evidence can be verified.
 
 Official Codex for Open Source application: https://openai.com/form/codex-for-oss/ . A newly created repository is not automatically eligible.
+
+## Battery report reliability progress (2026-11-02)
+
+A real parser risk was found: Windows capacity-history tables could be confused with current battery data. The native Windows parser now scopes to the installed-battery section and separates supported multiple batteries. Synthetic regression tests cover history, localization, malformed units and two-battery reports. See [issue #2](https://github.com/ShaoYuYo/packfit-open/issues/2) for remaining real-device and format validation. This is **maintenance work**, not evidence of independent adoption.
