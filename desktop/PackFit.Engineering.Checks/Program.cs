@@ -261,4 +261,109 @@ Assert(denseComparison.Findings.Any(x=>x.Code=="VOLTAGE_LOW"&&
 Assert(!comparison.ToMarkdown().Contains("C:\\private\\path"),
     "comparison never invents machine paths into the report");
 
+
+// Irregular-pack use case, with publicly invented cell geometry only.
+// Disjoint XY rectangles form an L shape; the raised arm has a different Z limit.
+var layoutCase=new LayoutProblem(
+    Zones:[
+        new LayoutZone(0,0,138,64,6.8),
+        new LayoutZone(0,64,75,64,6.2)
+    ],
+    Keepouts:[new LayoutKeepout(70,75,5,12)],
+    Cells:[
+        new LayoutCellSpec("SYNTH-LONG",65,55,6,3.85,5,62,false),
+        new LayoutCellSpec("SYNTH-COMPACT",42,55,5.5,3.85,3,39,true)
+    ],
+    Topologies:[
+        new LayoutTopology(3,1),
+        new LayoutTopology(4,1),
+        new LayoutTopology(2,2)
+    ],
+    CellGapMm:2,BoundaryMarginMm:1,KeepoutMarginMm:1,
+    NonCellMassG:48,TargetEnergyWh:48,MaxSearchNodes:6000);
+var layouts=LayoutOptimizer.Optimize(layoutCase);
+var threeCell=layouts.Options.Single(x=>x.CellId=="SYNTH-LONG"&&x.Topology==new LayoutTopology(3,1));
+Assert(threeCell.Placements.Count==3&&Close(threeCell.NominalEnergyWh,57.75)&&
+    Close(threeCell.EstimatedMassG,234)&&threeCell.MeetsEnergyTarget,
+    "Irregular L-shaped zones fit exactly three nominal cells and account for assumed overhead");
+Assert(layouts.Options.Any(x=>x.CellId=="SYNTH-COMPACT"&&
+    x.Topology==new LayoutTopology(4,1) && !x.MeetsEnergyTarget),
+    "More compact cells support a 4S layout but need not meet the energy target");
+Assert(!layouts.Options.Any(x=>x.CellId=="SYNTH-LONG" &&
+    x.Topology==new LayoutTopology(4,1)),
+    "Oversized long-cell 4S layout is not spuriously reported as feasible");
+Assert(layouts.Options[0].ParetoOnEnergyMass &&
+    layouts.Options.Any(x=>x.CellId=="SYNTH-COMPACT" && x.ParetoOnEnergyMass),
+    "Energy-vs-mass Pareto front retains lightweight alternatives without a single fake optimum");
+Assert(layouts.Options[0].CellId=="SYNTH-LONG"&&
+    layouts.ToMarkdown(layoutCase).Contains("NOT AN OPTIMALITY CERTIFICATE")&&
+    layouts.ToMarkdown(layoutCase).Contains("NOT pack envelope volume"),
+    "Sorted candidates disclose energy-density denominator and bounded-search limitations");
+foreach(var option in layouts.Options)
+{
+    var cell=layoutCase.Cells.Single(x=>x.Id==option.CellId);
+    foreach(var item in option.Placements)
+    {
+        var zone=layoutCase.Zones[item.ZoneIndex];
+        Assert(item.XMm>=zone.XMm+layoutCase.BoundaryMarginMm-1e-7 &&
+            item.YMm>=zone.YMm+layoutCase.BoundaryMarginMm-1e-7 &&
+            item.XMm+item.WidthMm<=zone.XMm+zone.WidthMm-layoutCase.BoundaryMarginMm+1e-7 &&
+            item.YMm+item.HeightMm<=zone.YMm+zone.HeightMm-layoutCase.BoundaryMarginMm+1e-7 &&
+            cell.ThicknessMm<=zone.MaxThicknessMm,
+            "Each placed cell stays entirely inside a local XY/Z clearance");
+        foreach(var block in layoutCase.Keepouts)
+            Assert(item.XMm+item.WidthMm<=block.XMm-layoutCase.KeepoutMarginMm+1e-7 ||
+                item.XMm>=block.XMm+block.WidthMm+layoutCase.KeepoutMarginMm-1e-7 ||
+                item.YMm+item.HeightMm<=block.YMm-layoutCase.KeepoutMarginMm+1e-7 ||
+                item.YMm>=block.YMm+block.HeightMm+layoutCase.KeepoutMarginMm-1e-7,
+                "No cell footprint touches a keepout plus its margin");
+    }
+    for(int i=0;i<option.Placements.Count;i++)
+    for(int j=i+1;j<option.Placements.Count;j++)
+    {
+        var a=option.Placements[i];var b=option.Placements[j];
+        Assert(a.XMm+a.WidthMm+layoutCase.CellGapMm<=b.XMm+1e-7 ||
+            b.XMm+b.WidthMm+layoutCase.CellGapMm<=a.XMm+1e-7 ||
+            a.YMm+a.HeightMm+layoutCase.CellGapMm<=b.YMm+1e-7 ||
+            b.YMm+b.HeightMm+layoutCase.CellGapMm<=a.YMm+1e-7,
+            "Placed cells maintain the required XY gap");
+    }
+}
+var rotated = LayoutOptimizer.Optimize(new LayoutProblem(
+    [new LayoutZone(0,0,40,68,7)],[],
+    [new LayoutCellSpec("ROTATION",60,30,6,3.8,2,40,true)],
+    [new LayoutTopology(1,1)],BoundaryMarginMm:1));
+Assert(rotated.Options.Count==1&&rotated.Options[0].Placements[0].Rotated90,
+    "90-degree rotation can rescue an otherwise impossible footprint");
+var unrotated=LayoutOptimizer.Optimize(new LayoutProblem(
+    [new LayoutZone(0,0,40,68,7)],[],
+    [new LayoutCellSpec("NO_ROT",60,30,6,3.8,2,40,false)],
+    [new LayoutTopology(1,1)],BoundaryMarginMm:1));
+Assert(unrotated.Options.Count==0,
+    "Rotation restrictions are treated as hard constraints");
+var tooThick=LayoutOptimizer.Optimize(new LayoutProblem(
+    [new LayoutZone(0,0,100,100,5.9)],[],
+    [new LayoutCellSpec("TOO_THICK",40,40,6,3.8,2,40)],
+    [new LayoutTopology(1,1)]));
+Assert(tooThick.Options.Count==0,
+    "Local maximum Z height rejects geometrically overlapping thick cells");
+try
+{
+    LayoutOptimizer.Optimize(new LayoutProblem(
+        [new LayoutZone(0,0,50,50,7),new LayoutZone(40,40,50,50,7)],
+        [],[new LayoutCellSpec("C",20,20,6,3.8,2,40)],
+        [new LayoutTopology(1,1)]));
+    throw new Exception("FAIL: overlapping zones must not inflate available energy-density volume");
+}
+catch(ArgumentException){Console.WriteLine("PASS: overlapping zones are rejected");}
+try
+{
+    LayoutOptimizer.Optimize(new LayoutProblem(
+        [new LayoutZone(double.NaN,0,50,50,7)],[],
+        [new LayoutCellSpec("C",20,20,6,3.8,2,40)],
+        [new LayoutTopology(1,1)]));
+    throw new Exception("FAIL: invalid geometry must be rejected");
+}
+catch(ArgumentException){Console.WriteLine("PASS: NaN geometry rejected");}
+
 Console.WriteLine("All PackFit engineering core checks passed.");

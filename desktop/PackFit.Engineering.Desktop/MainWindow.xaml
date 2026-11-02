@@ -159,7 +159,21 @@
 </StackPanel><StackPanel x:Name="PackParametersDimensions" Orientation="Horizontal" Spacing="10">
 <TextBox x:Name="LengthBox" Header="Length (mm)" Text="240" MinWidth="115" Margin="0,0,10,12" /><TextBox x:Name="WidthBox" Header="Width (mm)" Text="70" MinWidth="115" Margin="0,0,10,12" />
 <TextBox x:Name="HeightBox" Header="Thickness (mm)" Text="6.8" MinWidth="115" Margin="0,0,10,12" />
-</StackPanel><Button x:Name="PackCalculateButton" Content="計算設計" Click="CalculatePackClick" Style="{StaticResource AccentButtonStyle}" MinHeight="42" Padding="17,10" /></StackPanel></Border><Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="14" Padding="22"><StackPanel Spacing="13"><TextBlock Text="計算結果" Style="{StaticResource PfSectionHeading}" /><TextBlock x:Name="PackResultText" Text="尚未計算。" TextWrapping="Wrap" FontSize="15" /><StackPanel x:Name="PackDiagramCanvas" Spacing="12"/></StackPanel></Border></StackPanel>
+</StackPanel><Button x:Name="PackCalculateButton" Content="計算設計" Click="CalculatePackClick" Style="{StaticResource AccentButtonStyle}" MinHeight="42" Padding="17,10" /></StackPanel></Border><Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="14" Padding="22"><StackPanel Spacing="13"><TextBlock Text="計算結果" Style="{StaticResource PfSectionHeading}" /><TextBlock x:Name="PackResultText" Text="尚未計算。" TextWrapping="Wrap" FontSize="15" /><StackPanel x:Name="PackDiagramCanvas" Spacing="12"/></StackPanel></Border>
+<Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="14" Padding="22">
+ <StackPanel Spacing="13">
+  <TextBlock Text="不規則空間配置最佳化 · LAYOUT EXPLORER" Style="{StaticResource PfSectionHeading}"/>
+  <TextBlock Text="用多個不重疊的 XY 區域表示 L 形／階梯形空間，每區可設定不同 Z 厚度。電芯不能重疊、侵犯禁放區或超出區域。候選排列只是有界幾何搜尋，不是 CAD 製造或安規簽核。" TextWrapping="Wrap" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+  <Button Content="載入完全合成的 L 形空間範例" Click="LoadSyntheticGeometryClick" MinHeight="40" HorizontalAlignment="Left" ToolTipService.ToolTip="只套用到下方配置編輯區，不會覆蓋其他工程工作階段"/>
+  <TextBox x:Name="GeometryJsonBox" Header="XY 區域、Keepout、電芯候選與 S/P 組合（JSON，mm）" PlaceholderText="先按上方按鈕載入合成示例，或貼上自己的去識別化幾何設定" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="150" MaxHeight="250" FontFamily="Consolas" FontSize="12" TextChanged="GeometryJsonChanged" AutomationProperties.Name="編輯不規則空間與電芯幾何 JSON"/>
+  <Button x:Name="GeometryRunButton" Content="尋找可行排列並比較" Click="CalculateGeometryClick" MinHeight="42" HorizontalAlignment="Left" Style="{StaticResource AccentButtonStyle}"/>
+  <ComboBox x:Name="GeometryCandidateChoice" Header="查看候選排列" MinWidth="220" HorizontalAlignment="Stretch" SelectionChanged="GeometryCandidateChanged" AutomationProperties.Name="選擇不規則電池布局候選"/>
+  <TextBlock x:Name="GeometrySummary" Text="請載入合成範例或輸入自己的幾何設定，再執行有界排列搜尋。" FontSize="13" TextWrapping="Wrap" IsTextSelectionEnabled="True"/>
+  <StackPanel x:Name="GeometryMap" Spacing="9"/>
+  <TextBlock Text="灰色：可放置區；紅色：禁放區；藍綠色：幾何上已放置的電芯。Wh/L 是名目能量除以全部輸入區域總容積，不是實際 Pack ED。沒有驗證電芯極耳、FPC、PCB、熱與機構可製造性。" TextWrapping="Wrap" FontSize="11" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+ </StackPanel>
+</Border>
+</StackPanel>
                 <StackPanel x:Name="ReportPanel" Spacing="20" Visibility="Collapsed"><StackPanel Spacing="8" Margin="0,0,0,12">
 <TextBlock Text="05 / REPORTING" Style="{StaticResource PfEyebrowText}" />
 <TextBlock Text="工程摘要產生器" Style="{StaticResource PfPageHeading}" />

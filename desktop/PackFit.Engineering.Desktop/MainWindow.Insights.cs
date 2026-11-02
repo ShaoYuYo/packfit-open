@@ -28,9 +28,11 @@ public sealed partial class MainWindow
            !DataModeText.Text.Contains("混合資料來源",StringComparison.Ordinal))
             throw new InvalidOperationException("Synthetic data provenance contract failed.");
         RunComparisonSmokeTest();
+        RunLayoutSmokeTest();
         ClearAnalysisData();
         if(HasSessionData || HasSyntheticData || _telemetry is not null ||
-           _comparison is not null ||
+           _comparison is not null || _geometryResult is not null ||
+           GeometryMap.Children.Count != 0 ||
            TelemetryList.Items.Count != 0 || OverviewBattery.Text != "尚未分析")
             throw new InvalidOperationException("Workspace reset smoke test failed.");
     }

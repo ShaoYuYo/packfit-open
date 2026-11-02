@@ -426,6 +426,8 @@ public sealed partial class MainWindow : Window
                 $"loss {_sleepDrain.LossPercentPerHour:0.###}%/h, " +
                 $"estimated average power {_sleepDrain.AveragePowerW?.ToString("0.###", Culture) ?? "N/A"} W. " +
                 "This is a manual SOC estimate, not power-meter evidence.\n";
+        if(_geometryProblem is not null && _geometryResult is not null)
+            review += "\n\n" + _geometryResult.ToMarkdown(_geometryProblem);
         review += "\n\n## Next investigation steps\n";
         foreach(var step in EngineeringTriage.NextSteps(_telemetry,_battery,_matrix is not null))
             review += "- [ ] "+step+"\n";

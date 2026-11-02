@@ -25,6 +25,8 @@ internal static class Cli
                 return args.Length == 0 ? 2 : 0;
             }
             string command = args[0].ToLowerInvariant();
+            if (command == "layout")
+                return await RunLayoutAsync(args);
             if (command is not ("telemetry" or "compare"))
                 throw new ArgumentException("Unknown command: " + command);
             var files = new List<string>();
@@ -150,6 +152,67 @@ internal static class Cli
         }
     }
 
+    /// <summary>
+    /// Bounded, local-only JSON geometry screening. Never writes to the input file,
+    /// and refuses to clobber earlier exports.
+    /// </summary>
+    private static async Task<int> RunLayoutAsync(string[] args)
+    {
+        if (args.Length == 2 && args[1] == "--help")
+        {
+            Help();return 0;
+        }
+        if (args.Length < 2 || args[1].StartsWith("--",StringComparison.Ordinal))
+            throw new ArgumentException("Usage: layout <local-geometry.json> [--format markdown|json] [--output NEW-FILE]");
+        string source=args[1];
+        string format="markdown",outputFile="";
+        for(int i=2;i<args.Length;i++)
+        {
+            if (args[i] is not ("--format" or "--output") || i+1>=args.Length)
+                throw new ArgumentException("layout supports --format and --output only.");
+            string name=args[i++];
+            string value=args[i];
+            if(name=="--format")
+            {
+                if (format!="markdown" || value is not ("markdown" or "json"))
+                    throw new ArgumentException("layout format must be markdown or json, specified once.");
+                format=value;
+            }
+            else
+            {
+                if (outputFile.Length!=0 || string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentException("Specify one nonempty output path.");
+                outputFile=value;
+            }
+        }
+        string input=await LocalDataFiles.ReadTextAsync(source,200_000);
+        var problem=JsonSerializer.Deserialize<LayoutProblem>(input,new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive=true
+        }) ?? throw new ArgumentException("Layout JSON did not contain a problem.");
+        var result=LayoutOptimizer.Optimize(problem);
+        string report=format=="json"
+            ? JsonSerializer.Serialize(new
+              {
+                  kind="irregular-battery-layout-screening",
+                  units="mm, g, Ah, V, Wh, Wh/kg, gross-zone Wh/L",
+                  status="GEOMETRY ONLY — bounded search, not a global optimum or battery approval",
+                  input=problem,
+                  result
+              },new JsonSerializerOptions{WriteIndented=true})
+            :result.ToMarkdown(problem);
+        if(outputFile.Length>0)
+        {
+            await using var stream=new FileStream(outputFile,FileMode.CreateNew,FileAccess.Write,FileShare.None);
+            await using var writer=new StreamWriter(stream,new UTF8Encoding(false));
+            await writer.WriteAsync(report);
+            await writer.FlushAsync();
+            Console.Error.WriteLine("Saved a NEW local geometry screening report.");
+        }
+        else Console.WriteLine(report);
+        return 0;
+    }
+
     private static double ParseNumber(string option, string value)
     {
         if (!double.TryParse(value,NumberStyles.Float,Culture,out double number) ||
@@ -201,6 +264,9 @@ internal static class Cli
           --format markdown|json
           --output path         Create a NEW local output file; refuses overwrite
           --help                Show this help
+
+          dotnet run --project desktop/PackFit.Engineering.Cli -- layout <geometry.json> --format json
+            # Geometry: disjoint XY zones + per-zone Z, keepouts, cells and S/P topologies.
 
         Use synthetic or explicitly authorized files only. Compare requires comparable
         workload, SOC window, sampling and hardware setup; flags are not safety verdicts.

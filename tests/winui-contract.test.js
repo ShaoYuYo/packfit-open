@@ -12,7 +12,8 @@ const main=[
  read("desktop/PackFit.Engineering.Desktop/MainWindow.Tools.cs"),
  read("desktop/PackFit.Engineering.Desktop/MainWindow.Batch.cs"),
  read("desktop/PackFit.Engineering.Desktop/MainWindow.Insights.cs"),
- read("desktop/PackFit.Engineering.Desktop/MainWindow.Premium.cs")
+ read("desktop/PackFit.Engineering.Desktop/MainWindow.Premium.cs"),
+ read("desktop/PackFit.Engineering.Desktop/MainWindow.Layout.cs")
 ].join("\n");
 
 test("native WinUI events have C# handlers and every named control is unique",()=>{
@@ -164,4 +165,27 @@ test("native engineering A/B compare is actionable and reports source limitation
  assert.match(core,/FindingCodeCounts/);
  assert.match(core,/per 1,000 sample rows/);
  assert.match(core,/root-cause/);
+});
+
+test("native irregular-space fit is a real selectable visualization with explicit safety limitations",()=>{
+ const ui=read("desktop/PackFit.Engineering.Desktop/MainWindow.Layout.cs");
+ const core=read("desktop/PackFit.Engineering.Core/LayoutOptimizer.cs");
+ const insights=read("desktop/PackFit.Engineering.Desktop/MainWindow.Insights.cs");
+ const premium=read("desktop/PackFit.Engineering.Desktop/MainWindow.Premium.cs");
+ for(const id of ["GeometryJsonBox","GeometryCandidateChoice","GeometryMap",
+   "GeometryRunButton","GeometrySummary"])
+   assert.match(source,new RegExp('x:Name="'+id+'"'));
+ for(const handler of ["LoadSyntheticGeometryClick","CalculateGeometryClick",
+   "GeometryCandidateChanged","GeometryJsonChanged"])
+   assert.match(ui,new RegExp('\\b'+handler+'\\s*\\('));
+ assert.match(ui,/LayoutOptimizer\.Optimize/);
+ assert.match(ui,/GeometryMap\.Children\.Add/);
+ assert.match(ui,/RunLayoutSmokeTest/);
+ assert.match(insights,/RunLayoutSmokeTest\(\)/);
+ assert.match(premium,/InvalidateGeometry\(clearText:true\)/);
+ assert.match(main,/_geometryResult\.ToMarkdown\(_geometryProblem\)/);
+ assert.match(core,/KeepoutMarginMm/);
+ assert.match(core,/MaxThicknessMm/);
+ assert.match(core,/NOT AN OPTIMALITY CERTIFICATE/);
+ assert.match(core,/MaxSearchNodes/);
 });
