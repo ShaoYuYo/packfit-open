@@ -1,71 +1,67 @@
-# Real-world evidence and adoption log
+# PackFit Open — verified project evidence
 
-**Purpose:** preserve honest, verifiable evidence of community impact. This is not a marketing scoreboard.
+This log separates **maintainer activity**, **automated verification**, **on-device observations** and **independent adoption**. It is not a claim of OpenAI acceptance, downstream deployments, professional certification or audited business impact.
 
-## Public repository snapshot (2026-11-02)
+## Public snapshot — 2026-11-02
 
-- **4 GitHub Stars**, **0 forks**, and **no independent PRs** at the time of verification. A Star is not proof of usage; no conversion from stars to users is claimed.
-- **5 published prereleases**: [beta.1](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.1), [beta.2](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.2), and [beta.3](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.3). All include Windows executable assets and SHA-256 files, but successful packaging is not proof of physical-device compatibility.
-- **3 open maintainer-raised issues** addressing browser QA, battery report variants and native Windows QA; these are **not** external bug reports.
-- Windows and browser CI have passed on recent commits. CI does **not** replace first-hand device testing.
-- The maintainer has started a [15-minute trial](TRY_PACKFIT.md) and an issue template to collect verified external feedback. **There are not yet published independent trial reports.**
+Source: [GitHub repository](https://github.com/ShaoYuYo/packfit-open) and GitHub public Releases API at the time of inspection.
 
-## Implementation milestones (source-code claims only)
-
-- 2026-11-01, v0.1: public runtime and pack feasibility calculators, bilingual interface, methodology and unit tests.
-- 2026-11-01, v0.2: local Windows batteryreport import, everyday charging estimates and responsive interface.
-- 2026-11-01, v0.3: daily usage planner, scoped offline caching, portable validated JSON scenarios, open example data and onboarding improvements.
-
-- 2026-11-02, first public beta: [v0.7.0-beta.1](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.1) is a **real published GitHub Prerelease** with Windows ZIP, single-file EXE and SHA256 file. The Windows release workflow passed browser tests, pure C# engineering checks and WinUI publication. Real hardware launch testing and external adoption remain unverified.
-
-These entries describe code changes; **they do not assert external adoption, downloads, users, or community contributions**.
-
-## Evidence still needed
-
-| Signal | Verification path | What can currently be claimed |
+| Signal | Observed evidence | What it does *not* establish |
 | --- | --- | --- |
-| Stars and forks | GitHub repository | Must verify live counts |
-| Unique clones and traffic | GitHub Insights / Traffic | Not yet documented |
-| Independent contributors | PRs and contributors list | Not yet documented |
-| Independent bug reports | Public issues with reproducible evidence | Not yet documented |
-| Downstream real use | Cited sites, learning materials or consented feedback | Not yet documented |
-| Release maintenance | Tags, Actions results, release notes | First public beta is published; subsequent releases and long-term maintenance remain to be demonstrated |
-| Independent formula review | External engineer or reproducible public test cases | Not yet documented |
+| Repository | Public, MIT-licensed, created 2026-11-01 | Long-term maturity or ecosystem adoption |
+| GitHub Stars | **4** | Four active users, downloads or independent endorsements |
+| Forks | **0** | Independent integrations |
+| External pull requests | **None observed** at this snapshot | A community of maintainers |
+| Issues | **4** publicly tracked, opened by the maintainer | Reports from unrelated users |
+| Native prereleases | **5** tagged prereleases through v0.8.0-beta.1 | Five stable or independently tested versions |
+| Release asset counts | Available from public GitHub Releases; low counts include unknown and potentially repeat downloaders | Unique users or installed systems |
 
-## Ethical project growth
+Releases: [beta.1](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.1), [beta.2](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.2), [beta.3](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.3), [beta.4](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.4), and [v0.8.0-beta.1](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.8.0-beta.1).
 
-- Do not buy or automate GitHub Stars, forks or traffic.
-- Do not invent testimonials, community activity, code reviews or adoption.
-- Do not count AI-generated commits as independent community contributions.
-- Never expose employer, vendor or customer confidential battery data in fixtures or issues.
-- Protect contributors and user's private Windows battery reports.
+These releases occurred during the project's first two days. The frequency reflects early iterative development **not** mature, long-term OSS maintenance.
 
-## Practical next steps
+## Engineering value demonstrated in source
 
-1. Test on multiple real laptops and browsers; record anonymous, consented feedback.
-2. Add public synthetic fixtures for unsupported battery report formats.
-3. Track reproducible issues and actually resolve them.
-4. Request independent reviews of equations, boundary handling and accessibility.
-5. Publish versioned releases after CI and hands-on browser checks.
-6. Update this file only when new evidence can be verified.
+PackFit combines a public bilingual browser calculator with a local-first native C# / WinUI 3 engineering workspace.
 
-Official Codex for Open Source application: https://openai.com/form/codex-for-oss/ . A newly created repository is not automatically eligible.
+- Windows battery report import with installed-battery scoping, separate physical batteries and an optional historical capacity chart.
+- Telemetry CSV/TSV screening with explicit units, user-defined limits, current-sign handling, time integrity checks and reportable findings.
+- Battery pack nominal voltage, capacity, Wh, mass and bounding-envelope estimates.
+- Validation matrix PASS / FAIL / NOT RUN review and Markdown report handoffs.
+- Guided Windows sleep and energy diagnostics, plus synthetic demo data.
+- Two independent native UIs: a full XAML interface and a XAML-independent compatibility workspace.
 
-## Native engineering visualization release (2026-11-02)
+**Important limits:** formulas and examples do not represent OEM acceptance criteria, safety regulations, battery qualification, or measured standby power. No employer/customer/supplier confidential data has been included as a sample.
 
-[v0.8.0-beta.1](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.8.0-beta.1) is a **published prerelease**, not merely an unreleased roadmap. Its GitHub Actions job passed browser checks, pure C# engineering calculations, native WinUI folder publishing, a real MainWindow XAML construction check, a XAML-independent compatibility construction check, and **native synthetic chart/demo smoke tests in both interfaces**. It contains an executable ZIP, an unrenamed self-extracting EXE and SHA-256 hashes.
+## Verified automated evidence
 
-The visual features are based on local parsed capacity/telemetry/validation data, with unit-specific plots, a bounded trace preview, S/P topology and manual standby estimates. Charts are not calibrated instrumentation, direct root-cause analysis, enterprise security approval, or a finished hardware compatibility audit. Independent user adoption, full visual accessibility tests and original-device feedback still require evidence.
+- [Web CI](https://github.com/ShaoYuYo/packfit-open/actions/workflows/ci.yml) — JavaScript syntax, unit/regression tests and static assets.
+- [Windows CI](https://github.com/ShaoYuYo/packfit-open/actions/workflows/desktop-winui.yml) — .NET engineering test vectors, WinUI self-contained build, main XAML creation, compatibility UI creation, and native demo/chart smoke tests.
+- [CodeQL](https://github.com/ShaoYuYo/packfit-open/actions/workflows/codeql.yml) — automated source scanning of JS and C#. **A green workflow is not proof that no security vulnerabilities exist.**
+- [v0.8.0-beta.1 release](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.8.0-beta.1) — ZIP, original-name optional EXE and SHA-256 checksum file, published from a passing Windows release workflow.
 
-## Battery report reliability progress (2026-11-02)
+These are **CI/build facts**, not test certificates from a laboratory or independent domain reviewers.
 
-A real parser risk was found: Windows capacity-history tables could be confused with current battery data. The native Windows parser now scopes to the installed-battery section and separates supported multiple batteries. Synthetic regression tests cover history, localization, malformed units and two-battery reports. See [issue #2](https://github.com/ShaoYuYo/packfit-open/issues/2) for remaining real-device and format validation. This is **maintenance work**, not evidence of independent adoption.
+## Real laptop feedback and outstanding investigation
 
+A Windows user reported a native XAML parsing failure during startup; logs showed App initialization succeeded before MainWindow failed. This prompted [issue #4](https://github.com/ShaoYuYo/packfit-open/issues/4), diagnostics, an independent safe mode and a portable EXE packaging correction. The maintainer subsequently reported that the app could open, which is useful first-hand **maintainer feedback** but is not an independent multi-device acceptance study.
 
-The beta.2 release was built only after browser tests, C# engineering tests, native WinUI packaging and checksum generation passed. [Release workflow](https://github.com/ShaoYuYo/packfit-open/actions/workflows/publish-beta2.yml). As of this update there are no independent user testimonials or external PRs to claim.
+Still unverified: cross-device Windows 10/11 compatibility, accessible keyboard/screen-reader operation, real-world battery-report format diversity, no-false-positive validation thresholds, and independent engineer review of formulas.
 
+## Why the project matters; what remains to prove
 
-## Browser and native parser parity (2026-11-02)
+Laptop battery diagnostics cross hardware, firmware, OS power management, data logs and practical user questions. PackFit aims to reduce repetitive setup and create reviewable handoffs **without sending private Windows data to an AI model**. This is a plausible niche ecosystem contribution, not yet proven broad adoption.
 
-The browser-side Windows battery importer was separately audited after the native Windows beta. It now confines capacity extraction to the installed-battery section, exposes a per-battery selector for supported multi-battery reports and clears stale results when imports fail. Regression tests cover separate battery records, Chinese headings, capacity history, invalid units and ambiguous columns. The two independent parsers are **not yet proven equivalent across all Windows report formats**; manual cross-browser and real-device checks remain open. Automated web tests and GitHub Pages deployment should be reviewed on each final commit.
-\n## Windows startup and Fluent recovery work (2026-11-02)\n\nA real launch failure was reported with the earlier desktop beta. The underlying machine-specific exception code remains unknown. The maintainer responded by shipping local-only startup logs, a recovery window, `--safe-ui`, a non-elevating diagnostic script, OS-preference-aware animation, a system typography scale and adaptive layouts. The beta.3 CI build completed and its nonblocking hosted-Windows launch probe observed an active native process after seven seconds. **This does not demonstrate success on the original device**, and the issue must remain open until a real repro is understood. [Release](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.3).\n
+Before claiming substantial external impact, obtain:
+
+1. At least one voluntary, consented first-hand trial report from someone other than the maintainer, with Windows/browser version and reproducible steps; never publish an unredacted battery report.
+2. An independent technical review of battery capacity handling, CSV unit/sign rules or WinUI accessibility.
+3. A real PR / issue triage cycle with tests and documented resolution.
+4. Follow-up maintenance across weeks/months, not only an intensive initial release day.
+5. Measurable downstream reuse or credible anonymized results if contributors willingly report them.
+
+Do not buy stars, fabricate testimonials, count AI-generated commits as independent contributions, infer unique installations from asset download counts, or imply employer sponsorship.
+
+See [maintenance workflow](MAINTAINER_WORKFLOW.md), [engineering acceptance checklist](RELEASE_CHECKLIST.md) and [15-minute trial](TRY_PACKFIT.md).
+
+Official [Codex for Open Source eligibility](https://openai.com/form/codex-for-oss/) prioritizes real usage, ecosystem relevance and active maintenance. This evidence log does **not** assert that the program has approved PackFit.
