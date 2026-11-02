@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import {readFileSync,existsSync} from "node:fs";
+import {readFileSync,existsSync,readdirSync} from "node:fs";
 import {fileURLToPath} from "node:url";
 import {resolve,dirname} from "node:path";
 import {DICTIONARY} from "../src/i18n.js";
@@ -75,4 +75,16 @@ test("privacy-first runtime never imports executable third-party scripts or remo
   assert.doesNotMatch(css,/@import\s+url\s*\(\s*["']?https?:/i);
   assert.doesNotMatch(html,/rel="preconnect"[^>]*href="https?:/i);
   assert.match(motion,/element\.animate/);
+});
+
+
+test("all browser application modules avoid network upload and executable dynamic imports",()=>{
+  const jsFiles=readdirSync(resolve(root,"src")).filter(name=>name.endsWith(".js"));
+  for(const filename of jsFiles){
+    const source=read("src/"+filename);
+    assert.doesNotMatch(source,/\b(?:fetch|sendBeacon|XMLHttpRequest|WebSocket|EventSource)\s*\(/,
+      filename+" unexpectedly makes a network call");
+    assert.doesNotMatch(source,/\bimport\s*\(/,
+      filename+" unexpectedly imports JavaScript at runtime");
+  }
 });
