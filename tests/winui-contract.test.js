@@ -11,7 +11,8 @@ const main=[
  read("desktop/PackFit.Engineering.Desktop/MainWindow.xaml.cs"),
  read("desktop/PackFit.Engineering.Desktop/MainWindow.Tools.cs"),
  read("desktop/PackFit.Engineering.Desktop/MainWindow.Batch.cs"),
- read("desktop/PackFit.Engineering.Desktop/MainWindow.Insights.cs")
+ read("desktop/PackFit.Engineering.Desktop/MainWindow.Insights.cs"),
+ read("desktop/PackFit.Engineering.Desktop/MainWindow.Premium.cs")
 ].join("\n");
 
 test("native WinUI events have C# handlers and every named control is unique",()=>{
