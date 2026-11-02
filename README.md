@@ -38,7 +38,7 @@ The browser app also includes a daily energy budget, charging-cost calculator, W
 
 ### Windows engineering workbench: an example you can reproduce
 
-1. Download the [initial beta release](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.1). For a first trial, use the **win-x64 ZIP**, extract the whole folder and run `PackFit.Engineering.exe`. This is an unsigned developer preview; follow your IT policy.
+1. Download the [current beta release](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.2). For a first trial, use the **win-x64 ZIP**, extract the whole folder and run `PackFit.Engineering.exe`. This is an unsigned developer preview; follow your IT policy.
 2. Import the [synthetic Windows battery report](desktop/samples/battery-report-sample.html). It contains **56 Wh** design capacity and **49 Wh** full-charge capacity. The calculated retention is **87.5%**.
 3. Import [synthetic telemetry](desktop/samples/telemetry-sample.csv), set project-specific screening limits and review time, voltage, SOC and temperature flags.
 4. Import the [synthetic test matrix](desktop/samples/validation-sample.csv). Unmeasured cases should remain **NOT RUN**, not silently counted as passing.
@@ -52,7 +52,7 @@ The desktop also offers read-only Windows `powercfg` queries, Energy/SleepStudy 
 
 - **Open source:** all application and core calculation source is here under MIT.
 - **Automated checks:** browser unit tests and an independent C# engineering test runner are run in GitHub Actions. See [web CI](https://github.com/ShaoYuYo/packfit-open/actions/workflows/ci.yml), [Windows build](https://github.com/ShaoYuYo/packfit-open/actions/workflows/desktop-winui.yml), and [first beta release build](https://github.com/ShaoYuYo/packfit-open/actions/workflows/publish-first-beta.yml).
-- **Published binary:** [v0.7.0-beta.1](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.1) includes a self-contained WinUI ZIP, single-file EXE and SHA-256 hashes. CI compiled both distributions.
+- **Published binary:** [v0.7.0-beta.2](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.2) includes a self-contained WinUI ZIP, single-file EXE and SHA-256 hashes. CI compiled both distributions. Beta.2 also improves Windows battery-report reliability for history and multiple batteries.
 - **Still to verify:** Windows hardware smoke testing across devices, full accessibility review, additional real-world report formats and broad external adoption. Passing CI is **not** proof of hardware compatibility.
 - **Not claimed:** production safety approval, calibrated capacity measurement, OEM-specific charging limits, regulatory certification or automated root-cause diagnosis.
 
