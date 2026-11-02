@@ -34,12 +34,13 @@ Write-Report 'Reminder: EXE-only copies of the folder-based distribution cannot 
 
 if (-not $InventoryOnly) {
     try {
-        $args = @()
         if ($SafeUi) {
-            $args = @('--safe-ui')
             Write-Report 'Launching with safe UI mode (no custom title bar or optional transitions).'
+            $process = Start-Process -FilePath $exe -WorkingDirectory $root -ArgumentList '--safe-ui' -PassThru
         }
-        $process = Start-Process -FilePath $exe -WorkingDirectory $root -ArgumentList $args -PassThru
+        else {
+            $process = Start-Process -FilePath $exe -WorkingDirectory $root -PassThru
+        }
         Start-Sleep -Seconds 6
         $process.Refresh()
         if ($process.HasExited) {
