@@ -25,6 +25,8 @@ OpenAI states that it reviews repository usage, ecosystem importance, and proof 
 - [PR #8](https://github.com/ShaoYuYo/packfit-open/pull/8) added A/B telemetry comparison and a local-only .NET CLI usable on Linux/macOS/Windows. Its [Linux CLI tests](https://github.com/ShaoYuYo/packfit-open/actions/runs/41450896154), [Windows native tests](https://github.com/ShaoYuYo/packfit-open/actions/runs/41450896156) and [CodeQL](https://github.com/ShaoYuYo/packfit-open/actions/runs/41450896221) passed before merge.
 - These are self-maintained code and CI facts. They **do not** establish external adoption, independent technical review, on-device safety, or sustained maintenance over months.
 
+**Maintainer identity and claim boundary:** The person maintaining the code should not be described as a practicing battery engineer merely because a separate engineer helped identify design problems. Needs discovery is not independent PackFit use, nor professional design approval.
+
 ### Additional source evidence: spatial design problem and geometry pre-screen (2026-11-02)
 
 - [Merged PR #11](https://github.com/ShaoYuYo/packfit-open/pull/11) addresses a **qualitative design-stage problem** raised by an experienced battery engineer: small/irregular assigned battery space complicates cell form-factor choice and placement. The tool implements conservative XY zones, local Z ceilings, keepouts, mandatory gaps, S/P candidate comparison, and a bounded local-search visualization plus CLI.
@@ -46,7 +48,7 @@ OpenAI states that it reviews repository usage, ecosystem importance, and proof 
 
 ### What is appropriate to tell reviewers now
 
-PackFit is a newly opened, independent MIT project built from a battery developer's experience of repetitive laptop power and validation tasks. It serves general laptop owners and engineers, emphasizes local-only handling of sensitive reports, and has test-backed fixes and public Windows builds. It is in early adoption and is **not endorsed by an employer or supplier**. Codex support would target maintainer automation, bilingual docs and additional public format tests, never confidential supplier/customer data.
+PackFit is a newly opened, independent MIT project developed by a software maintainer, with battery-engineering requirements informed by qualitative conversations with a separate battery engineer. It serves general laptop owners and engineers, emphasizes local-only handling of sensitive reports, and has test-backed fixes and public Windows builds. It is in early adoption and is **not endorsed by an employer or supplier**. Codex support would target maintainer automation, bilingual docs and additional public format tests, never confidential supplier/customer data.
 
 Use [the field-by-field application draft](OPENAI_APPLICATION_2026.md) only as a copy-editing aid; updating a GitHub file **does not amend a previously submitted OpenAI application**. Do not resubmit repeatedly only because an immediate acknowledgment email is absent.
 
