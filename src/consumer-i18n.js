@@ -7,7 +7,14 @@ everydayTag:"EVERYDAY / 02",everydayTitle:"充電要花多少？直接算。",ev
 costTitle:"充電要花多少錢？",costDesc:"依電池容量、充電效率和電價估算。",batteryWh:"電池容量",efficiency:"效率",rate:"每度電價",times:"每月充電次數",perCharge:"每次電費",perMonth:"每月電費",fromGrid:"插座取電量",
 bankTitle:"行動電源能充幾次？",bankDesc:"先將 mAh 依照電芯標稱電壓換成 Wh。",bankMah:"標示容量",cellV:"電芯標稱電壓",targetWh:"設備電池容量",delivered:"估計可用能量",rated:"標稱能量",charges:"約可充滿次數",
 timeTitle:"大約多久充好？",timeDesc:"粗略估算，額外加入 15% 充電緩衝。",from:"起始電量",to:"目標電量",power:"平均充電功率",duration:"預估充電時間",delta:"需要補充能量",
-caution:"所有結果是簡化估算，實際充電曲線、溫度、電池老化、轉換效率和電價都可能不同。",goHealth:"看我的電池",useForCalc:"把容量套用到其他計算機",whatIsWh:"Wh 是什麼？",whExpl:"Wh 是能量單位。例如 56 Wh 電池平均耗電 14 W，理想續航約 4 小時。",whatIsMah:"mAh 是什麼？",mahExpl:"mAh 是電荷容量，換算 Wh 必須知道標稱電壓。例如 20,000 mAh × 3.7 V ≈ 74 Wh。"};
+caution:"所有結果是簡化估算，實際充電曲線、溫度、電池老化、轉換效率和電價都可能不同。",goHealth:"看我的電池",useForCalc:"把容量套用到其他計算機",whatIsWh:"Wh 是什麼？",whExpl:"Wh 是能量單位。例如 56 Wh 電池平均耗電 14 W，理想續航約 4 小時。",whatIsMah:"mAh 是什麼？",mahExpl:"mAh 是電荷容量，換算 Wh 必須知道標稱電壓。例如 20,000 mAh × 3.7 V ≈ 74 Wh。",
+symptomTag:"不用報告也能查",symptomTitle:"筆電遇到問題，先從哪裡查？",
+symptomIntro:"不用知道電池規格，也不用下載工具。選一個狀況，看看下一步怎麼查。",
+symptomLabel:"現在遇到的狀況",symptomSteps:"可以先做這些事",
+symptomCopy:"複製排查步驟",symptomCopied:"排查步驟已複製",symptomCopyFailed:"無法自動複製，請選取文字手動複製。",
+symptomDisclaimer:"只是初步排查方向，不能用來判定電池故障、安全性或保固資格。",
+pendingRecalc:"數字已修改，請重新按「計算健康度」。"
+};
 const en={
 navHealth:"My Battery",navEveryday:"Everyday Tools",healthTag:"PERSONAL / 01",healthTitle:"Check charge. Then capacity.",healthIntro:"Try reading current charge. For capacity retention, import a Windows battery report.",
 liveTitle:"Current charge",liveDesc:"Some browsers can share charge level, charging status and rough remaining time.",connect:"Check my battery",notChecked:"Not checked",unsupported:"This browser doesn't support live battery access. Try the Windows report or manual entry.",denied:"Your browser or device restricted battery information.",charging:"Charging / connected to power",discharging:"On battery / not charging",noTime:"No reliable time estimate",liveNotice:"Some browsers show approximate or default values. This is not a battery health measurement.",
@@ -17,6 +24,13 @@ everydayTag:"EVERYDAY / 02",everydayTitle:"What will charging cost?",everydayInt
 costTitle:"How much does charging cost?",costDesc:"Estimate from battery capacity, efficiency and electricity price.",batteryWh:"Battery capacity",efficiency:"Efficiency",rate:"Price per kWh",times:"Charges per month",perCharge:"Cost per charge",perMonth:"Cost per month",fromGrid:"Grid energy per charge",
 bankTitle:"How many power-bank charges?",bankDesc:"Convert rated mAh into Wh using nominal cell voltage.",bankMah:"Rated capacity",cellV:"Nominal cell voltage",targetWh:"Device battery energy",delivered:"Deliverable energy",rated:"Rated energy",charges:"Approximate full charges",
 timeTitle:"How long to recharge?",timeDesc:"Rough model with a 15% additional charging allowance.",from:"From",to:"To",power:"Average charge power",duration:"Estimated charge time",delta:"Energy required",
-caution:"All figures are simplified estimates; real charging curves, temperature, aging, conversion losses and electricity rates vary.",goHealth:"Check my battery",useForCalc:"Use this capacity in other calculators",whatIsWh:"What is Wh?",whExpl:"Wh is an energy unit. A 56 Wh battery running a 14 W load has a four-hour ideal runtime.",whatIsMah:"What is mAh?",mahExpl:"mAh is electric charge; nominal voltage is needed to convert to Wh. Example: 20,000 mAh × 3.7 V ≈ 74 Wh."};
+caution:"All figures are simplified estimates; real charging curves, temperature, aging, conversion losses and electricity rates vary.",goHealth:"Check my battery",useForCalc:"Use this capacity in other calculators",whatIsWh:"What is Wh?",whExpl:"Wh is an energy unit. A 56 Wh battery running a 14 W load has a four-hour ideal runtime.",whatIsMah:"What is mAh?",mahExpl:"mAh is electric charge; nominal voltage is needed to convert to Wh. Example: 20,000 mAh × 3.7 V ≈ 74 Wh.",
+symptomTag:"QUICK HELP / NO REPORT NEEDED",symptomTitle:"Battery acting up? Start here.",
+symptomIntro:"No battery specifications or download required. Choose your situation to see practical first checks.",
+symptomLabel:"What's happening?",symptomSteps:"What to check first",
+symptomCopy:"Copy next steps",symptomCopied:"Next steps copied",symptomCopyFailed:"Can't copy automatically. Select the text and copy it instead.",
+symptomDisclaimer:"General troubleshooting steps only — not a fault diagnosis, safety decision or warranty determination.",
+pendingRecalc:"Values changed. Select Calculate retention to refresh the result."
+};
 export const CONSUMER_I18N={"zh-TW":zh,en};
 export function consumerText(locale,key){return (CONSUMER_I18N[locale]||en)[key]||key;}
