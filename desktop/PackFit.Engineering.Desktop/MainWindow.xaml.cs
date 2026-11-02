@@ -65,6 +65,11 @@ public sealed partial class MainWindow : Window
         // The content width excludes the NavigationView sidebar.
         bool compact = args.NewSize.Width < 760;
         QuickActions.Orientation = compact ? Orientation.Vertical : Orientation.Horizontal;
+        SymptomActions.Orientation = compact ? Orientation.Vertical : Orientation.Horizontal;
+        BatteryActions.Orientation = compact ? Orientation.Vertical : Orientation.Horizontal;
+        TelemetryFileActions.Orientation = compact ? Orientation.Vertical : Orientation.Horizontal;
+        ValidationFileActions.Orientation = compact ? Orientation.Vertical : Orientation.Horizontal;
+        SleepToolActions.Orientation = compact ? Orientation.Vertical : Orientation.Horizontal;
         TelemetryLimitsPrimary.Orientation = compact ? Orientation.Vertical : Orientation.Horizontal;
         TelemetryLimitsSecondary.Orientation = compact ? Orientation.Vertical : Orientation.Horizontal;
         PackParametersPrimary.Orientation = compact ? Orientation.Vertical : Orientation.Horizontal;
