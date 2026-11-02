@@ -27,6 +27,22 @@ jobs:
         with:
           node-version: '22'
 
+      - name: Verify v0.8 release identity and native chart sources
+        shell: pwsh
+        run: |
+          $project = Get-Content "desktop/PackFit.Engineering.Desktop/PackFit.Engineering.Desktop.csproj" -Raw
+          if ($project -notmatch '<Version>0\.8\.0-beta\.1</Version>') {
+            throw "Project version does not match release tag v0.8.0-beta.1"
+          }
+          foreach ($file in @(
+            "desktop/PackFit.Engineering.Desktop/EngineeringVisuals.cs",
+            "desktop/PackFit.Engineering.Desktop/MainWindow.Insights.cs",
+            "desktop/PackFit.Engineering.Core/EngineeringInsights.cs",
+            "desktop/docs/ENGINEERING_VISUALS.md"
+          )) {
+            if (!(Test-Path $file)) { throw "Missing native visual feature source: $file" }
+          }
+
       - name: Check browser app syntax and source integrity
         run: npm run check
 
