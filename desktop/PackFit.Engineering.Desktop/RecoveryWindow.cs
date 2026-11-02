@@ -170,7 +170,7 @@ internal sealed class RecoveryWindow : Window
         if (path is null) return;
         if (new FileInfo(path).Length > 5_000_000)
             throw new FormatException("電池報告超過 5 MB。");
-        string html = await File.ReadAllTextAsync(path);
+        string html = await LocalDataFiles.ReadTextAsync(path,5_000_000);
         _batteryRecords = await Task.Run(() => BatteryReportParser.ParseAll(html));
         _capacityHistory = await Task.Run(() => BatteryHistoryParser.Parse(html));
         _battery = _batteryRecords.Count == 1 ? _batteryRecords[0] : null;
@@ -188,8 +188,9 @@ internal sealed class RecoveryWindow : Window
         if (path is null) return;
         if (new FileInfo(path).Length > 12_000_000)
             throw new FormatException("檔案超過 12 MB。");
+        string telemetryCsv = await LocalDataFiles.ReadTextAsync(path,12_000_000);
         _telemetry = await Task.Run(() =>
-            TelemetryAnalyzer.Analyze(File.ReadAllText(path), _limits));
+            TelemetryAnalyzer.Analyze(telemetryCsv, _limits));
         _output.Text = "量測筆數：" + _telemetry.Samples.ToString("N0", CultureInfo.InvariantCulture) +
             "\n異常旗標：" + _telemetry.TotalFindings +
             "\n最高溫：" + _telemetry.MaxTemperatureC?.ToString("0.##", CultureInfo.InvariantCulture) +
@@ -204,7 +205,8 @@ internal sealed class RecoveryWindow : Window
         if (path is null) return;
         if (new FileInfo(path).Length > 4_000_000)
             throw new FormatException("檔案超過 4 MB。");
-        _matrix = await Task.Run(() => ValidationMatrix.Parse(File.ReadAllText(path)));
+        string matrixCsv = await LocalDataFiles.ReadTextAsync(path,4_000_000);
+        _matrix = await Task.Run(() => ValidationMatrix.Parse(matrixCsv));
         var sum = ValidationMatrix.Summarize(_matrix);
         _output.Text = "驗證案例 " + sum.Total +
             "\nPASS " + sum.Passed + " · FAIL " + sum.Failed +

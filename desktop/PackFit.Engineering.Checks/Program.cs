@@ -167,4 +167,54 @@ Assert(nextSteps.Any(s=>s.Contains("Temperature flags")) &&
     nextSteps.Any(s=>s.Contains("validation matrix")),
     "Evidence-based triage proposes next checks without claiming an automatic root cause");
 
+
+var longCsvRows=Enumerable.Range(0,1208).Select(index =>
+    DateTimeOffset.Parse("2026-11-01T00:00:00Z")
+        .AddSeconds(index).ToString("O",System.Globalization.CultureInfo.InvariantCulture) +
+    $",{(index==1207?9.0:11.5):0.0},2.0,{(index<1207?65:34)},80");
+var longLog="Timestamp,Voltage_V,Current_A,Temp_C,SOC_pct\n"
+    +string.Join("\n",longCsvRows)+"\n";
+var longAnalysis=TelemetryAnalyzer.Analyze(longLog,
+    new TelemetryThresholds(MaximumTemperatureC:60,MinimumVoltageV:10));
+Assert(longAnalysis.TotalFindings>1000 && longAnalysis.HiddenFindings>0,
+    "large telemetry logs report truncated detailed findings explicitly");
+Assert(!longAnalysis.Findings.Any(f=>f.Code=="VOLTAGE_LOW") &&
+    longAnalysis.FindingCodeCounts.TryGetValue("VOLTAGE_LOW",out int lowCount) &&
+    lowCount==1 &&
+    longAnalysis.FindingCodeCounts.GetValueOrDefault("TEMP_HIGH")>=1200,
+    "full-log finding category counts preserve late anomalies beyond the first 1000 flags");
+var longNext=EngineeringTriage.NextSteps(longAnalysis,null,true);
+Assert(longNext.Any(step=>step.Contains("Voltage flags")),
+    "late voltage events still inform next-step triage");
+var longReport=EngineeringReport.Build("synthetic","",null,longAnalysis,null,null,
+    new TelemetryThresholds(MaximumTemperatureC:60,MinimumVoltageV:10));
+Assert(longReport.Contains("VOLTAGE_LOW: 1") &&
+    longReport.Contains("Full-log finding counts"),
+    "reviewable report includes anomalies suppressed from the detailed table");
+
+
+string boundedFixture=Path.Combine(Path.GetTempPath(),
+    "packfit-local-fixture-"+Guid.NewGuid().ToString("N")+".csv");
+try
+{
+    await File.WriteAllTextAsync(boundedFixture,
+        "Timestamp,Voltage_V\n2026-11-01T00:00:00Z,11.5\n",
+        new System.Text.UTF8Encoding(encoderShouldEmitUTF8Identifier:true));
+    string imported=await LocalDataFiles.ReadTextAsync(boundedFixture,500);
+    Assert(imported.Contains("Voltage_V") && imported.Contains("11.5"),
+        "local importer correctly reads BOM-prefixed synthetic CSV within the byte limit");
+
+    await File.WriteAllBytesAsync(boundedFixture,new byte[501]);
+    try
+    {
+        await LocalDataFiles.ReadTextAsync(boundedFixture,500);
+        throw new Exception("FAIL: importer accepted oversized local input");
+    }
+    catch(FormatException){Console.WriteLine("PASS: 501-byte input rejected against 500-byte limit");}
+}
+finally
+{
+    if(File.Exists(boundedFixture)) File.Delete(boundedFixture);
+}
+
 Console.WriteLine("All PackFit engineering core checks passed.");

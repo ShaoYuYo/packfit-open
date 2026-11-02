@@ -39,7 +39,7 @@ test("new layout and worker modules are included in offline precache",()=>{
    assert.ok(existsSync(resolve(root,path)),path);
    assert.ok(sw.includes('"./'+path+'"'),path+" absent from cache");
  }
- assert.match(sw,/packfit-static-v0\.6\.3/);
+ assert.match(sw,/packfit-static-v0\.6\.4/);
 });
 test("GPU identification and the benchmark are user-initiated and never uploaded",()=>{
  const ui=read("src/device-ui.js");

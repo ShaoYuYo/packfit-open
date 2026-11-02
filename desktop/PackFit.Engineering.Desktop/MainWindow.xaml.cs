@@ -233,7 +233,7 @@ public sealed partial class MainWindow : Window
             if (process.ExitCode != 0)
                 throw new InvalidOperationException(
                     $"powercfg 失敗（結束碼：{process.ExitCode}）。部分桌機沒有可用電池。");
-            string html = await File.ReadAllTextAsync(reportPath);
+            string html = await LocalDataFiles.ReadTextAsync(reportPath,5_000_000);
             _batteryRecords = await Task.Run(() => BatteryReportParser.ParseAll(html));
             _batteryHistory = await Task.Run(() => BatteryHistoryParser.Parse(html));
             _battery = _batteryRecords.Count == 1 ? _batteryRecords[0] : null;
@@ -257,7 +257,7 @@ public sealed partial class MainWindow : Window
         {
             var path = await PickFileAsync(".html", ".htm");
             if (path is null) return;
-            string html = await File.ReadAllTextAsync(path);
+            string html = await LocalDataFiles.ReadTextAsync(path,5_000_000);
             (_batteryRecords, _batteryHistory) = await Task.Run(() =>
                 ((IReadOnlyList<BatteryHealth>)BatteryReportParser.ParseAll(html),
                  (IReadOnlyList<CapacityHistoryPoint>)BatteryHistoryParser.Parse(html)));
@@ -305,7 +305,7 @@ public sealed partial class MainWindow : Window
             var path = await PickFileAsync(".csv", ".tsv", ".txt");
             if (path is null) return;
             var thresholds = ReadThresholds();
-            string text = await File.ReadAllTextAsync(path);
+            string text = await LocalDataFiles.ReadTextAsync(path,12_000_000);
             _telemetry = await Task.Run(() => TelemetryAnalyzer.Analyze(text, thresholds));
             _limits = thresholds;
             TelemetryResult.Text = string.Format(Culture,
@@ -335,7 +335,8 @@ public sealed partial class MainWindow : Window
         {
             var path = await PickFileAsync(".csv");
             if (path is null) return;
-            _matrix = await Task.Run(() => ValidationMatrix.Parse(File.ReadAllText(path)));
+            string matrixCsv = await LocalDataFiles.ReadTextAsync(path,4_000_000);
+            _matrix = await Task.Run(() => ValidationMatrix.Parse(matrixCsv));
             var summary = ValidationMatrix.Summarize(_matrix);
             ValidationResult.Text = string.Format(Culture,
                 "Total {0:N0}   PASS {1:N0}   FAIL {2:N0}   NOT RUN {3:N0}   完成項目通過率 {4}%",

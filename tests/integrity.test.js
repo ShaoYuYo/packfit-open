@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import {readFileSync,existsSync} from "node:fs";
+import {readFileSync,existsSync,readdirSync} from "node:fs";
 import {fileURLToPath} from "node:url";
 import {resolve,dirname} from "node:path";
 import {DICTIONARY} from "../src/i18n.js";
@@ -65,4 +65,42 @@ test("consumer controller can only reference present HTML controls",()=>{
   const ids=new Set([...html.matchAll(/\bid="([^"]+)"/g)].map((m)=>m[1]));
   const used=[...consumer.matchAll(/\bq\("([^"]+)"\)/g)].map((m)=>m[1]);
   assert.deepEqual([...new Set(used.filter((id)=>!ids.has(id)))],[]);
+});
+
+
+test("privacy-first runtime never imports executable third-party scripts or remote fonts",()=>{
+  const motion=read("src/motion-enhance.js");
+  const css=read("styles.css");
+  assert.doesNotMatch(motion,/import\s*\(|cdn\.jsdelivr|https?:\/\//);
+  assert.doesNotMatch(css,/@import\s+url\s*\(\s*["']?https?:/i);
+  // A privacy claim covers every loaded stylesheet, not only styles.css.
+  for(const filename of readdirSync(resolve(root,"assets")).filter(name=>name.endsWith(".css"))){
+    const asset=read("assets/"+filename);
+    assert.doesNotMatch(asset,/@import\s+(?:url\s*\()?\s*["']?https?:/i,filename);
+    assert.doesNotMatch(asset,/url\s*\(\s*["']?https?:/i,filename);
+  }
+  assert.doesNotMatch(html,/rel="preconnect"[^>]*href="https?:/i);
+  assert.match(motion,/element\.animate/);
+});
+
+
+test("all browser application modules avoid network upload and executable dynamic imports",()=>{
+  const jsFiles=readdirSync(resolve(root,"src")).filter(name=>name.endsWith(".js"));
+  for(const filename of jsFiles){
+    const source=read("src/"+filename);
+    assert.doesNotMatch(source,/\b(?:fetch|sendBeacon|XMLHttpRequest|WebSocket|EventSource)\s*\(/,
+      filename+" unexpectedly makes a network call");
+    assert.doesNotMatch(source,/\bimport\s*\(/,
+      filename+" unexpectedly imports JavaScript at runtime");
+  }
+});
+
+test("published Windows ZIP provenance uses permissions required by actions/attest v4",()=>{
+  const workflow=read(".github/workflows/desktop-winui.yml");
+  assert.match(workflow,/id-token:\s*write/);
+  assert.match(workflow,/attestations:\s*write/);
+  assert.match(workflow,/artifact-metadata:\s*write/);
+  assert.match(workflow,/uses:\s*actions\/attest@v4/);
+  assert.match(workflow,/if:\s*github\.event_name\s*!=\s*'pull_request'/);
+  assert.match(workflow,/subject-path:\s*dist\/PackFit-Engineering-win-x64\.zip/);
 });

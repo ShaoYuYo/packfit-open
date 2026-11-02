@@ -41,12 +41,15 @@ This emphasizes practical domain value and honest early adoption. If actual star
 
 This is where the maintainer's personal motivation appears without overclaiming organization-wide impact or implying an employer endorses the project.
 
-## What has actually changed since the first beta
+## Current project evidence (updated 2026-11-02)
 
-- The public first beta contains signed-off GitHub Actions build artifacts, **not code-signed binaries**; Windows smoke testing is still outstanding.
-- New parser tests cover separate installed batteries, capacity-history scoping and localized headings. Issue [#2](https://github.com/ShaoYuYo/packfit-open/issues/2) tracks unsupported variants and the remaining verification.
-- A public [15-minute trial](https://github.com/ShaoYuYo/packfit-open/blob/main/docs/TRY_PACKFIT.md) and feedback template help collect genuine reproducible reports. No independent adoption is claimed.
-- The second beta [v0.7.0-beta.2](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.2) is now published with Windows artifacts, verified by its [gated release workflow](https://github.com/ShaoYuYo/packfit-open/actions/workflows/publish-beta2.yml). This remains **automated build evidence**, not actual field validation.
+- [v0.8.0-beta.1](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.8.0-beta.1) is a **real, unsigned Windows prerelease** with self-contained ZIP, original-filename optional EXE and checksum file. CI exercised main and compatibility UI native graphics; this is **not** a physical-device certification or a signed binary.
+- Issue [#4](https://github.com/ShaoYuYo/packfit-open/issues/4) documents the early XAML launch failure and work toward a functional safe mode. A maintainer-reported successful launch is not proof of independent adoption.
+- Issue [#5](https://github.com/ShaoYuYo/packfit-open/issues/5) and [PR #6](https://github.com/ShaoYuYo/packfit-open/pull/6) document a discovered telemetry aggregation flaw, bounded local import and removal of optional third-party executable JavaScript. This is **maintainer-origin maintenance**, not external review.
+- The verified [evidence log](PROJECT_EVIDENCE.md) lists 4 Stars and no forks/external PRs at its snapshot; these numbers should never be converted into invented user or installation counts.
+- [Maintainer workflow](MAINTAINER_WORKFLOW.md) describes proposed opt-in Codex issue/PR analysis, human review and privacy safeguards. API-based automation is **not currently shipped**.
+
+**Submitting a new commit or revising this document does not amend any form previously sent to OpenAI.** Use new facts only if the program requests additional information.
 
 ## Factual context and links
 
