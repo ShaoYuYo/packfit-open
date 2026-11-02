@@ -113,7 +113,7 @@ public static partial class BatteryReportParser
     private static string InstalledSection(string html)
     {
         var heading = Regex.Match(html,
-            @"(?is)<h[1-6]\b[^>]*>\s*(?:<[^>]+>\s*)*(?:Installed\s+batteries|已安裝的電池|已安裝電池|安装的电池|已安装的电池)\b?\s*</h[1-6]\s*>");
+            @"(?is)<h[1-6]\b[^>]*>\s*(?:<[^>]+>\s*)*(?:Installed\s+batteries|已安裝的電池|已安裝電池|安装的电池|已安装的电池)\s*</h[1-6]\s*>");
         if (!heading.Success) return html; // Supports minimal standalone test fixtures.
         int start = heading.Index + heading.Length;
         var next = Regex.Match(html[start..], @"(?is)<h[1-6]\b");
