@@ -19,6 +19,17 @@ This checklist separates **automated evidence**, **manual acceptance**, and **ex
 - [ ] Check malformed, excessively large and unexpected supplier file formats on actual devices.
 - [ ] Verify all thresholds against project-specific documentation before calling any measurement safe or unsafe.
 
+## Native v0.8 visualization checks
+
+- [x] Pure C# test vectors cover capacity history, user-entered standby SOC/Wh estimates, bounded chart samples and next-step recommendation rules.
+- [x] WinUI full and compatible fallback code compiles on a hosted Windows runner.
+- [x] Hosted Windows smoke tests instantiate both native workspaces, import synthetic sample data and construct the corresponding diagrams.
+- [x] [v0.8.0-beta.1](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.8.0-beta.1) is publicly downloadable with SHA-256 hashes.
+- [ ] Verify on a physical Windows laptop that all 5 diagrams render at different display scales and high contrast settings.
+- [ ] Validate chart output with independent real, authorized and anonymized Windows battery reports and supplier-neutral Log fixtures.
+- [ ] Check keyboard navigation, screen reader support and visibility of long issue text in narrow windows.
+- [ ] Confirm correct warning and documentation when SleepStudy is unsupported or powercfg requires permissions.
+
 ## Manual user acceptance (not yet confirmed)
 
 - [ ] Windows 11 x64: launch **the released binary** from the ZIP on a real laptop.
