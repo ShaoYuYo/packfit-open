@@ -189,5 +189,15 @@ public sealed partial class MainWindow
             _pack is null)
             throw new InvalidOperationException(
                 "Editing the outer dimensions failed to invalidate the old geometry.");
+
+        QuickLayoutSampleClick(this,new RoutedEventArgs());
+        var redoProblem=DimensionFirstLayout.Build(ReadQuickRequest());
+        ApplyGeometry(redoProblem,LayoutOptimizer.Optimize(redoProblem),synthetic:true);
+        QuickKeepoutUndoClick(this,new RoutedEventArgs());
+        if(_quickKeepouts.Count!=0 || QuickKeepoutList.Items.Count!=0 ||
+           _geometryResult is not null || GeometryMap.Children.Count!=0 ||
+           _quickLayoutSynthetic)
+            throw new InvalidOperationException(
+                "Removing a keepout failed to invalidate the candidate layout and clear its source state.");
     }
 }
