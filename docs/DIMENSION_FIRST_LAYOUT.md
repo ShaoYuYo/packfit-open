@@ -15,10 +15,11 @@ Open **Pack design → 不規則空間配置** in the native Windows app:
 1. Under **01 / 只要 L × W × H**, fill in the outer battery allocation's `長 L`, `寬 W`, `厚 H` (mm). **These are packaging limits, not proven free interior space.**
 2. Enter candidate **Cell A** dimensions (`L/W/H` in mm), nominal capacity (Ah) and cell mass (g). Optionally fill **all five fields** for **Cell B** to compare two different outlines. Both use the same entered nominal voltage, but *different cells are compared, never mixed together within one topology*.
 3. Set the required number of **series cells S**, the maximum parallel number **P**, nominal voltage per cell, target Wh and noncell weight assumption. PackFit evaluates `S×1P` through `S×MaxP` (no inference that all topologies are electrically suitable).
-4. Explicitly choose **side allowance per edge** (mm), **total reserved Z thickness** (mm) and **minimum cell-to-cell gap** (mm). These values are **project assumptions** and not manufacturer-verified clearances.
-5. Leave 90° rotation **unchecked** unless pouch-tab direction, connector exits and production constraints permit rotating the candidate outline.
-6. Select **用長寬高找配置方案** and inspect each geometry candidate, its nominal Wh, assumed mass, provisional Wh/kg and limited energy/mass Pareto flag.
-7. Export **Engineering Report** to record the exact placement coordinates, input basis, assumptions, and the outstanding engineering checklist.
+4. If a 2D sketch or dimensions identify screws, PCB, connector exit or other **no-cell** locations, mark them under **03 / 在 2D 俯視圖標記禁放區**. Drag an XY rectangle across the preview or use the keyboard-accessible **X / Y / Length / Width** inputs, then click **新增禁放區**. The origin is the upper left (X rightward, Y downward). Use **復原上一區** / **清除禁放區** to revise. The editor supports up to twelve explicitly entered rectangles, and the margin field expands their no-go boundaries. This is still only a 2D full-height exclusion model, not CAD or a Z-dependent partial obstruction.
+5. Explicitly choose **side allowance per edge** (mm), **total reserved Z thickness** (mm) and **minimum cell-to-cell gap** (mm). These values are **project assumptions** and not manufacturer-verified clearances.
+6. Leave 90° rotation **unchecked** unless pouch-tab direction, connector exits and production constraints permit rotating the candidate outline.
+7. Select **用長寬高找配置方案** and inspect each geometry candidate, its nominal Wh, assumed mass, provisional Wh/kg and limited energy/mass Pareto flag.
+8. Export **Engineering Report** to record the exact placement coordinates, input basis, assumptions, and the outstanding engineering checklist.
 
 The JSON and L-shaped zone editor remain available under **Advanced**, *only* when real irregular-space details and height-limited subregions are known.
 

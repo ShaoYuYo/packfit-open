@@ -14,7 +14,8 @@ const main=[
  read("desktop/PackFit.Engineering.Desktop/MainWindow.Insights.cs"),
  read("desktop/PackFit.Engineering.Desktop/MainWindow.Premium.cs"),
  read("desktop/PackFit.Engineering.Desktop/MainWindow.Layout.cs"),
- read("desktop/PackFit.Engineering.Desktop/MainWindow.DimensionFirst.cs")
+ read("desktop/PackFit.Engineering.Desktop/MainWindow.DimensionFirst.cs"),
+ read("desktop/PackFit.Engineering.Desktop/MainWindow.Keepouts.cs")
 ].join("\n");
 
 test("native WinUI events have C# handlers and every named control is unique",()=>{
@@ -218,4 +219,34 @@ test("dimension-first battery pack planning can start from an outer L/W/H withou
  assert.match(insight,/RunDimensionFirstSmokeTest\(\)/);
  assert.match(source,/進階模式：不規則 XY 區域、禁放區與 JSON/);
  assert.match(source,/QuickAllowRotation"[^>]*IsChecked="False"/);
+});
+
+test("the LWH native editor offers real mouse/touch and keyboard keepout input",()=>{
+ const ui=read("desktop/PackFit.Engineering.Desktop/MainWindow.Keepouts.cs");
+ const dimension=read("desktop/PackFit.Engineering.Desktop/MainWindow.DimensionFirst.cs");
+ const core=read("desktop/PackFit.Engineering.Core/DimensionFirstLayout.cs");
+ const checks=read("desktop/PackFit.Engineering.Checks/Program.cs");
+ for(const id of ["QuickKeepoutCanvas","QuickKeepoutStatus","QuickKeepoutList",
+    "QuickKeepoutX","QuickKeepoutY","QuickKeepoutWidth",
+    "QuickKeepoutHeight","QuickKeepoutMargin"])
+   assert.match(source,new RegExp('x:Name="'+id+'"'));
+ for(const handler of ["KeepoutPointerPressed","KeepoutPointerMoved",
+    "KeepoutPointerReleased","KeepoutPointerCanceled",
+    "KeepoutPointerCaptureLost","QuickKeepoutAddClick",
+    "QuickKeepoutUndoClick","QuickKeepoutClearClick"])
+   assert.match(ui,new RegExp("\\b"+handler+"\\s*\\("));
+ assert.match(source,/PointerPressed="KeepoutPointerPressed"/);
+ assert.match(source,/PointerCaptureLost="KeepoutPointerCaptureLost"/);
+ assert.match(ui,/QuickKeepoutCanvas\.CapturePointer\(e\.Pointer\)/);
+ assert.match(ui,/TryPointToKeepoutMm/);
+ assert.match(ui,/AddQuickKeepout\(new LayoutKeepout/);
+ assert.match(ui,/QuickKeepoutList\.Items\.Add/);
+ assert.match(ui,/QuickKeepoutLimit = 12/);
+ assert.match(dimension,/Keepouts:_quickKeepouts\.ToArray\(\)/);
+ assert.match(dimension,/KeepoutMarginMm:ReadNumber\(QuickKeepoutMargin\)/);
+ assert.match(dimension,/JsonSerializer\.Serialize\(_quickKeepouts\)/);
+ assert.match(dimension,/QuickKeepoutUndoClick\(this,new RoutedEventArgs\(\)\)/);
+ assert.match(checks,/A no-cell rectangle covering the entire outer envelope/);
+ assert.match(core,/Blocked area extends beyond the provided outer L\/W envelope/);
+ assert.match(core,/FULL-HEIGHT keepout rectangles/);
 });

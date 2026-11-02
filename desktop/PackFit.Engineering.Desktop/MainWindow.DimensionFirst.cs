@@ -30,7 +30,9 @@ public sealed partial class MainWindow
             QuickCellGap,QuickOverhead,QuickTargetWh
         ];
         return string.Join("\u001f",fields.Select(box=>box.Text))+
-            (QuickAllowRotation.IsChecked==true?"|rotate":"|fixed");
+            (QuickAllowRotation.IsChecked==true?"|rotate":"|fixed")+
+            "|margin:"+QuickKeepoutMargin.Text+
+            "|keepouts:"+JsonSerializer.Serialize(_quickKeepouts);
     }
 
     private void QuickLayoutSampleClick(object sender,RoutedEventArgs e)
@@ -60,8 +62,12 @@ public sealed partial class MainWindow
             QuickCellGap.Text="2";
             QuickOverhead.Text="35";
             QuickTargetWh.Text="50";
+            QuickKeepoutMargin.Text="1";
+            _quickKeepouts.Clear();
+            _quickKeepouts.Add(new LayoutKeepout(86,25,20,22));
         }
         finally {_quickLayoutFilling=false;}
+        RefreshQuickKeepoutPreview();
         _quickLayoutSynthetic=true;
         _quickLayoutFingerprint=CurrentQuickFingerprint();
         InvalidateGeometry(clearText:true);
@@ -83,8 +89,9 @@ public sealed partial class MainWindow
         _quickLayoutFingerprint=current;
         _quickLayoutSynthetic=false;
         InvalidateGeometry(clearText:true);
+        RefreshQuickKeepoutPreview();
         QuickLayoutStatus.Text =
-            "尺寸或條件已變更；先前的配置結果已清除。只知道外框尺寸時，內部干涉和極耳預留仍未知。";
+            "尺寸、避讓區或配置條件已變更；先前的配置結果已清除。只知道外框尺寸時，其餘內部干涉仍未知。";
     }
 
     private LayoutCellSpec ReadQuickCell(
@@ -117,7 +124,9 @@ public sealed partial class MainWindow
             ReadInteger(QuickSeries),ReadInteger(QuickParallel),
             ReadNumber(QuickEdge),ReadNumber(QuickZReserve),
             ReadNumber(QuickCellGap),ReadNumber(QuickOverhead),
-            ReadNumber(QuickTargetWh));
+            ReadNumber(QuickTargetWh),
+            Keepouts:_quickKeepouts.ToArray(),
+            KeepoutMarginMm:ReadNumber(QuickKeepoutMargin));
     }
 
     private void QuickLayoutOptionChanged(object sender,RoutedEventArgs e)
@@ -154,11 +163,17 @@ public sealed partial class MainWindow
         var problem=DimensionFirstLayout.Build(request);
         var result=LayoutOptimizer.Optimize(problem);
         ApplyGeometry(problem,result,synthetic:true);
+        if(_quickKeepouts.Count!=1 || QuickKeepoutList.Items.Count!=1 ||
+           problem.Keepouts.Count!=1 ||
+           QuickKeepoutCanvas.Children.Count<2)
+            throw new InvalidOperationException(
+                "Synthetic 2D keepout drawing, keyboard list or geometry handoff failed.");
         if(result.Options.Count<2 ||
            GeometryCandidateChoice.SelectedIndex!=0 ||
            GeometryMap.Children.Count==0 ||
            !HasSyntheticData ||
-           !CreateReport().Contains("OUTER PACK L/W/H ONLY",StringComparison.Ordinal))
+           !CreateReport().Contains("OUTER PACK L/W/H ONLY",StringComparison.Ordinal) ||
+           !CreateReport().Contains("user-marked 2D FULL-HEIGHT keepout",StringComparison.Ordinal))
             throw new InvalidOperationException(
                 "Dimension-first UI, candidate list, report assumptions or source labeling failed.");
 
@@ -174,5 +189,15 @@ public sealed partial class MainWindow
             _pack is null)
             throw new InvalidOperationException(
                 "Editing the outer dimensions failed to invalidate the old geometry.");
+
+        QuickLayoutSampleClick(this,new RoutedEventArgs());
+        var redoProblem=DimensionFirstLayout.Build(ReadQuickRequest());
+        ApplyGeometry(redoProblem,LayoutOptimizer.Optimize(redoProblem),synthetic:true);
+        QuickKeepoutUndoClick(this,new RoutedEventArgs());
+        if(_quickKeepouts.Count!=0 || QuickKeepoutList.Items.Count!=0 ||
+           _geometryResult is not null || GeometryMap.Children.Count!=0 ||
+           _quickLayoutSynthetic)
+            throw new InvalidOperationException(
+                "Removing a keepout failed to invalidate the candidate layout and clear its source state.");
     }
 }
