@@ -190,9 +190,18 @@ public sealed partial class MainWindow
             QuickKeepoutStatus.Text="禁放區至少需要 1 × 1 mm。請拖曳更大的矩形，或用下方座標新增。";
             return;
         }
-        AddQuickKeepout(new LayoutKeepout(
-            Math.Round(x,2),Math.Round(y,2),
-            Math.Round(w,2),Math.Round(h,2)));
+        try
+        {
+            // Keep exact bounded pointer coordinates; independent rounding can
+            // otherwise push a rectangle just outside an envelope edge.
+            AddQuickKeepout(new LayoutKeepout(x,y,w,h));
+        }
+        catch(Exception ex)
+        {
+            RefreshQuickKeepoutPreview();
+            QuickKeepoutStatus.Text="無法完成拖曳禁放區："+ex.Message;
+            Notice("禁放區拖曳未套用："+ex.Message,true);
+        }
         e.Handled=true;
     }
 
