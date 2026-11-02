@@ -1,0 +1,9 @@
+# Maintainer stewardship for sensitive calculation, release and security changes.
+# CODEOWNERS routes review requests; without a protected branch it does NOT enforce review.
+* @ShaoYuYo
+
+/desktop/PackFit.Engineering.Core/ @ShaoYuYo
+/src/ @ShaoYuYo
+/.github/workflows/ @ShaoYuYo
+/SECURITY.md @ShaoYuYo
+/.github/CODEOWNERS @ShaoYuYo
