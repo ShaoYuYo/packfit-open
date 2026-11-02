@@ -76,6 +76,8 @@ jobs:
           compact=[o for o in opts if o["CellId"]=="SYNTH-COMPACT-42x55" and o["Topology"]["Series"]==4][0]
           assert abs(long["NominalEnergyWh"]-57.75)<1e-6,long
           assert long["MeetsEnergyTarget"] is True
+          assert long["ParetoOnEnergyMass"] is True
+          assert any(o["ParetoOnEnergyMass"] for o in opts)
           assert compact["MeetsEnergyTarget"] is False
           assert len(long["Placements"])==3
           assert not any(o["CellId"]=="SYNTH-LONG-65x55" and o["Topology"]["Series"]==4 for o in opts)
