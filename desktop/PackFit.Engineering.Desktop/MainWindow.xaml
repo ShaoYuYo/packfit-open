@@ -212,6 +212,31 @@
      <TextBox x:Name="QuickOverhead" Grid.Column="0" Grid.Row="2" Header="非電芯估計 g" PlaceholderText="例如 35" TextChanged="QuickLayoutChanged"/>
      <TextBox x:Name="QuickTargetWh" Grid.Column="1" Grid.Row="2" Header="目標 Wh" PlaceholderText="例如 50" TextChanged="QuickLayoutChanged"/>
     </Grid>
+    <Border BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" Padding="14" CornerRadius="12">
+     <StackPanel Spacing="10">
+      <TextBlock Text="03 / 在 2D 俯視圖標記禁放區（選填）" FontWeight="SemiBold" FontSize="16"/>
+      <TextBlock Text="只有長、寬、高時，可以直接在下方拖曳矩形，標記螺絲、接頭或其他需要避讓的 XY 區域；也可以用座標欄位精確新增。不提供任何位置時，並不代表內部完全淨空。" TextWrapping="Wrap" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+      <ScrollViewer HorizontalScrollBarVisibility="Auto" HorizontalScrollMode="Auto" VerticalScrollBarVisibility="Disabled">
+       <Canvas x:Name="QuickKeepoutCanvas" Width="700" Height="285" Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}" PointerPressed="KeepoutPointerPressed" PointerMoved="KeepoutPointerMoved" PointerReleased="KeepoutPointerReleased" PointerCanceled="KeepoutPointerCanceled" PointerCaptureLost="KeepoutPointerCaptureLost" AutomationProperties.Name="電池外框俯視圖，滑鼠或觸控拖曳以畫禁放區，亦可使用下方座標輸入框"/>
+      </ScrollViewer>
+      <TextBlock x:Name="QuickKeepoutStatus" Text="X 由左至右、Y 由上至下，單位 mm。若未輸入有效外框尺寸，請先填 L 與 W。" TextWrapping="Wrap" FontSize="12" IsTextSelectionEnabled="True"/>
+      <TextBlock Text="使用座標新增禁放區（鍵盤操作，不需拖曳）" FontWeight="SemiBold" FontSize="12"/>
+      <Grid ColumnSpacing="8" RowSpacing="8">
+       <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+       <TextBox x:Name="QuickKeepoutX" Grid.Column="0" Header="X 起點 mm" PlaceholderText="0"/>
+       <TextBox x:Name="QuickKeepoutY" Grid.Column="1" Header="Y 起點 mm" PlaceholderText="0"/>
+       <TextBox x:Name="QuickKeepoutWidth" Grid.Column="2" Header="長 mm" PlaceholderText="20"/>
+       <TextBox x:Name="QuickKeepoutHeight" Grid.Column="3" Header="寬 mm" PlaceholderText="15"/>
+      </Grid>
+      <StackPanel Orientation="Horizontal" Spacing="9">
+       <Button Content="新增禁放區" Click="QuickKeepoutAddClick" MinHeight="38"/>
+       <Button Content="復原上一區" Click="QuickKeepoutUndoClick" MinHeight="38"/>
+       <Button Content="清除禁放區" Click="QuickKeepoutClearClick" MinHeight="38"/>
+      </StackPanel>
+      <ListView x:Name="QuickKeepoutList" MinHeight="35" MaxHeight="140" SelectionMode="None" AutomationProperties.Name="已標記的禁放區座標清單"/>
+      <TextBlock Text="禁放區會在搜尋時視為整個可用厚度都不可放置電芯；若某個障礙只占部分 Z 高度，仍需機構確認。此畫布不是 CAD，也沒有推斷未知內部零件。" TextWrapping="Wrap" FontSize="11" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+     </StackPanel>
+    </Border>
     <TextBlock x:Name="QuickLayoutStatus" Text="尚未提供外框尺寸及候選 Cell 規格。系統外框 L/W/H ≠ 真正無干涉的電池內部可用體積。" TextWrapping="Wrap" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
     <Button x:Name="QuickLayoutRunButton" Content="用長寬高找配置方案" Click="QuickLayoutRunClick" Style="{StaticResource AccentButtonStyle}" MinHeight="45" HorizontalAlignment="Left"/>
    </StackPanel>
