@@ -41,6 +41,10 @@ const labels={
   full:["FULL CHARGE CAPACITY","完整充電容量","完全充電容量","完全充电容量"],
   cycles:["CYCLE COUNT","循環次數","循环次数"]
 };
+const INSTALLED_TITLES=new Set([
+  "INSTALLED BATTERIES","已安裝電池","已安裝的電池","已安装的电池","安装的电池"
+]);
+const MAX_REPORT_CHARS=2_500_000,MAX_INSTALLED_BATTERIES=12;
 function strip(html){
   return html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi," ")
     .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi," ")
@@ -48,26 +52,79 @@ function strip(html){
     .replace(/&#(\d+);/g,(_,d)=>String.fromCodePoint(Math.min(Number(d),0x10ffff)))
     .replace(/\s+/g," ").trim();
 }
-export function parseWindowsReport(html){
-  if(typeof html!=="string"||html.length>2500000)throw new Error("Invalid size or format");
-  const rows=[...html.matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr\s*>/gi)].map(r=>
-    [...r[1].matchAll(/<t[dh]\b[^>]*>([\s\S]*?)<\/t[dh]\s*>/gi)].map(c=>strip(c[1]))).filter(c=>c.length>=2);
-  const found={};
-  for(const row of rows){
-    const label=row[0].replace(/[:：]$/,"").toUpperCase().trim();
-    for(const [key,variants] of Object.entries(labels))
-      if(found[key]===undefined&&variants.includes(label))found[key]=row[1];
+function capacityWh(raw){
+  const match=String(raw??"").match(/([\d][\d\s,.]*)\s*(mWh|Wh)\b/i);
+  if(!match)return null;
+  const value=Number(match[1].replace(/[\s,]/g,""));
+  if(!Number.isFinite(value)||value<=0)return null;
+  return match[2].toLowerCase()==="mwh"?value/1000:value;
+}
+function installedSection(html){
+  const headings=[...html.matchAll(/<h[1-6]\b[^>]*>([\s\S]*?)<\/h[1-6]\s*>/gi)];
+  for(let index=0;index<headings.length;index++){
+    const heading=headings[index],label=strip(heading[1]).toUpperCase();
+    if(!INSTALLED_TITLES.has(label))continue;
+    const start=heading.index+heading[0].length;
+    return html.slice(start,headings[index+1]?.index??html.length);
   }
-  const energy=(raw)=>{
-    const match=String(raw||"").match(/([\d][\d\s,.]*)\s*(mWh|Wh)\b/i);
-    if(!match)return null;
-    const n=Number(match[1].replace(/[\s,]/g,""));
-    if(!Number.isFinite(n)||n<=0)return null;
-    return match[2].toLowerCase()==="mwh"?n/1000:n;
-  };
-  const design=energy(found.design),full=energy(found.full);
-  if(design===null||full===null)throw new Error("Missing battery capacities");
-  const capacity=calculateRetention(design,full);
-  const cyclesMatch=(found.cycles||"").match(/\d[\d,]*/);
-  return {...capacity,cycles:cyclesMatch?Number(cyclesMatch[0].replace(/,/g,"")):null};
+  if(headings.length)throw new Error("Installed batteries section not found");
+  // Legacy minimal single-table fixtures remain supported.
+  const first=html.match(/<table\b[^>]*>[\s\S]*?<\/table\s*>/i);
+  return first?first[0]:html;
+}
+/**
+ * Parses physically distinct battery records, without executing or retaining HTML.
+ * Rejects ambiguous multi-column records rather than guessing how values align.
+ */
+export function parseWindowsReportRecords(html){
+  if(typeof html!=="string"||!html.trim()||html.length>MAX_REPORT_CHARS)
+    throw new Error("Invalid size or format");
+  const section=installedSection(html);
+  const tables=[...section.matchAll(/<table\b[^>]*>([\s\S]*?)<\/table\s*>/gi)];
+  if(!tables.length)throw new Error("Installed battery table missing");
+  const results=[];
+  function parseTable(table){
+    let current={design:null,full:null,cycles:null},started=false;
+    function complete(){
+      if(!started)return;
+      if(current.design===null||current.full===null)
+        throw new Error("Incomplete installed battery capacity");
+      if(results.length>=MAX_INSTALLED_BATTERIES)throw new Error("Too many battery records");
+      const calculated=calculateRetention(current.design,current.full);
+      results.push({...calculated,cycles:current.cycles});
+      current={design:null,full:null,cycles:null};started=false;
+    }
+    const rows=[...table.matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr\s*>/gi)];
+    for(const row of rows){
+      const cells=[...row[1].matchAll(/<t[dh]\b[^>]*>([\s\S]*?)<\/t[dh]\s*>/gi)]
+        .map(match=>strip(match[1]));
+      if(cells.length<2)continue;
+      const key=cells[0].replace(/[:：]$/,"").toUpperCase().trim();
+      if(["NAME","名稱","名称"].includes(key)){
+        if(started)complete();
+        continue;
+      }
+      const kind=Object.keys(labels).find(x=>labels[x].includes(key));
+      if(!kind)continue;
+      if(cells.length!==2)throw new Error("Ambiguous multi-column battery report");
+      if(kind==="cycles"){
+        const matched=cells[1].match(/\d[\d,]*/);
+        current.cycles=matched?Number(matched[0].replace(/,/g,"")):null;
+        continue;
+      }
+      if(current[kind]!==null)complete();
+      current[kind]=capacityWh(cells[1]);
+      if(current[kind]===null)throw new Error("Unsupported battery capacity units");
+      started=true;
+    }
+    complete();
+  }
+  tables.forEach(match=>parseTable(match[1]));
+  if(!results.length)throw new Error("Missing battery capacities");
+  return results;
+}
+export function parseWindowsReport(html){
+  const records=parseWindowsReportRecords(html);
+  if(records.length!==1)throw new Error("Multiple batteries; select a battery separately");
+  return records[0];
 }
