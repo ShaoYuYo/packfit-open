@@ -229,7 +229,7 @@ var oldLog=TelemetryAnalyzer.Analyze(compareBefore,compareLimits);
 var newLog=TelemetryAnalyzer.Analyze(compareAfter,compareLimits);
 var comparison=TelemetryComparison.Compare(
     new TelemetryBatchItem("before.csv",oldLog),
-    new TelemetryBatchItem("after.csv",newLog));
+    new TelemetryBatchItem("after.csv",newLog),compareLimits);
 var tempDiff=comparison.Findings.Single(x=>x.Code=="TEMP_HIGH");
 var voltageDiff=comparison.Findings.Single(x=>x.Code=="VOLTAGE_LOW");
 Assert(tempDiff.BaselineCount==1 && tempDiff.CandidateCount==0 &&
@@ -237,8 +237,10 @@ Assert(tempDiff.BaselineCount==1 && tempDiff.CandidateCount==0 &&
     "same-limit A/B comparison reports lower temperature flags per thousand rows");
 Assert(voltageDiff.CountDelta==-1 && comparison.ToMarkdown().Contains("REVIEW ONLY"),
     "comparison retains exact voltage delta without an automatic Pass/Fail claim");
-Assert(comparison.ToMarkdown().Contains("| TEMP_HIGH | 1 | 0 | -1 |"),
-    "Markdown engineering handoff includes explicit candidate-minus-baseline counts");
+Assert(comparison.ToMarkdown().Contains("| TEMP_HIGH | 1 | 0 | -1 |") &&
+    comparison.ToMarkdown().Contains("Recorded screening parameters") &&
+    comparison.ToMarkdown().Contains("min 11 V"),
+    "Markdown handoff includes exact threshold assumptions and candidate-minus-baseline counts");
 
 var divergentTimeLog=TelemetryAnalyzer.Analyze("Timestamp,Voltage_V\n" +
     "2026-11-01T00:00:00Z,11.5\n" +
