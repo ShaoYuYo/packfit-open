@@ -145,3 +145,23 @@ test("premium workbench couples visible status with real source provenance",()=>
   assert.match(main,/UpdateSessionStatus\(\)/);
   assert.match(main,/WorkspaceScroll.ChangeView\(null, 0, null, true\)/);
 });
+
+test("native engineering A/B compare is actionable and reports source limitations",()=>{
+ const core=read("desktop/PackFit.Engineering.Core/TelemetryComparison.cs");
+ const batch=read("desktop/PackFit.Engineering.Desktop/MainWindow.Batch.cs");
+ const premium=read("desktop/PackFit.Engineering.Desktop/MainWindow.Premium.cs");
+ const insights=read("desktop/PackFit.Engineering.Desktop/MainWindow.Insights.cs");
+ for(const id of ["BaselineChoice","CandidateChoice","CompareFilesButton",
+   "ComparisonResult","ComparisonFlags"])
+   assert.match(source,new RegExp('x:Name="'+id+'"'));
+ for(const handler of ["CompareBatchClick","ComparisonSelectionChanged"])
+   assert.match(batch,new RegExp('\\b'+handler+'\\s*\\('));
+ assert.match(batch,/TelemetryComparison\.Compare/);
+ assert.match(batch,/_comparison\.ToMarkdown\(\)/);
+ assert.match(batch,/RunComparisonSmokeTest/);
+ assert.match(premium,/ResetComparison\(\)/);
+ assert.match(insights,/RunComparisonSmokeTest\(\)/);
+ assert.match(core,/FindingCodeCounts/);
+ assert.match(core,/per 1,000 sample rows/);
+ assert.match(core,/root-cause/);
+});
