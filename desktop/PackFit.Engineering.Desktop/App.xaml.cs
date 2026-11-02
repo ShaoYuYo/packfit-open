@@ -33,6 +33,24 @@ public partial class App : Application
     protected override void OnLaunched(LaunchActivatedEventArgs args)
     {
         StartupDiagnostics.Record("OnLaunched");
+        // Automated native XAML-load check: unlike a process-liveness test, this
+        // fails if MainWindow falls back to RecoveryWindow. No user data is read.
+        if (Environment.GetCommandLineArgs().Any(a =>
+            a.Equals("--selftest-xaml", StringComparison.OrdinalIgnoreCase)))
+        {
+            try
+            {
+                _mainWindow = new MainWindow();
+                StartupDiagnostics.Record("XAML self-test: MAIN_WINDOW_OK");
+                Environment.Exit(0);
+            }
+            catch (Exception ex)
+            {
+                StartupDiagnostics.Record("XAML self-test: MAIN_WINDOW_FAILED", ex);
+                Environment.Exit(23);
+            }
+            return;
+        }
         try
         {
             _mainWindow = new MainWindow();
