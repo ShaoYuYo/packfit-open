@@ -91,7 +91,11 @@ public static class EngineeringTriage
             steps.Add($"Capacity retention {battery.RetentionPercent:0.0}%: compare measurement date, cycle count and workload; retention alone does not diagnose safety.");
         if(telemetry is not null)
         {
-            var flags=telemetry.Findings.Select(f=>f.Code).ToHashSet();
+            // The UI preview keeps only 1,000 findings. Recommendations must
+            // use counts gathered across all rows, including later anomalies.
+            var flags=telemetry.FindingCodeCounts.Count>0
+                ? telemetry.FindingCodeCounts.Keys.ToHashSet(StringComparer.Ordinal)
+                : telemetry.Findings.Select(f=>f.Code).ToHashSet(StringComparer.Ordinal);
             if(flags.Contains("TEMP_HIGH")||flags.Contains("TEMP_LOW"))
                 steps.Add("Temperature flags: verify probe placement, ambient conditions, sample timestamps and project-specific thermal specification.");
             if(flags.Contains("VOLTAGE_LOW")||flags.Contains("VOLTAGE_HIGH"))
