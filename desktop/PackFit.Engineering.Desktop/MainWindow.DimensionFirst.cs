@@ -133,6 +133,7 @@ public sealed partial class MainWindow
             {
                 WriteIndented=true
             });
+            _lastGeometryInputText=GeometryJsonBox.Text;
             _layoutSynthetic=_quickLayoutSynthetic;
             QuickLayoutStatus.Text =
                 "已建立外框包絡預篩條件（非 CAD）：固定 S、嘗試 1 到指定最高 P。結果仍需確認內部 Keepout。";
