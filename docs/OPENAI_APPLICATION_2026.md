@@ -46,7 +46,7 @@ This is where the maintainer's personal motivation appears without overclaiming 
 - The public first beta contains signed-off GitHub Actions build artifacts, **not code-signed binaries**; Windows smoke testing is still outstanding.
 - New parser tests cover separate installed batteries, capacity-history scoping and localized headings. Issue [#2](https://github.com/ShaoYuYo/packfit-open/issues/2) tracks unsupported variants and the remaining verification.
 - A public [15-minute trial](https://github.com/ShaoYuYo/packfit-open/blob/main/docs/TRY_PACKFIT.md) and feedback template help collect genuine reproducible reports. No independent adoption is claimed.
-- Do not claim the second beta has been published until its release workflow is green and the release is visible.
+- The second beta [v0.7.0-beta.2](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.2) is now published with Windows artifacts, verified by its [gated release workflow](https://github.com/ShaoYuYo/packfit-open/actions/workflows/publish-beta2.yml). This remains **automated build evidence**, not actual field validation.
 
 ## Factual context and links
 
