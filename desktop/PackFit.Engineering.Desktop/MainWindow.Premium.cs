@@ -160,6 +160,7 @@ public sealed partial class MainWindow
         _batterySynthetic = _telemetrySynthetic = _validationSynthetic = _packSynthetic = false;
         _batches.Clear();
         _batchImportErrors.Clear();
+        ResetComparison();
         OverviewBattery.Text = "尚未分析";
         OverviewTelemetry.Text = "尚未匯入";
         OverviewValidation.Text = "尚未匯入";
