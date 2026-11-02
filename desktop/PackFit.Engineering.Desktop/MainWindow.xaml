@@ -54,7 +54,7 @@
  <StackPanel Spacing="13">
   <TextBlock Text="我今天遇到什麼問題？" Style="{StaticResource PfSectionHeading}" />
   <TextBlock Text="選擇症狀，系統會開啟有理由、有證據需求的排查清單。沒有資料時先試用合成範例。" Style="{StaticResource PfLeadText}"/>
-  <StackPanel Orientation="Horizontal" Spacing="9">
+  <StackPanel x:Name="SymptomActions" Orientation="Horizontal" Spacing="9">
     <Button Tag="sleep-drain" Content="待機掉電" Click="GoSymptomClick" />
     <Button Tag="slow-charge" Content="充電慢" Click="GoSymptomClick"/>
     <Button Tag="shutdown" Content="突然關機" Click="GoSymptomClick"/>
@@ -75,7 +75,7 @@
 <TextBlock Text="01 / WINDOWS DIAGNOSTICS" Style="{StaticResource PfEyebrowText}" />
 <TextBlock Text="電池健康度" Style="{StaticResource PfPageHeading}" />
 <TextBlock Text="一鍵執行 Windows powercfg 電池報告，或者匯入既有的 battery-report.html。" Style="{StaticResource PfLeadText}" />
-</StackPanel><Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="14" Padding="22"><StackPanel Spacing="13"><TextBlock Text="讀取本機電池" Style="{StaticResource PfSectionHeading}" /><StackPanel Orientation="Horizontal" Spacing="12"><Button x:Name="PowerCfgButton" Content="在本機建立報告" Click="GenerateBatteryClick" Style="{StaticResource AccentButtonStyle}" MinHeight="42" Padding="17,10" /><Button x:Name="BatteryFileButton" Content="匯入 HTML" Click="ImportBatteryClick"  MinHeight="42" Padding="17,10" /></StackPanel>
+</StackPanel><Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="14" Padding="22"><StackPanel Spacing="13"><TextBlock Text="讀取本機電池" Style="{StaticResource PfSectionHeading}" /><StackPanel x:Name="BatteryActions" Orientation="Horizontal" Spacing="12"><Button x:Name="PowerCfgButton" Content="在本機建立報告" Click="GenerateBatteryClick" Style="{StaticResource AccentButtonStyle}" MinHeight="42" Padding="17,10" /><Button x:Name="BatteryFileButton" Content="匯入 HTML" Click="ImportBatteryClick"  MinHeight="42" Padding="17,10" /></StackPanel>
 <TextBlock Text="powercfg 是 Windows 內建工具；程式只解析容量欄位，不會將報告上傳。" FontSize="12" TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
 <TextBlock x:Name="BatteryResult" Text="尚未讀取。請先執行報告或匯入 HTML。" FontSize="17" TextWrapping="Wrap" FontWeight="SemiBold"/><StackPanel x:Name="BatteryVisualCanvas" Spacing="14"/></StackPanel></Border></StackPanel>
                 <StackPanel x:Name="TelemetryPanel" Spacing="20" Visibility="Collapsed"><StackPanel Spacing="8" Margin="0,0,0,12">
@@ -92,7 +92,7 @@
 <TextBox x:Name="MaxGapBox" Header="Sample gap (s)" Text="120" MinWidth="115" Margin="0,0,10,12" />
 </StackPanel>
 <CheckBox x:Name="DischargeSignCheck" Content="正電流表示放電（如量測設備使用負值，取消勾選）" IsChecked="True" />
-<StackPanel Orientation="Horizontal" Spacing="10">
+<StackPanel x:Name="TelemetryFileActions" Orientation="Horizontal" Spacing="10">
   <Button x:Name="TelemetryImportButton" Content="分析 CSV / TSV" Click="ImportTelemetryClick" Style="{StaticResource AccentButtonStyle}" MinHeight="42" Padding="17,10" />
   <Button x:Name="TelemetryBatchButton" Content="批次匯入 CSV / TSV" Click="ImportTelemetryBatchClick" MinHeight="42" Padding="17,10"/>
   <Button Content="取得 Log 範例" Click="SaveTelemetryExampleClick" MinHeight="42" Padding="17,10"/>
@@ -110,7 +110,7 @@
 <TextBlock Text="測試驗證矩陣" Style="{StaticResource PfPageHeading}" />
 <TextBlock Text="讀入測試標準和量測結果，快速歸類 PASS、FAIL、NOT RUN，避免每次手動整理表格。" Style="{StaticResource PfLeadText}" />
 </StackPanel><Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="14" Padding="22"><StackPanel Spacing="13"><TextBlock Text="CSV 驗證矩陣" Style="{StaticResource PfSectionHeading}" /><TextBlock Text="輸入欄位：TestID, Category, Metric, Measured, Min, Max, Unit, Owner, Notes。Min / Max 至少填一個；未量測的項目會標為 NOT RUN。" TextWrapping="Wrap" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-<StackPanel Orientation="Horizontal" Spacing="10">
+<StackPanel x:Name="ValidationFileActions" Orientation="Horizontal" Spacing="10">
 <Button x:Name="ValidationImportButton" Content="匯入驗證矩陣 CSV" Click="ImportValidationClick" Style="{StaticResource AccentButtonStyle}" MinHeight="42" Padding="17,10" />
 <Button Content="取得測試矩陣範例" Click="SaveValidationExampleClick" MinHeight="42" Padding="17,10"/>
 </StackPanel>
@@ -186,7 +186,7 @@
   <StackPanel Spacing="12">
    <TextBlock Text="2 · 建議的 Windows 診斷流程" Style="{StaticResource PfSectionHeading}"/>
    <StackPanel x:Name="SleepFlowCanvas" Spacing="9"/>
-   <StackPanel Orientation="Horizontal" Spacing="10">
+   <StackPanel x:Name="SleepToolActions" Orientation="Horizontal" Spacing="10">
      <Button Content="檢查可用睡眠狀態 /a" Tag="sleep" Click="RunSleepToolClick"/>
      <Button Content="檢查電力阻擋 /requests" Tag="requests" Click="RunSleepToolClick"/>
      <Button Content="檢查上次喚醒 /lastwake" Tag="wake" Click="RunSleepToolClick"/>
