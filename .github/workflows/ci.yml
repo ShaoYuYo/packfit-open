@@ -5,6 +5,13 @@ on:
   pull_request:
 permissions:
   contents: read
+
+# Cancel superseded pull-request checks; never cancel trusted main-branch,
+# scheduled, or manual jobs. This reduces wasted hosted Windows CI time.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   test:
     runs-on: ubuntu-latest
