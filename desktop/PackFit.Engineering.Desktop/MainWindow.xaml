@@ -217,8 +217,9 @@
       <TextBlock Text="03 / 在 2D 俯視圖標記禁放區（選填）" FontWeight="SemiBold" FontSize="16"/>
       <TextBlock Text="只有長、寬、高時，可以直接在下方拖曳矩形，標記螺絲、接頭或其他需要避讓的 XY 區域；也可以用座標欄位精確新增。不提供任何位置時，並不代表內部完全淨空。" TextWrapping="Wrap" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
       <ScrollViewer HorizontalScrollBarVisibility="Auto" HorizontalScrollMode="Auto" VerticalScrollBarVisibility="Disabled">
-       <Canvas x:Name="QuickKeepoutCanvas" Width="700" Height="285" Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}" PointerPressed="KeepoutPointerPressed" PointerMoved="KeepoutPointerMoved" PointerReleased="KeepoutPointerReleased" PointerCanceled="KeepoutPointerCanceled" PointerCaptureLost="KeepoutPointerCaptureLost" AutomationProperties.Name="電池外框俯視圖，滑鼠或觸控拖曳以畫禁放區，亦可使用下方座標輸入框"/>
+       <Canvas x:Name="QuickKeepoutCanvas" Width="700" Height="285" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" PointerPressed="KeepoutPointerPressed" PointerMoved="KeepoutPointerMoved" PointerReleased="KeepoutPointerReleased" PointerCanceled="KeepoutPointerCanceled" PointerCaptureLost="KeepoutPointerCaptureLost" AutomationProperties.Name="電池外框俯視圖，滑鼠或觸控拖曳以畫禁放區，亦可使用下方座標輸入框"/>
       </ScrollViewer>
+      <TextBox x:Name="QuickKeepoutMargin" Header="禁放區周圍額外避讓（mm）" Text="1" TextChanged="QuickLayoutChanged" Width="240" HorizontalAlignment="Left"/>
       <TextBlock x:Name="QuickKeepoutStatus" Text="X 由左至右、Y 由上至下，單位 mm。若未輸入有效外框尺寸，請先填 L 與 W。" TextWrapping="Wrap" FontSize="12" IsTextSelectionEnabled="True"/>
       <TextBlock Text="使用座標新增禁放區（鍵盤操作，不需拖曳）" FontWeight="SemiBold" FontSize="12"/>
       <Grid ColumnSpacing="8" RowSpacing="8">
