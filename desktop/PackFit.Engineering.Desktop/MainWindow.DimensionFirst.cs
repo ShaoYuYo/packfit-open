@@ -13,6 +13,25 @@ public sealed partial class MainWindow
 {
     private bool _quickLayoutFilling;
     private bool _quickLayoutSynthetic;
+    private string? _quickLayoutFingerprint;
+
+    // WinUI can deliver TextChanged on a later dispatcher turn. A value
+    // fingerprint prevents delayed notifications from sample autofill
+    // invalidating the just-created geometry.
+    private string CurrentQuickFingerprint()
+    {
+        TextBox[] fields=[
+            QuickPackLength,QuickPackWidth,QuickPackHeight,
+            QuickCellALength,QuickCellAWidth,QuickCellAHeight,
+            QuickCellACapacity,QuickCellAMass,
+            QuickCellBLength,QuickCellBWidth,QuickCellBHeight,
+            QuickCellBCapacity,QuickCellBMass,
+            QuickSeries,QuickParallel,QuickNominalV,QuickEdge,QuickZReserve,
+            QuickCellGap,QuickOverhead,QuickTargetWh
+        ];
+        return string.Join("\u001f",fields.Select(box=>box.Text))+
+            (QuickAllowRotation.IsChecked==true?"|rotate":"|fixed");
+    }
 
     private void QuickLayoutSampleClick(object sender,RoutedEventArgs e)
     {
@@ -44,6 +63,7 @@ public sealed partial class MainWindow
         }
         finally {_quickLayoutFilling=false;}
         _quickLayoutSynthetic=true;
+        _quickLayoutFingerprint=CurrentQuickFingerprint();
         InvalidateGeometry(clearText:true);
         QuickLayoutStatus.Text =
             "完全合成示例已填入。這些數字不是任何量產產品；按「用長寬高找配置方案」可比較兩種虛構電芯。";
@@ -51,9 +71,16 @@ public sealed partial class MainWindow
     }
 
     private void QuickLayoutChanged(object sender,TextChangedEventArgs e)
+        => InvalidateQuickLayoutWhenInputsChange();
+
+    private void InvalidateQuickLayoutWhenInputsChange()
     {
         if (_quickLayoutFilling || GeometryJsonBox is null || QuickLayoutStatus is null)
             return;
+        string current=CurrentQuickFingerprint();
+        if (string.Equals(_quickLayoutFingerprint,current,StringComparison.Ordinal))
+            return;
+        _quickLayoutFingerprint=current;
         _quickLayoutSynthetic=false;
         InvalidateGeometry(clearText:true);
         QuickLayoutStatus.Text =
@@ -94,14 +121,7 @@ public sealed partial class MainWindow
     }
 
     private void QuickLayoutOptionChanged(object sender,RoutedEventArgs e)
-    {
-        if(_quickLayoutFilling || GeometryJsonBox is null ||
-           QuickLayoutStatus is null) return;
-        _quickLayoutSynthetic=false;
-        InvalidateGeometry(clearText:true);
-        QuickLayoutStatus.Text =
-            "已修改旋轉限制。請重新執行搜尋，並自行確認實際極耳方向允許旋轉。";
-    }
+        => InvalidateQuickLayoutWhenInputsChange();
 
     private void QuickLayoutRunClick(object sender,RoutedEventArgs e)
     {
@@ -144,6 +164,9 @@ public sealed partial class MainWindow
         // Preserve the source history of earlier synthetic data in normal smoke,
         // but editing a quick field must invalidate this geometry immediately.
         QuickPackWidth.Text="117";
+        // Exercise the same invalidation used by the actual TextChanged handler;
+        // programmatically assigned Text need not dispatch its event synchronously.
+        InvalidateQuickLayoutWhenInputsChange();
         if(_geometryResult is not null || GeometryMap.Children.Count!=0 ||
            _quickLayoutSynthetic || HasSyntheticData &&
             _batteryRecords.Count==0 && _telemetry is null && _matrix is null &&
