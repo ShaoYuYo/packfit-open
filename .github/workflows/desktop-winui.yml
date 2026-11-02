@@ -45,6 +45,25 @@ jobs:
             throw "Expected native WinUI executable was not produced"
           }
 
+      - name: Assert real WinUI MainWindow XAML loads (not recovery window)
+        shell: pwsh
+        run: |
+          $exe = (Resolve-Path "dist/PackFit-Engineering-WinUI/PackFit.Engineering.exe").Path
+          $folder = Split-Path $exe -Parent
+          $proc = Start-Process -FilePath $exe -WorkingDirectory $folder -ArgumentList '--selftest-xaml' -PassThru
+          if (!$proc.WaitForExit(20000)) {
+            Stop-Process -Id $proc.Id -Force -ErrorAction SilentlyContinue
+            throw "Native XAML self-test timed out"
+          }
+          $log = Join-Path $env:LOCALAPPDATA "PackFitOpen/Logs/startup.log"
+          if (Test-Path $log) { Get-Content $log -Tail 36 }
+          if ($proc.ExitCode -ne 0) {
+            throw "MainWindow failed native XAML load, exit code $($proc.ExitCode) — CI must not accept RecoveryWindow"
+          }
+          if (!(Test-Path $log) -or !(Select-String -Path $log -Pattern 'XAML self-test: MAIN_WINDOW_OK' -Quiet)) {
+            throw "Expected MainWindow XAML success marker was not produced"
+          }
+
       - name: Package complete desktop application
         shell: pwsh
         run: |
