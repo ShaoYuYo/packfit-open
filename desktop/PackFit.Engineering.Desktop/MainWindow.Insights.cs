@@ -89,7 +89,7 @@ public sealed partial class MainWindow
             return;
         bool basic=string.Equals(mode.Tag?.ToString(),"basic",StringComparison.Ordinal);
         var advanced=new HashSet<string>(StringComparer.Ordinal)
-            {"telemetry","validation","pack","report","resources"};
+            {"telemetry","validation","pack","report"};
         foreach (var entry in Navigation.MenuItems)
         {
             if (entry is NavigationViewItem item)
