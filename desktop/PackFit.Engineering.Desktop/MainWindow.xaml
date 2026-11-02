@@ -198,6 +198,7 @@
      <TextBox x:Name="QuickCellBMass" Grid.Column="1" Grid.Row="1" Header="質量 g" TextChanged="QuickLayoutChanged"/>
      <TextBlock Grid.Column="2" Grid.Row="1" Text="不同尺寸先比較幾何可放入性與 Wh；不能假設兩款不同電芯可混接。" TextWrapping="Wrap" FontSize="11" VerticalAlignment="Center" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
     </Grid>
+    <CheckBox x:Name="QuickAllowRotation" Content="允許電芯 90° 旋轉（僅在極耳、出線及製程允許時勾選）" IsChecked="False" Checked="QuickLayoutOptionChanged" Unchecked="QuickLayoutOptionChanged" AutomationProperties.Name="允許電芯在 XY 平面旋轉九十度"/>
     <TextBlock Text="02 / 拓樸、保留空間與名目目標" FontWeight="SemiBold"/>
     <Grid ColumnSpacing="9" RowSpacing="8">
      <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
