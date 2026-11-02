@@ -152,7 +152,7 @@ public static partial class BatteryReportParser
         return match.Groups[2].Value.Equals("mWh", StringComparison.OrdinalIgnoreCase) ? n / 1000 : n;
     }
 
-    [GeneratedRegex(@"(?is)<h[1-6]\\b[^>]*>(.*?)</h[1-6]\\s*>", RegexOptions.CultureInvariant)]
+    [GeneratedRegex(@"(?is)<h[1-6]\b[^>]*>(.*?)</h[1-6]\s*>", RegexOptions.CultureInvariant)]
     private static partial Regex HeadingRegex();
     [GeneratedRegex(@"(?is)<table\b[^>]*>(.*?)</table\s*>", RegexOptions.CultureInvariant)]
     private static partial Regex TableRegex();
