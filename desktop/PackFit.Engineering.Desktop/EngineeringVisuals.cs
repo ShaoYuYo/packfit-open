@@ -103,7 +103,8 @@ internal static class EngineeringVisuals
         double yPos(double value)=>top+(height-top-bottom)*(high-value)/(high-low);
         for(int k=1;k<valid.Length;k++)
         {
-            var previous=valid[k-1],current=valid[k];
+            var previous=valid[k-1];
+            var current=valid[k];
             if(current.Index!=previous.Index+1)continue; // do not connect missing periods.
             canvas.Children.Add(new Line
             {
