@@ -192,4 +192,29 @@ Assert(longReport.Contains("VOLTAGE_LOW: 1") &&
     longReport.Contains("Full-log finding counts"),
     "reviewable report includes anomalies suppressed from the detailed table");
 
+
+string boundedFixture=Path.Combine(Path.GetTempPath(),
+    "packfit-local-fixture-"+Guid.NewGuid().ToString("N")+".csv");
+try
+{
+    await File.WriteAllTextAsync(boundedFixture,
+        "Timestamp,Voltage_V\n2026-11-01T00:00:00Z,11.5\n",
+        new System.Text.UTF8Encoding(encoderShouldEmitUTF8Identifier:true));
+    string imported=await LocalDataFiles.ReadTextAsync(boundedFixture,500);
+    Assert(imported.Contains("Voltage_V") && imported.Contains("11.5"),
+        "local importer correctly reads BOM-prefixed synthetic CSV within the byte limit");
+
+    await File.WriteAllBytesAsync(boundedFixture,new byte[501]);
+    try
+    {
+        await LocalDataFiles.ReadTextAsync(boundedFixture,500);
+        throw new Exception("FAIL: importer accepted oversized local input");
+    }
+    catch(FormatException){Console.WriteLine("PASS: 501-byte input rejected against 500-byte limit");}
+}
+finally
+{
+    if(File.Exists(boundedFixture)) File.Delete(boundedFixture);
+}
+
 Console.WriteLine("All PackFit engineering core checks passed.");
