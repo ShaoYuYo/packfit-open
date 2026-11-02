@@ -1,0 +1,89 @@
+name: Publish PackFit Second Beta
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/publish-beta2.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: second-public-beta-v0.7.0-beta.2
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: windows-latest
+    timeout-minutes: 50
+    steps:
+      - name: Check out the exact source commit
+        uses: actions/checkout@v4
+
+      - name: Prepare Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Check browser app syntax and source integrity
+        run: npm run check
+
+      - name: Run browser calculation and privacy regression tests
+        run: npm test
+
+      - name: Prepare .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Run battery engineering core test vectors
+        shell: pwsh
+        run: |
+          dotnet run --project desktop/PackFit.Engineering.Checks/PackFit.Engineering.Checks.csproj --configuration Release
+          if ($LASTEXITCODE -ne 0) { throw "Engineering checks failed" }
+
+      - name: Build self-contained native WinUI 3 executable
+        shell: pwsh
+        run: |
+          dotnet publish desktop/PackFit.Engineering.Desktop/PackFit.Engineering.Desktop.csproj --configuration Release --runtime win-x64 --self-contained true --output dist/PackFit-Engineering-WinUI -p:Platform=x64 -p:WindowsPackageType=None -p:WindowsAppSDKSelfContained=true -p:PublishSingleFile=false
+          if ($LASTEXITCODE -ne 0) { throw "WinUI publish failed" }
+          if (!(Test-Path "dist/PackFit-Engineering-WinUI/PackFit.Engineering.exe")) { throw "WinUI executable was not produced" }
+          Compress-Archive -Path "dist/PackFit-Engineering-WinUI/*" -DestinationPath "dist/PackFit-Engineering-win-x64.zip" -Force
+
+      - name: Attempt optional single-file EXE
+        id: portable
+        shell: pwsh
+        continue-on-error: true
+        run: |
+          dotnet publish desktop/PackFit.Engineering.Desktop/PackFit.Engineering.Desktop.csproj --configuration Release --runtime win-x64 --self-contained true --output dist/portable -p:Platform=x64 -p:WindowsPackageType=None -p:WindowsAppSDKSelfContained=true -p:PublishSingleFile=true -p:EnableMsixTooling=true -p:IncludeAllContentForSelfExtract=true
+          if ($LASTEXITCODE -ne 0) { throw "Optional single-file build unavailable" }
+          if (!(Test-Path "dist/portable/PackFit.Engineering.exe")) { throw "Optional single-file EXE not found" }
+          Copy-Item "dist/portable/PackFit.Engineering.exe" "dist/PackFit-Engineering-portable-win-x64.exe" -Force
+
+      - name: Create SHA256 file for release assets
+        shell: pwsh
+        run: |
+          $assets = @("dist/PackFit-Engineering-win-x64.zip")
+          if (Test-Path "dist/PackFit-Engineering-portable-win-x64.exe") { $assets += "dist/PackFit-Engineering-portable-win-x64.exe" }
+          $lines = foreach ($path in $assets) {
+            $hash = Get-FileHash $path -Algorithm SHA256
+            "$($hash.Hash.ToLowerInvariant())  $(Split-Path $path -Leaf)"
+          }
+          $lines | Set-Content -Path "dist/SHA256SUMS.txt" -Encoding utf8
+
+      - name: Publish prerelease from this exact verified commit
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          $tag = "v0.7.0-beta.2"
+          gh release view $tag --repo "$env:GITHUB_REPOSITORY" --json url *> $null
+          if ($LASTEXITCODE -eq 0) { throw "Beta release already exists. Do not silently overwrite its files or tag." }
+          $files = @("dist/PackFit-Engineering-win-x64.zip","dist/SHA256SUMS.txt")
+          if (Test-Path "dist/PackFit-Engineering-portable-win-x64.exe") { $files += "dist/PackFit-Engineering-portable-win-x64.exe" }
+          gh release create $tag $files --repo "$env:GITHUB_REPOSITORY" --target "$env:GITHUB_SHA" --title "PackFit Open v0.7.0-beta.2 — Battery Report Reliability Beta" --notes-file "docs/RELEASE_NOTES_v0.7.0-beta.2.md" --prerelease --latest=false
+          if ($LASTEXITCODE -ne 0) { throw "GitHub prerelease publication failed" }
+          gh release view $tag --repo "$env:GITHUB_REPOSITORY" --json url,assets,isPrerelease
+          if ($LASTEXITCODE -ne 0) { throw "Cannot verify published release" }
