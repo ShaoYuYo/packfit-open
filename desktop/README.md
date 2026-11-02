@@ -4,7 +4,7 @@
 
 PackFit Engineering Desktop is a companion to the [browser edition](https://shaoyuyo.github.io/packfit-open/). The web app helps consumers estimate runtime; the desktop app is intended for **laptop battery, power, validation, reliability and system engineers** who need to turn scattered test measurements into clear, reproducible follow-up items.
 
-> **Public beta available:** [v0.7.0-beta.1](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.1). Automated browser and C# tests passed; GitHub Actions successfully built both Windows distributions. **Real Windows hardware smoke-testing and enterprise code signing remain unverified.** No engineering safety or regulatory certification is implied.
+> **Public beta available:** [v0.7.0-beta.2](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.2). Automated browser and C# tests passed; GitHub Actions successfully built both Windows distributions. **Real Windows hardware smoke-testing and enterprise code signing remain unverified.** No engineering safety or regulatory certification is implied.
 
 ## Windows 11 Fluent UI and guided workflow refresh
 
@@ -56,15 +56,15 @@ This desktop edition targets those repetitive steps:
 
 **Important:** Findings are *screening flags*, not root-cause conclusions. Team reviews, battery manufacturer specifications, IEC/UL/UN transportation requirements and approvals remain necessary. You must independently validate thresholds and interpretations.
 
-## Download and run the first public beta
+## Download and run the latest public beta
 
-**[Open GitHub Releases — v0.7.0-beta.1](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.1)**
+**[Open GitHub Releases — v0.7.0-beta.2](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.2)**
 
 The initial beta release has three verified attached assets:
 
-1. [**PackFit-Engineering-win-x64.zip**](https://github.com/ShaoYuYo/packfit-open/releases/download/v0.7.0-beta.1/PackFit-Engineering-win-x64.zip) — recommended. Download, extract every file, then run `PackFit.Engineering.exe` within the extracted folder.
-2. [**PackFit-Engineering-portable-win-x64.exe**](https://github.com/ShaoYuYo/packfit-open/releases/download/v0.7.0-beta.1/PackFit-Engineering-portable-win-x64.exe) — a larger, optional single-file build. It may extract runtime files at startup; do not assume it is zero-extraction.
-3. [**SHA256SUMS.txt**](https://github.com/ShaoYuYo/packfit-open/releases/download/v0.7.0-beta.1/SHA256SUMS.txt) — checksums for confirming the downloaded file matches the published artifact.
+1. [**PackFit-Engineering-win-x64.zip**](https://github.com/ShaoYuYo/packfit-open/releases/download/v0.7.0-beta.2/PackFit-Engineering-win-x64.zip) — recommended. Download, extract every file, then run `PackFit.Engineering.exe` within the extracted folder.
+2. [**PackFit-Engineering-portable-win-x64.exe**](https://github.com/ShaoYuYo/packfit-open/releases/download/v0.7.0-beta.2/PackFit-Engineering-portable-win-x64.exe) — a larger, optional single-file build. It may extract runtime files at startup; do not assume it is zero-extraction.
+3. [**SHA256SUMS.txt**](https://github.com/ShaoYuYo/packfit-open/releases/download/v0.7.0-beta.2/SHA256SUMS.txt) — checksums for confirming the downloaded file matches the published artifact.
 
 The release workflow performed web tests, engineering core tests and native WinUI compilation, then published the binaries from the **same commit**. Compilation and artifact presence are verified; **manual Windows 10/11 launch, hardware diagnostics, accessibility and performance are not yet independently validated**.
 
