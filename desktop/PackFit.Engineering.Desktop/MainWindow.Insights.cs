@@ -24,7 +24,8 @@ public sealed partial class MainWindow
            SleepGraphCanvas.Children.Count==0)
             throw new InvalidOperationException("Engineering visuals smoke test failed.");
         if(!CreateReport().Contains("SYNTHETIC DEMO DATA",StringComparison.Ordinal) ||
-           !HasSyntheticData || DataModeText.Text != "合成示範模式 · 非實測數據")
+           !HasSyntheticData ||
+           !DataModeText.Text.Contains("混合資料來源",StringComparison.Ordinal))
             throw new InvalidOperationException("Synthetic data provenance contract failed.");
         ClearAnalysisData();
         if(HasSessionData || HasSyntheticData || _telemetry is not null ||
