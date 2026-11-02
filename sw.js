@@ -1,5 +1,5 @@
 /* Offline-first static assets; navigations are network-first to allow updates. */
-const CACHE = "packfit-static-v0.6.3";
+const CACHE = "packfit-static-v0.6.4";
 const RESOURCES = [
   "./", "./index.html", "./styles.css", "./assets/premium.css", "./assets/editorial.css",
   "./assets/atelier.css", "./assets/workspace.css", "./assets/logo.svg", "./manifest.webmanifest", "./examples/sample-scenarios.json",
