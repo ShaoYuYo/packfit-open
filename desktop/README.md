@@ -11,9 +11,9 @@ PackFit Engineering Desktop is a companion to the [browser edition](https://shao
 A user reported that the earlier WinUI beta did not launch on their PC. The cause has **not been reproduced on that device**, so beta.3 provides a better way to obtain evidence instead of pretending the problem is fixed:
 
 - **Recommended:** download the complete `win-x64.zip` and extract the entire folder, including native DLLs. Start with `Start-PackFit.cmd` to retain the exit code.
-- **Safe UI:** from a terminal in that folder run `.\\PackFit.Engineering.exe --safe-ui` to temporarily disable the custom title bar and optional transitions.
-- **Startup log:** `%LOCALAPPDATA%\\PackFitOpen\\Logs\\startup.log`, generated when managed app initialization is reached.
-- **Diagnostic script:** `.\\Diagnostics\\Diagnose-PackFit.ps1`, which collects **local-only** process and Windows application event details. It does not upload data or bypass PowerShell execution policies.
+- **Safe UI:** from a terminal in that folder run `.\PackFit.Engineering.exe --safe-ui` to temporarily disable the custom title bar and optional transitions.
+- **Startup log:** `%LOCALAPPDATA%\PackFitOpen\Logs\startup.log`, generated when managed app initialization is reached.
+- **Diagnostic script:** `.\Diagnostics\Diagnose-PackFit.ps1`, which collects **local-only** process and Windows application event details. It does not upload data or bypass PowerShell execution policies.
 - **Complete instructions:** [繁體中文 Windows 無法啟動排查指南](docs/STARTUP.zh-TW.md).
 
 Official Microsoft documentation confirms that single-file WinUI 3 executables extract native dependencies on first launch; the self-contained folder distribution avoids that extraction step. A successful hosted CI process run is **not a substitute for your own Windows startup test**.
@@ -27,8 +27,8 @@ The native window now follows Microsoft's [modern WinUI 3 app structure](https:/
 | Workspace | Purpose | Needs another installation? |
 | --- | --- | --- |
 | **問題排查引導 / Guided investigation** | Step-by-step evidence checklists for sleep-drain, slow charging, unexpected shutdown, heat/throttling and capacity decline; copy or save a reviewable Markdown investigation handoff. | **No** |
-| **Windows 診斷工具箱 / Built-in diagnostics** | One-click read-only \`powercfg /a\`, \`/requests\`, \`/lastwake\`, \`/waketimers\`, \`/devicequery wake_armed\`. Generate Energy Report or SleepStudy to a path chosen by the user; open Reliability Monitor, Event Viewer or DxDiag. | **No**; some reports require administrator permissions or supported sleep modes |
-| **工具與安裝指南 / Official tools** | Check whether \`wpr.exe\`, \`wpa.exe\`, and \`procmon.exe\` are on common executable search paths; explain when ETW or process-level analysis is necessary and link to official Microsoft resources. | Optional, **manual** installation for WPA/Procmon |
+| **Windows 診斷工具箱 / Built-in diagnostics** | One-click read-only `powercfg /a`, `/requests`, `/lastwake`, `/waketimers`, `/devicequery wake_armed`. Generate Energy Report or SleepStudy to a path chosen by the user; open Reliability Monitor, Event Viewer or DxDiag. | **No**; some reports require administrator permissions or supported sleep modes |
+| **工具與安裝指南 / Official tools** | Check whether `wpr.exe`, `wpa.exe`, and `procmon.exe` are on common executable search paths; explain when ETW or process-level analysis is necessary and link to official Microsoft resources. | Optional, **manual** installation for WPA/Procmon |
 
 Read-only diagnostics never change power scheme settings and do not trigger automatic elevation or install third-party software. Reports stay on the local machine; users must remove sensitive details before sharing.
 
@@ -44,7 +44,7 @@ The app opens these Microsoft pages on user request. **It does not auto-download
 
 The **Telemetry Screening** screen can import **up to 12 local log files** at once, applying the same explicitly selected limits to each. A compact comparison lists sample counts, peak temperatures and flag counts. All successful file results are included in the exported Markdown report, along with any failed file imports.
 
-The analyzer also recognizes \`CSV\`, **TSV (tab-separated)** and **semicolon-separated** rows. Headers explicitly declaring \`BatteryVoltage_mV\`, \`BattCurrent_mA\`, \`BatteryTemp_C\`, \`BatterySOC_pct\` and similar supported aliases are accepted without manually converting units in Excel. Unitless electrical values are **not silently guessed**. Time zone and current sign still require confirmation.
+The analyzer also recognizes `CSV`, **TSV (tab-separated)** and **semicolon-separated** rows. Headers explicitly declaring `BatteryVoltage_mV`, `BattCurrent_mA`, `BatteryTemp_C`, `BatterySOC_pct` and similar supported aliases are accepted without manually converting units in Excel. Unitless electrical values are **not silently guessed**. Time zone and current sign still require confirmation.
 
 The comparison and troubleshooting guides are **screening aids**, not automatic root-cause analysis, verified SVTP compliance, or a replacement for independent engineering judgment.
 
