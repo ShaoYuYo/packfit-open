@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased source — dimension-first battery layouts (merged PR #13)
+
+- Add a native WinUI form for outer battery L/W/H, cell A and optional cell B (L/W/H, Ah, mass), fixed series S, parallel options, user-defined edge/gap/Z reserves and target Wh without needing CAD or JSON.
+- Keep per-cell 90-degree rotation opt-in and preserve all manual parameters in the resulting geometry JSON. Put irregular-zone JSON behind an optional advanced expander.
+- Distinguish nominal Wh per **outer** L×W×H envelope from gross-zone energy loading; neither is verified finished-pack ED.
+- Fix delayed WinUI TextChanged notifications so programmatic synthetic examples are not mistaken for user edits, while genuine changes invalidate stale layout diagrams.
+- Cover bounds, source provenance, voltage/topology constraints, native WinUI and report handoff with automated tests. **Not included in older v0.8.0-beta.1 release.**
+
+
 ## Unreleased source — cross-platform engineering comparison (merged PR #8)
 
 - Add baseline/candidate A/B comparison from two local telemetry logs under one explicit threshold set, including full-log per-code counts, per-1,000-row rates, temperature/voltage deltas, and comparability warnings.
