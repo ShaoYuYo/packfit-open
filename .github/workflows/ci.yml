@@ -61,6 +61,37 @@ jobs:
           dotnet run --project desktop/PackFit.Engineering.Cli --configuration Release -- telemetry \
             desktop/samples/telemetry-sample.csv --format markdown > "$RUNNER_TEMP/packfit-report.md"
           grep -q "Telemetry screening" "$RUNNER_TEMP/packfit-report.md"
+      - name: Verify irregular layout optimizer, clearance and bounded JSON handoff
+        shell: bash
+        run: |
+          dotnet run --project desktop/PackFit.Engineering.Cli --configuration Release -- layout \
+            desktop/samples/irregular-layout-synthetic.json --format json > "$RUNNER_TEMP/layout.json"
+          python3 - "$RUNNER_TEMP/layout.json" <<'PY'
+          import json,sys
+          with open(sys.argv[1],encoding="utf-8") as f: data=json.load(f)
+          assert data["kind"]=="irregular-battery-layout-screening"
+          opts=data["result"]["Options"]
+          assert len(opts)>=2,opts
+          long=[o for o in opts if o["CellId"]=="SYNTH-LONG-65x55" and o["Topology"]["Series"]==3][0]
+          compact=[o for o in opts if o["CellId"]=="SYNTH-COMPACT-42x55" and o["Topology"]["Series"]==4][0]
+          assert abs(long["NominalEnergyWh"]-57.75)<1e-6,long
+          assert long["MeetsEnergyTarget"] is True
+          assert compact["MeetsEnergyTarget"] is False
+          assert len(long["Placements"])==3
+          assert not any(o["CellId"]=="SYNTH-LONG-65x55" and o["Topology"]["Series"]==4 for o in opts)
+          assert "NOT a global optimum" in data["status"]
+          assert data["result"]["TotalZoneVolumeL"]>0
+          PY
+          dotnet run --project desktop/PackFit.Engineering.Cli --configuration Release -- layout \
+            desktop/samples/irregular-layout-synthetic.json --format markdown > "$RUNNER_TEMP/layout.md"
+          grep -q "NOT AN OPTIMALITY CERTIFICATE" "$RUNNER_TEMP/layout.md"
+          grep -q "Gross XY cell fill" "$RUNNER_TEMP/layout.md"
+          dotnet run --project desktop/PackFit.Engineering.Cli --configuration Release -- layout \
+            desktop/samples/irregular-layout-synthetic.json --output "$RUNNER_TEMP/geometry.md"
+          if dotnet run --project desktop/PackFit.Engineering.Cli --configuration Release -- layout \
+            desktop/samples/irregular-layout-synthetic.json --output "$RUNNER_TEMP/geometry.md"; then
+            echo "Expected existing geometry output to remain untouched";exit 1
+          fi
       - name: Refuse output overwrite and oversized local file
         shell: bash
         run: |
