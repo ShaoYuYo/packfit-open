@@ -36,6 +36,18 @@ The browser app also includes a daily energy budget, charging-cost calculator, W
 
 [Web user guide (English)](docs/USER_GUIDE.en.md) · [網站操作說明（繁中）](docs/USER_GUIDE.zh-TW.md) · [Formula definitions](docs/METHODOLOGY.md)
 
+### v0.8 native engineering visuals
+
+The next Windows beta adds functioning **native WinUI charts**, not screenshots or a WebView dashboard. Once v0.8.0-beta.1 is published, use the built-in **載入合成示範資料** button to view:
+
+- Capacity-retention bars and a time-ordered full-charge-capacity history.
+- Four separate V / A / °C / SOC charts from a bounded preview of a real CSV/TSV import.
+- A live S/P pack topology diagram connected to nominal Wh, voltage and cell count.
+- Before/after standby SOC bars with %/hour and optional energy estimates.
+- Symptom-first triage, Basic/Engineering navigation, and evidence-backed next steps.
+
+The XAML-independent `--safe-ui` mode also supports charts and synthetic sample workflows. [Visual workflow methods, units and limits](desktop/docs/ENGINEERING_VISUALS.md). Graphs and status indicators do not substitute for test instruments, project-approved thresholds or a safety approval.
+
 ### Windows engineering workbench: an example you can reproduce
 
 1. Download the [current beta release](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.4). For a first trial, use the **win-x64 ZIP**, extract the whole folder and launch `Start-PackFit.cmd` (or use `--safe-ui` for the independent fallback). This is an unsigned developer preview; follow your IT policy.
