@@ -179,6 +179,7 @@
                 <div class="pf-command"><code id="pf-command">powercfg /batteryreport /output "%USERPROFILE%\Desktop\battery-report.html"</code><button id="pf-copy" type="button" data-pf="copy">複製指令</button></div>
               </div>
               <label for="pf-report" class="pf-upload"><span>↥</span><span data-pf="import">匯入 Windows 電池報告</span></label><input id="pf-report" class="sr-only" type="file" accept=".html,.htm,text/html">
+              <div class="field" id="pf-battery-selector" hidden><label for="pf-battery-choice" class="field-title" data-pf="chooseBattery">選擇要查看的電池</label><select id="pf-battery-choice" aria-label="Battery record"></select></div>
               <p class="pf-small" data-pf="local">報告只在瀏覽器內處理，不會上傳。</p>
               <div class="subhead" data-pf="orManual">或手動輸入容量（Wh）</div>
               <div class="field-grid">
