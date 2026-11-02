@@ -64,6 +64,23 @@ jobs:
             throw "Expected MainWindow XAML success marker was not produced"
           }
 
+      - name: Assert XAML-independent compatible engineering workspace works
+        shell: pwsh
+        run: |
+          $exe = (Resolve-Path "dist/PackFit-Engineering-WinUI/PackFit.Engineering.exe").Path
+          $folder = Split-Path $exe -Parent
+          $proc = Start-Process -FilePath $exe -WorkingDirectory $folder -ArgumentList '--selftest-compat' -PassThru
+          if (!$proc.WaitForExit(20000)) {
+            Stop-Process -Id $proc.Id -Force -ErrorAction SilentlyContinue
+            throw "Compatible WinUI workspace test timed out"
+          }
+          $log = Join-Path $env:LOCALAPPDATA "PackFitOpen/Logs/startup.log"
+          if (Test-Path $log) { Get-Content $log -Tail 15 }
+          if ($proc.ExitCode -ne 0 -or !(Test-Path $log) -or
+              !(Select-String -Path $log -Pattern 'Compatibility self-test: COMPAT_WINDOW_OK' -Quiet)) {
+            throw "XAML-independent compatibility workbench failed"
+          }
+
       - name: Package complete desktop application
         shell: pwsh
         run: |
