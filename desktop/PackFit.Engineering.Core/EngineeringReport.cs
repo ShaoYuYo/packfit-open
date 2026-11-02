@@ -57,6 +57,12 @@ public static class EngineeringReport
             b.AppendLine($"- SOC: {F(telemetry.MinSocPercent)}% to {F(telemetry.MaxSocPercent)}%");
             b.AppendLine($"- Integrated discharge energy (where available): {F(telemetry.EstimatedDischargedWh)} Wh");
             b.AppendLine($"- Flagged findings: {telemetry.TotalFindings} (details shown: {telemetry.Findings.Count})");
+            if(telemetry.FindingCodeCounts.Count>0)
+            {
+                b.AppendLine("- Full-log finding counts (includes flags omitted from the preview):");
+                foreach(var entry in telemetry.FindingCodeCounts.OrderBy(x=>x.Key,StringComparer.Ordinal))
+                    b.AppendLine($"  - {Safe(entry.Key)}: {entry.Value}");
+            }
             if (limits is not null)
             {
                 b.AppendLine($"- Thresholds: temperature {F(limits.MinimumTemperatureC)}–{F(limits.MaximumTemperatureC)} °C;");
