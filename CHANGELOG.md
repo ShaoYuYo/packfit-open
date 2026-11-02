@@ -1,6 +1,15 @@
 # Changelog
 
 
+## v0.7.0-beta.3 — 2026-11-02 (published)
+
+- Fix desktop deployment defaults: prefer a complete self-contained WinUI folder and include an easy-to-use CMD launcher and PowerShell diagnostics.
+- Add bounded local startup logging, visible managed startup errors, a native recovery window, and `--safe-ui` mode to isolate custom title bar and motion failures.
+- Improve Windows 11 Fluent visual hierarchy with Segoe UI Variable, OS CJK font fallback, roomier cards and responsive input/action layouts.
+- Use a 190 ms page transition that honors Windows animation preferences and gracefully disables if unsupported.
+- Extend the release pipeline with bundled dependency checks and an exploratory hosted Windows startup probe. **The original device failure is not yet confirmed resolved.**
+- Publish ZIP, optional self-extracting EXE and SHA-256 hashes in [beta.3](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.3).
+
 ## Web v0.6.3 — 2026-11-02
 
 - Keep browser battery-report parsing scoped to installed batteries; do not mistake capacity-history rows for current capacity.
