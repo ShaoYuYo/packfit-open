@@ -43,6 +43,8 @@ public sealed record TelemetryAnalysis(
 {
     public TimeSpan Duration => Last - First;
     public int HiddenFindings => Math.Max(0, TotalFindings - Findings.Count);
+    /// <summary>Bounded, chronological sample for visualization, not the full original log.</summary>
+    public IReadOnlyList<TelemetrySample> Trace { get; init; } = Array.Empty<TelemetrySample>();
 }
 
 public static class TelemetryAnalyzer
@@ -83,6 +85,9 @@ public static class TelemetryAnalyzer
 
         int count=0, totalFindings=0;
         var findings=new List<TelemetryFinding>();
+        const int MaxChartPoints = 320;
+        var trace = new List<TelemetrySample>(MaxChartPoints);
+        int chartStride = 1;
         DateTimeOffset? start=null;
         TelemetrySample? previous=null;
         double? minV=null,maxV=null,minT=null,maxT=null,minSoc=null,maxSoc=null;
@@ -104,6 +109,15 @@ public static class TelemetryAnalyzer
                 Value(cells,v.Index,v.Factor),Value(cells,i.Index,i.Factor),
                 Value(cells,temp,1),Value(cells,soc,1));
             start ??= when;
+            if (count % chartStride == 0)
+            {
+                trace.Add(current);
+                if (trace.Count >= MaxChartPoints)
+                {
+                    trace = trace.Where((_,idx)=>idx%2==0).ToList();
+                    chartStride *= 2;
+                }
+            }
             void Find(string code,string severity,string message)
             {
                 totalFindings++;
@@ -163,8 +177,13 @@ public static class TelemetryAnalyzer
         }
         if (count==0||previous is null||start is null)
             throw new FormatException("CSV contains no measurement samples.");
-        return new(count,start.Value,previous.Timestamp,minV,maxV,minT,maxT,
-            minSoc,maxSoc,hasPowerIntegration?dischargedWh:null,totalFindings,findings);
+        if (trace.Count == 0 || trace[^1].Timestamp != previous.Timestamp)
+            trace.Add(previous);
+        return new TelemetryAnalysis(count,start.Value,previous.Timestamp,minV,maxV,minT,maxT,
+            minSoc,maxSoc,hasPowerIntegration?dischargedWh:null,totalFindings,findings)
+        {
+            Trace = trace.AsReadOnly()
+        };
     }
 
     private static bool HasTimeZone(string text)
