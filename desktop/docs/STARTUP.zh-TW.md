@@ -1,6 +1,6 @@
 # PackFit Engineering: 無法啟動的排查指南
 
-這份說明適用於 **v0.7.0-beta.3 及後續版本**。beta.1、beta.2 並沒有這些啟動診斷工具。以下步驟不會自動安裝其他軟體，也不需要管理員權限；如果公司的資安政策不允許執行，請先詢問 IT。
+這份說明適用於 **v0.7.0-beta.4 及後續版本**。beta.1、beta.2 並沒有這些啟動診斷工具。以下步驟不會自動安裝其他軟體，也不需要管理員權限；如果公司的資安政策不允許執行，請先詢問 IT。
 
 ## 先確認下載了哪個版本
 
@@ -17,7 +17,7 @@
    ```powershell
    .\PackFit.Engineering.exe --safe-ui
    ```
-   這個模式會停用自訂標題列和額外頁面動畫，保留原生 Windows 視窗。若安全模式能開啟，就表示可能是 Fluent 視窗層級的相容性問題。
+   Beta 4 的安全模式**完全不會載入 MainWindow.xaml**，而是開啟另一個以 C# 建立的相容工程介面，具備電池報告、CSV/TSV、驗證矩陣、基本 Pack 估算與 Markdown 報告功能。若能開啟，至少可以繼續工作並確認問題集中於主介面載入流程；還不能直接判定是哪個 Fluent 元素造成的。
 3. 再次失敗時，檢查這個本機檔案：
    ```text
    %LOCALAPPDATA%\PackFitOpen\Logs\startup.log
@@ -63,6 +63,12 @@ PowerShell 腳本會檢查 EXE 是否存在、旁邊是否有相依 DLL、啟動
 | Windows SmartScreen 或公司政策封鎖 | 驗證官方 Release 與雜湊，向 IT 詢問；**不要繞過安全限制** |
 | 只解壓出一個 EXE，沒有其他 DLL | 重新完整解壓 ZIP 版 |
 | `0xc000027b`，涉及 `Microsoft.UI.Xaml.dll` | 這是 Windows App SDK 的「stowed exception」包裝碼，需提供事件詳細資訊；不能單靠碼判定問題 |
+
+## 已確認的打包問題：EXE 重新命名
+
+Beta 1–3 的單檔程式在編譯後被重新命名成 `PackFit-Engineering-portable-win-x64.exe`。微軟曾有 [WinUI 問題回報](https://github.com/microsoft/microsoft-ui-xaml/issues/10966) 指出，重新命名 self-contained EXE 後可能產生 XAML parsing failed。**Beta 4 已改為直接發布原始檔名 `PackFit.Engineering.exe`，請不要自行更名。** 但尚未確認這是否就是原本電腦上的根因。
+
+若你是使用 Beta 3 的單檔 EXE，優先改試 Beta 4 的 `PackFit.Engineering.exe`，或完整 ZIP。如果問題仍存在，請提供新版 `startup.log`，其中會記錄實際執行檔名稱、Windows 版本及 XAML HRESULT，幫助定位真正原因。
 
 ## 完整版與單檔版的技術差異
 
