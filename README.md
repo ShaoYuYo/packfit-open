@@ -1,169 +1,98 @@
 # PackFit Open
 
-**Battery questions, answered with practical tools.**  
-*A free, privacy-conscious project for everyday laptop users and battery development engineers.*
+**Understand a laptop battery. Investigate what went wrong. Spend less time cleaning logs.**
 
-[Try the web app](https://shaoyuyo.github.io/packfit-open/) · [Download first Windows beta](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.1) · [Desktop guide](desktop/README.md) · [Report an issue](https://github.com/ShaoYuYo/packfit-open/issues) · [Contribute](CONTRIBUTING.md)
+[**Use the web app**](https://shaoyuyo.github.io/packfit-open/) · [**Windows engineering beta**](https://github.com/ShaoYuYo/packfit-open/releases) · [15-minute guided trial](docs/TRY_PACKFIT.md) · [Report a problem](https://github.com/ShaoYuYo/packfit-open/issues/new/choose)
 
-![Web CI](https://github.com/ShaoYuYo/packfit-open/actions/workflows/ci.yml/badge.svg) ![Windows desktop CI](https://github.com/ShaoYuYo/packfit-open/actions/workflows/desktop-winui.yml/badge.svg) ![MIT license](https://img.shields.io/badge/license-MIT-neutral)
+![Web tests](https://github.com/ShaoYuYo/packfit-open/actions/workflows/ci.yml/badge.svg) ![Native Windows build](https://github.com/ShaoYuYo/packfit-open/actions/workflows/desktop-winui.yml/badge.svg) ![License](https://img.shields.io/badge/license-MIT-6b6271)
 
-## Why I started PackFit
+PackFit is an independent, **MIT-licensed**, bilingual (English / 繁體中文) project maintained by a battery development engineer. There are two products in one repository: a free browser app for people who want practical answers about their laptop batteries, and a native WinUI 3 workbench for repetitive battery validation and Windows troubleshooting tasks.
 
-I'm a **battery development engineer**. In laptop development, some of the most time-consuming work isn't designing the battery itself: it's repeatedly collecting diagnostic reports, cleaning voltage/current/temperature/SOC logs, comparing test results, checking limits, and writing a handoff that another engineer can actually reproduce.
+## Why I built this
 
-Outside engineering work, people face simpler but equally real questions: *How long will my laptop last today? Has its battery aged? How much does charging cost? Why does it drain overnight?* Battery information should not require an electrical engineering background to understand.
+Working with laptop batteries, I've learned that a surprisingly large part of engineering is not about deriving a formula. It is checking where a measurement came from, converting mV into V, investigating a suspicious temperature or SOC change, and rewriting the same findings in a report so another engineer can follow them.
 
-**PackFit Open connects those two worlds:** a simple browser app for everyday battery decisions, and a native Windows engineering workbench for repetitive diagnostic and validation tasks.
+People outside engineering have related questions: *How long should my battery last? Is capacity dropping? Why is my computer draining overnight?* I wanted a tool that answers ordinary questions without jargon and gives engineers something they can actually use at work.
 
-I also believe AI is a powerful **development assistant**, particularly for turning domain experience into working prototypes, tests, accessible explanations, and maintainable open-source code. AI helps me move faster; it does **not** replace checking equations, verifying measurements, reviewing code, or making engineering safety decisions. I want to show how an engineer can use AI responsibly to build something useful for other people.
+AI has helped me turn those ideas into code and documentation faster. I still treat its output as a draft to test and review. **The application doesn't use AI to invent a battery diagnosis**, and it never sends local reports to an AI service.
 
-This project is independent, MIT-licensed, and built with **public or synthetic examples**. It does not represent my employer, a battery supplier, or an official certification body. No confidential design specifications or private product data belong in this repository.
+This project is personal and independent. It is **not endorsed by my employer or any battery supplier**, and none of the included example measurements are proprietary company data.
 
-## Two ways to use PackFit
+## Start here
 
-| | Everyday battery tools | Engineering desktop beta |
+| | **Web: Everyday Battery Tools** | **Windows: Engineering Desktop** |
 | --- | --- | --- |
-| **For** | Laptop owners, learners, repair enthusiasts | Battery, power, systems and validation engineers |
-| **Platform** | Any modern desktop/mobile browser | Windows 10/11 x64 · native C# / WinUI 3 |
-| **Start** | [Open the website](https://shaoyuyo.github.io/packfit-open/) · no sign-up | [Download the v0.7.0-beta.1 release](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.1) |
-| **Typical use** | Runtime and charging cost, battery capacity reports, daily energy budget | Batch log screening, test matrices, sleep/wake troubleshooting, native diagnostics, engineering reports |
-| **Privacy** | Calculations and file analysis stay local | Local-only processing, explicit file selection, no telemetry or cloud backend |
-| **Scope** | Informational estimates | Engineering **screening**, not certified validation |
+| **Who** | Laptop owners, students, repairers | Battery, power, EE, validation and system engineers |
+| **Start** | [Open in browser](https://shaoyuyo.github.io/packfit-open/), no account needed | [Download latest beta](https://github.com/ShaoYuYo/packfit-open/releases) (Windows 10/11 x64) |
+| **Tasks** | Estimate runtime and charging cost, read Windows battery capacity reports, compare pack ideas | Screen CSV/TSV logs, check test verdicts, run Windows diagnostics, prepare review reports |
+| **Data handling** | Local calculations and file parsing | Files processed locally; no analytics/backend |
+| **Scope** | Estimates and education | First-pass screening and handoff, **not** certified validation |
 
-### Engineering Desktop — what it can do
+### Web app: an example you can reproduce
 
-- **Read Windows battery capacity:** use the built-in `powercfg` report or import an HTML report, with a clear distinction between capacity retention and overall battery safety.
-- **Process multiple test logs:** import up to 12 supported CSV/TSV/semicolon logs, normalize explicitly labeled mV/mA units, check user-configured voltage, current, temperature, SOC and timing conditions, and compare findings.
-- **Organize validation work:** turn measured values and Min/Max thresholds into PASS / FAIL / NOT RUN matrices, rather than maintaining ad hoc spreadsheet formulas.
-- **Investigate laptop problems:** follow guided checklists for sleep drain, slow charging, unexpected shutdown, thermal throttling and capacity loss; run selected read-only Windows diagnostics without memorizing commands.
-- **Explain optional specialist tools:** find official Microsoft documentation for WPR/WPA and Procmon; never auto-install them.
-- **Prepare engineering handoffs:** save reproducible Markdown summaries, the thresholds used, unresolved flags and reviewer checklists.
+Try **56 Wh** of energy and **14 W** of constant load with zero reserve and 100% efficiency. The ideal runtime is **4 hours** (56 ÷ 14). Increase the reserve or reduce efficiency and see how the estimate changes.
 
-**Windows EXE status:** The first public **beta / developer preview** is [published](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.1), with a self-contained WinUI ZIP, optional single-file EXE and SHA-256 checksums. GitHub Actions passed browser and C# checks and compiled both Windows distributions. A successful CI build **does not establish successful real-device launch, full accessibility or engineering certification**. See the [desktop download and build instructions](desktop/README.md), [Fluent design notes](desktop/docs/FLUENT.md), and [troubleshooting guide](desktop/docs/TROUBLESHOOTING.md).
+The browser app also includes a daily energy budget, charging-cost calculator, Windows battery report import, battery pack series/parallel estimates, scenario comparison, Chinese/English UI, system light/dark mode and offline support for cached assets.
 
-## Project status and maintenance
+[Web user guide (English)](docs/USER_GUIDE.en.md) · [網站操作說明（繁中）](docs/USER_GUIDE.zh-TW.md) · [Formula definitions](docs/METHODOLOGY.md)
 
-- **Browser app:** v0.6.1 — browser-based, Chinese/English, available on GitHub Pages.
-- **First repository beta:** [`v0.7.0-beta.1`](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.1) — published as a GitHub Prerelease with Windows downloads and checksums; physical-device smoke testing remains open.
-- **Maintainer:** [ShaoYuYo](https://github.com/ShaoYuYo), primary maintainer.
-- **Engineering integrity:** formulas and input assumptions are documented; source tests, CI configuration and synthetic examples are included.
-- **Community adoption:** still early. We do **not** claim users, downloads, independent contributions, certification or operational readiness without evidence.
-- **Looking for:** genuine browser test feedback, privacy-safe Windows battery-report fixtures, test vectors, accessibility feedback, code review and bug reports.
+### Windows engineering workbench: an example you can reproduce
 
-[Public calculation methodology](docs/METHODOLOGY.md) · [Maintenance and adoption evidence](docs/PROJECT_EVIDENCE.md) · [Security policy](SECURITY.md) · [Release checklist](docs/RELEASE_CHECKLIST.md)
+1. Download the [initial beta release](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.1). For a first trial, use the **win-x64 ZIP**, extract the whole folder and run \`PackFit.Engineering.exe\`. This is an unsigned developer preview; follow your IT policy.
+2. Import the [synthetic Windows battery report](desktop/samples/battery-report-sample.html). It contains **56 Wh** design capacity and **49 Wh** full-charge capacity. The calculated retention is **87.5%**.
+3. Import [synthetic telemetry](desktop/samples/telemetry-sample.csv), set project-specific screening limits and review time, voltage, SOC and temperature flags.
+4. Import the [synthetic test matrix](desktop/samples/validation-sample.csv). Unmeasured cases should remain **NOT RUN**, not silently counted as passing.
+5. Open **Guided Investigation** for a sleep-drain, charging or shutdown checklist, then export the Markdown engineering handoff.
 
----
+The desktop also offers read-only Windows \`powercfg\` queries, Energy/SleepStudy report creation when supported, batch comparison of up to 12 log files, and official Microsoft tool links for WPR/WPA and Procmon. The application does not automatically install extra software or elevate permissions.
 
-## What you can do
+[Complete WinUI desktop guide](desktop/README.md) · [Windows troubleshooting](desktop/docs/TROUBLESHOOTING.md) · [Fluent design](desktop/docs/FLUENT.md)
 
-| Workspace | Capabilities |
-| --- | --- |
-| **Overview** | Estimate runtime and plan a day of office/video/gaming usage with editable average wattages, current charge and reserve. |
-| **My Battery** | Opt-in browser battery status (where supported), local Windows battery report analysis and manual capacity retention. |
-| **Everyday Tools** | Charging cost, power-bank rated and deliverable Wh, and rough recharge time. |
-| **Device Insights** | Automatic browser hardware hints, opt-in WebGL graphics identification and local browser computation probe; not a Windows hardware inventory or a gaming benchmark. |
-| **Pack Studio** | Model S/P topology, nominal voltage/energy, total cell + overhead mass, rectangular envelope volume, Wh/kg, Wh/L and ideal runtime. |
-| **Compare** | Save four scenarios, compare metrics, export CSV, and back up or restore validated versioned JSON on another device. |
-| **Methodology** | Inspect formulas, assumptions, scope and safety limitations. |
+## What is verified?
 
-### Design principles
+- **Open source:** all application and core calculation source is here under MIT.
+- **Automated checks:** browser unit tests and an independent C# engineering test runner are run in GitHub Actions. See [web CI](https://github.com/ShaoYuYo/packfit-open/actions/workflows/ci.yml), [Windows build](https://github.com/ShaoYuYo/packfit-open/actions/workflows/desktop-winui.yml), and [first beta release build](https://github.com/ShaoYuYo/packfit-open/actions/workflows/publish-first-beta.yml).
+- **Published binary:** [v0.7.0-beta.1](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.1) includes a self-contained WinUI ZIP, single-file EXE and SHA-256 hashes. CI compiled both distributions.
+- **Still to verify:** Windows hardware smoke testing across devices, full accessibility review, additional real-world report formats and broad external adoption. Passing CI is **not** proof of hardware compatibility.
+- **Not claimed:** production safety approval, calibrated capacity measurement, OEM-specific charging limits, regulatory certification or automated root-cause diagnosis.
 
-- **Dependency-free calculations, zero API keys, zero telemetry:** core modules are plain HTML/CSS/JavaScript; the optional Motion library is loaded separately for visual transitions.
-- **Privacy-first:** inputs and saved scenarios stay in local browser storage; no backend or accounts.
-- **Accessible by default:** semantic form controls, keyboard navigation, reduced-motion support, mobile layout, dark/light themes.
-- **Bilingual:** Traditional Chinese and English.
-- **Modular and testable:** pure calculation functions are independent of the interface; node built-in test runner provides regressions.
-- **Safety-aware:** advisory messages for certain idealized inputs; avoids presenting estimates as validation or regulatory certification.
+[Full evidence log](docs/PROJECT_EVIDENCE.md) · [Known limitations and release checks](docs/RELEASE_CHECKLIST.md) · [Security](SECURITY.md)
 
-## First-time user guides
+## Architecture
 
-- [繁體中文使用指南](docs/USER_GUIDE.zh-TW.md)
-- [English Quick Start](docs/USER_GUIDE.en.md)
-- [Synthetic, downloadable scenario examples](examples/sample-scenarios.json)
-- [Developer module reference](docs/DEVELOPER_API.md)
-- [Design, typography and motion decisions](docs/DESIGN_SYSTEM.md)
-- [Release quality checklist](docs/RELEASE_CHECKLIST.md)
-- [Open-source adoption evidence (only verified claims)](docs/PROJECT_EVIDENCE.md)
+\`\`\`text
+index.html + src/ + assets/
+  Browser experience: batteries, daily power, scenarios, import/export and PWA
+desktop/
+  PackFit.Engineering.Core/       Independent .NET calculations and parsers
+  PackFit.Engineering.Checks/     Reproducible synthetic engineering tests
+  PackFit.Engineering.Desktop/    Native Windows C# / WinUI 3
+  samples/                        Public synthetic input files
+.github/workflows/               Web CI, Windows CI, versioned beta publisher
+docs/                             Methodology, guides, quality and evidence
+\`\`\`
 
-## Run
+To run the website locally:
 
-For a quick test, serve the repository root with any HTTP static server. Python 3 users can run:
+\`\`\`bash
+git clone https://github.com/ShaoYuYo/packfit-open.git
+cd packfit-open
+npm run check
+npm test
+python -m http.server 8000
+\`\`\`
 
-    python -m http.server 8000
+Open http://localhost:8000/ . To build the native app, use a Windows environment and the commands in [desktop/README.md](desktop/README.md).
 
-Then open http://localhost:8000 . Opening the HTML via a file URL may block ES modules in some browsers.
+## Help make it genuinely useful
 
-To run tests with Node.js 20+ (no npm install required):
+This is a young project, and real usage matters more than a Star count. The most helpful contribution is a **reproducible bug**, an independently checked formula, a privacy-safe sample file, a translation improvement or a better way to complete an engineering task.
 
-    npm test
-    npm run check
+- [Try the 15-minute trial](docs/TRY_PACKFIT.md) and tell us what is confusing.
+- [Open a bug or trial feedback issue](https://github.com/ShaoYuYo/packfit-open/issues/new/choose).
+- [See how to contribute](CONTRIBUTING.md) and the [development roadmap](docs/ROADMAP.md).
+- [Review security and reporting rules](SECURITY.md) before sharing logs.
 
-## Deploy to GitHub Pages
+**Please do not attach unredacted Windows reports, device IDs, serial numbers, supplier data or employer/customer measurements to public issues.** All included sample inputs are synthetic.
 
-Repository **Settings → Pages → Build and deployment → Deploy from a branch → main → / (root) → Save**. The site will appear at https://shaoyuyo.github.io/packfit-open/ once deployment completes.
-
-## Accuracy & limits
-
-This is a **first-pass parametric estimator**, not a physical battery pack design validator.
-
-- Energy: S × P × nominal cell voltage × cell capacity (Ah)
-- Mass: cell count × individual cell mass + explicitly provided pack overhead
-- Envelope volume: rectangular X × Y × Z dimensions in mm, divided by 1,000,000 to get liters
-- Runtime: available energy divided by **constant average** load; no cell discharge curve, aging, thermal loss or safety cutoff simulation
-- No checks for actual cell fit, stack-up, routing, interconnects, BMS, current limits, electrical protection, charging or thermal safety
-- Transport considerations depend on jurisdiction and carrier; any displayed advisory is only an awareness prompt
-
-All examples are **illustrative**, not specifications for an actual product or a manufacturer's validated battery. See [full methodology](docs/METHODOLOGY.md).
-
-## Contributing
-
-Pull requests, verified formula corrections, translations and test cases are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) and open an issue describing the intended behavior. Never post confidential employer, supplier or customer information.
-
-## License
-
-MIT © 2026 ShaoYuYo. See [LICENSE](LICENSE).
-## Personal Battery Lab (v0.2)
-
-Live monitoring requests the optional browser Battery Status API only when the visitor clicks **Check my battery**. Many browsers do not support it; even where available it typically offers current charge level, charging state and approximate time, **not battery health, design capacity or cycle count**. Some browsers may expose default or rounded values.
-
-On Windows, run `powercfg /batteryreport /output "%USERPROFILE%\Desktop\battery-report.html"`, then import the HTML file in **My Battery**. The static application reads the file locally in your browser, extracts design capacity, full-charge capacity and optionally cycle count, and displays the capacity retention ratio. Files are never uploaded or stored. Reports may contain private device identifiers; do not publish original files in GitHub issues. Manual entry works when reporting is unavailable.
-
-New Everyday Tools apply bounded, transparent formulas to charging electricity costs, portable power bank Wh estimates and approximate charge time. All sample values are illustrative. Charging time uses a stated 15% modeling buffer; power bank mAh-to-Wh conversion uses the **cell-side nominal voltage**, not 5V output, and output efficiency is assumed. These numbers are **not physical measurements or safety certifications**.
-
-The premium design layer is `assets/premium.css` with animations, responsive layouts, theme support and `prefers-reduced-motion` handling. Inspired by general contemporary product design principles; no Apple artwork or UI assets are copied.
-
-## Offline use and portable scenarios (v0.3)
-
-A scoped Service Worker precaches same-origin static modules after the first successful HTTPS visit. Browsers may provide install-to-home-screen options; offline availability and cache persistence depend on the platform. Google Fonts are external, with system font fallbacks. The application contains no analytics or upload endpoint.
-
-Design comparison JSON exports are explicitly versioned (packfit.scenarios v1). Import validates every numeric field and canonicalizes the result; it replaces locally stored scenarios **only after user confirmation**. Files never leave the browser. CSV is read-only spreadsheet export; JSON is the editable interchange format.
-
-Daily energy planning uses simple duration × average power sums; it does not simulate time-varying hardware load, BMS cutoffs, charging and discharge curves or thermal behavior.
-
-For potential Codex for Open Source participation, see [maintainer readiness](docs/MAINTAINER_APPLICATION.md). We have not claimed outside adoption or an approval.
-
-## Visual update (v0.4)
-
-The UI has a more restrained visual hierarchy, rewritten user-facing copy, Inter + Noto Sans TC with system font fallbacks, and short interaction-led motion instead of continuous decorative animation. The interface respects system reduced-motion settings. All functionality from v0.3 is retained. See [design guidelines](docs/DESIGN_SYSTEM.md).
-
-## Warm Graphite design and motion (v0.5)
-
-The v0.5 appearance uses a warm ivory/graphite foundation with a muted plum action color and restrained champagne-brass accents. Both light and dark themes share the same semantic variables; comparison bars are now plum, brass and neutral gray instead of green/blue. The palette overrides are isolated in `assets/atelier.css`.
-
-For optional enhanced transitions, `src/motion-enhance.js` imports the [MIT-licensed Motion](https://github.com/motiondivision/motion) JavaScript library from a **version-pinned jsDelivr URL (13.2.0)**. This is an asynchronous, nonessential CDN request and does not send battery inputs or reports. When offline, blocked or unavailable, the app uses the native Web Animations API. Essential controls, calculations and local storage work without Motion. Operating-system reduced-motion preferences disable these transitions.
-
-See [design decisions](docs/DESIGN_SYSTEM.md) and [dependency/privacy policy](SECURITY.md).
-
-## Device Insights and automatic color themes (v0.6)
-
-**System appearance is the default.** PackFit follows the browser/OS light/dark preference using `matchMedia('(prefers-color-scheme: dark)')` and reacts when that preference changes. The Appearance selector provides System, Light and Dark overrides. Explicit new choices are stored locally. Legacy pre-v0.6 theme settings automatically migrate to System, because earlier settings could not distinguish user overrides from defaults.
-
-**Basic browser hardware hints** are displayed when the site loads: `navigator.hardwareConcurrency` (possibly reduced logical processors), `navigator.deviceMemory` (coarse memory where supported), platform and WebGPU API presence. Missing hints stay unknown. The resource profile is a **low-confidence descriptive bracket**, not a CPU/GPU or gaming performance score.
-
-**Detailed GPU identification** only runs if you click Check GPU details; it uses WebGL and may return an anonymized renderer or no data. **Computation probe** runs only after you choose Run local test, in a dedicated Worker and reports elapsed milliseconds for a fixed JavaScript task. Thermal conditions, background work and browsers affect the result. Neither test uploads, stores or fingerprints device information; there is no analytics endpoint.
-
-The seven workspaces have a unified responsive layout in `assets/workspace.css`, with larger readable controls, consistent spacing and reflowing columns. See [User Guide](docs/USER_GUIDE.zh-TW.md) and [Device limitations](docs/DEVICE_INSIGHTS.md).
-
-### Optional full Windows hardware names
-
-The browser cannot read your full hardware inventory. To see a more precise CPU model, installed RAM label, OS and one or more GPU names, open Windows **DxDiag** (Win + R → `dxdiag`) and choose **Save All Information**. Select the resulting `.txt` report in Device Insights. Only these fields are extracted into memory; machine name and other diagnostic details are discarded. The raw report is **not uploaded, tracked or saved**. Do not publish DxDiag reports unredacted, because the original report may contain sensitive device identifiers.
+Copyright contributors. Released under the [MIT License](LICENSE).
