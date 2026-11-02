@@ -398,6 +398,10 @@ var dimensionalOptions=LayoutOptimizer.Optimize(dimensionalGeometry);
 Assert(dimensionalOptions.Options.Any(x=>x.CellId=="A-SYNTH"&&
     x.Topology==new LayoutTopology(3,1) && Close(x.NominalEnergyWh,57.75)),
     "2D dimensions screen a three-cell pack with transparent nominal energy arithmetic");
+Assert(dimensionalOptions.Options.Any(x=>x.CellId=="A-SYNTH"&&
+    x.Topology==new LayoutTopology(3,1) &&
+    Close(x.NominalOuterEnvelopeWhL ?? 0,57.75/(200*118*7/1_000_000.0))),
+    "Nominal Wh per L of external envelope uses unreserved outer H");
 Assert(dimensionalOptions.Options.Any(x=>x.CellId=="B-SYNTH"&&
     x.Topology==new LayoutTopology(3,1)),
     "Second qualified cell outline is actually compared using the same outer envelope");
