@@ -148,7 +148,8 @@ public static class LayoutOptimizer
         var names=new HashSet<string>(StringComparer.Ordinal);
         foreach(var cell in p.Cells)
         {
-            Require(cell is not null && !string.IsNullOrEmpty(cell.Id) &&
+            ArgumentNullException.ThrowIfNull(cell);
+            Require(!string.IsNullOrEmpty(cell.Id) &&
                 cell.Id.Length<=48 && cell.Id.All(ch=> char.IsAsciiLetterOrDigit(ch) ||
                 ch is '-' or '_'),"Cell IDs must be 1–48 ASCII letters, digits, - or _.");
             Require(names.Add(cell.Id),"Cell IDs must be unique.");
