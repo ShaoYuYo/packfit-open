@@ -15,6 +15,7 @@ public sealed partial class MainWindow
     private LayoutProblem? _geometryProblem;
     private LayoutResult? _geometryResult;
     private bool _layoutSynthetic;
+    private string? _lastGeometryInputText;
     private static readonly CultureInfo GeometryCulture=CultureInfo.InvariantCulture;
 
     private static LayoutProblem ExampleLayout() => new(
@@ -40,6 +41,9 @@ public sealed partial class MainWindow
         {
             WriteIndented=true
         });
+        // WinUI may dispatch TextChanged on another UI iteration. Treat the
+        // programmatically populated fixture as the current text state.
+        _lastGeometryInputText=GeometryJsonBox.Text;
         // TextChanged invalidates a prior geometry model; only this exact generated
         // source state is labeled as a synthetic fixture.
         _layoutSynthetic=true;
@@ -50,6 +54,9 @@ public sealed partial class MainWindow
     private void GeometryJsonChanged(object sender,TextChangedEventArgs e)
     {
         if(GeometryCandidateChoice is null || GeometryMap is null) return;
+        if(string.Equals(_lastGeometryInputText,GeometryJsonBox.Text,StringComparison.Ordinal))
+            return;
+        _lastGeometryInputText=GeometryJsonBox.Text;
         InvalidateGeometry(clearText:false);
         if(!string.IsNullOrWhiteSpace(GeometryJsonBox.Text))
             GeometrySummary.Text="幾何輸入已修改。請重新執行搜尋，避免使用舊配置結果。";
@@ -67,7 +74,10 @@ public sealed partial class MainWindow
         if(GeometrySummary is not null)
             GeometrySummary.Text="尚未計算幾何配置。";
         if(clearText && GeometryJsonBox is not null)
+        {
             GeometryJsonBox.Text="";
+            _lastGeometryInputText="";
+        }
     }
 
     private async void CalculateGeometryClick(object sender,RoutedEventArgs e)
