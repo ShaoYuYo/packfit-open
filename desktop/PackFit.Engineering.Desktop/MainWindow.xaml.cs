@@ -21,8 +21,19 @@ public sealed partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-        ExtendsContentIntoTitleBar = true;
-        SetTitleBar(AppTitleBar);
+        // A native title bar is preferred, but window startup must remain
+        // possible on devices where custom nonclient UI initialization fails.
+        try
+        {
+            ExtendsContentIntoTitleBar = true;
+            SetTitleBar(AppTitleBar);
+        }
+        catch (Exception ex)
+        {
+            StartupDiagnostics.Record("Custom Fluent title bar unavailable; using system title bar", ex);
+            ExtendsContentIntoTitleBar = false;
+        }
+
         SetupGuides();
         Navigation.SelectedItem = Navigation.MenuItems[0];
         ShowPage("overview");
@@ -33,6 +44,73 @@ public sealed partial class MainWindow : Window
     {
         if (args.SelectedItemContainer is NavigationViewItem item)
             ShowPage(item.Tag?.ToString() ?? "overview");
+    }
+
+    private string? _activePage;
+
+    private void WorkspaceRoot_SizeChanged(object sender, SizeChangedEventArgs args)
+    {
+        // The content width excludes the NavigationView sidebar.
+        bool compact = args.NewSize.Width < 760;
+        QuickActions.Orientation = compact ? Orientation.Vertical : Orientation.Horizontal;
+        TelemetryLimitsPrimary.Orientation = compact ? Orientation.Vertical : Orientation.Horizontal;
+        TelemetryLimitsSecondary.Orientation = compact ? Orientation.Vertical : Orientation.Horizontal;
+        PackParametersPrimary.Orientation = compact ? Orientation.Vertical : Orientation.Horizontal;
+        PackParametersSecondary.Orientation = compact ? Orientation.Vertical : Orientation.Horizontal;
+        PackParametersDimensions.Orientation = compact ? Orientation.Vertical : Orientation.Horizontal;
+
+        for (int i = 0; i < OverviewStatsGrid.ColumnDefinitions.Count; i++)
+        {
+            OverviewStatsGrid.ColumnDefinitions[i].Width = compact
+                ? (i == 0 ? new GridLength(1, GridUnitType.Star) : new GridLength(0))
+                : new GridLength(1, GridUnitType.Star);
+        }
+
+        var cards = new Microsoft.UI.Xaml.Controls.Border[]
+        {
+            OverviewStats1, OverviewStats2, OverviewStats3
+        };
+        for (int i = 0; i < cards.Length; i++)
+        {
+            Grid.SetColumn(cards[i], compact ? 0 : i);
+            Grid.SetRow(cards[i], compact ? i : 0);
+        }
+    }
+
+    private void AnimatePage(Microsoft.UI.Xaml.Controls.StackPanel page)
+    {
+        try
+        {
+            // Obey Windows "Show animations in Windows" accessibility setting.
+            if (!new Windows.UI.ViewManagement.UISettings().AnimationsEnabled)
+                return;
+
+            page.Opacity = 1;
+            var fade = new Microsoft.UI.Xaml.Media.Animation.DoubleAnimation
+            {
+                From = 0.30,
+                To = 1.0,
+                Duration = new Duration(TimeSpan.FromMilliseconds(190)),
+                EasingFunction = new Microsoft.UI.Xaml.Media.Animation.CubicEase
+                {
+                    EasingMode = Microsoft.UI.Xaml.Media.Animation.EasingMode.EaseOut
+                }
+            };
+            var storyboard = new Microsoft.UI.Xaml.Media.Animation.Storyboard
+            {
+                FillBehavior = Microsoft.UI.Xaml.Media.Animation.FillBehavior.Stop
+            };
+            Microsoft.UI.Xaml.Media.Animation.Storyboard.SetTarget(fade, page);
+            Microsoft.UI.Xaml.Media.Animation.Storyboard.SetTargetProperty(fade, "Opacity");
+            storyboard.Children.Add(fade);
+            storyboard.Begin();
+        }
+        catch (Exception ex)
+        {
+            // Motion must never prevent an engineering screen from opening.
+            page.Opacity = 1;
+            StartupDiagnostics.Record("Optional page transition disabled", ex);
+        }
     }
 
     private void ShowPage(string name)
@@ -46,6 +124,22 @@ public sealed partial class MainWindow : Window
         GuidePanel.Visibility = name == "guide" ? Visibility.Visible : Visibility.Collapsed;
         DiagnosticsPanel.Visibility = name == "diagnostics" ? Visibility.Visible : Visibility.Collapsed;
         ResourcesPanel.Visibility = name == "resources" ? Visibility.Visible : Visibility.Collapsed;
+        if (_activePage == name) return;
+        _activePage = name;
+        var page = name switch
+        {
+            "overview" => OverviewPanel,
+            "battery" => BatteryPanel,
+            "telemetry" => TelemetryPanel,
+            "validation" => ValidationPanel,
+            "pack" => PackPanel,
+            "report" => ReportPanel,
+            "guide" => GuidePanel,
+            "diagnostics" => DiagnosticsPanel,
+            "resources" => ResourcesPanel,
+            _ => OverviewPanel
+        };
+        AnimatePage(page);
     }
 
     private void Notice(string message, bool error = false)
