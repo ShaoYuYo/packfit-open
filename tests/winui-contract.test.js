@@ -57,3 +57,30 @@ test("Fluent typography and movement respect platform settings",()=>{
  assert.match(main,/WorkspaceRoot_SizeChanged/);
  assert.match(source,/x:Name="OverviewStatsGrid"/);
 });
+
+test("safe UI and its native compatibility flow bypass the XAML-based MainWindow",()=>{
+ const app=read("desktop/PackFit.Engineering.Desktop/App.xaml.cs");
+ const compat=read("desktop/PackFit.Engineering.Desktop/RecoveryWindow.cs");
+ const appSafe=app.indexOf('a.Equals("--safe-ui"');
+ const appNormal=app.indexOf('_mainWindow = new MainWindow();',appSafe);
+ assert.ok(appSafe>=0 && appNormal>appSafe,"safe UI must branch before normal MainWindow load");
+ assert.match(app,/new RecoveryWindow\(null\)/);
+ assert.match(app,/--selftest-compat/);
+ assert.match(compat,/BatteryReportParser\.ParseAll/);
+ assert.match(compat,/TelemetryAnalyzer\.Analyze/);
+ assert.match(compat,/ValidationMatrix\.Parse/);
+ assert.match(compat,/PackCalculator\.Calculate/);
+ assert.match(compat,/EngineeringReport\.Build/);
+ assert.doesNotMatch(compat,/InitializeComponent\(\)/);
+});
+
+test("portable WinUI release retains its original .exe filename to preserve resource URI mapping",()=>{
+ const release=read(".github/workflows/publish-beta4.yml");
+ assert.match(release,/dist\/portable\/PackFit\.Engineering\.exe/);
+ assert.doesNotMatch(release,/PackFit-Engineering-portable-win-x64\.exe/);
+ assert.doesNotMatch(release,/Copy-Item .*PackFit\.Engineering\.exe/);
+ assert.match(release,/Compatibility self-test: COMPAT_WINDOW_OK/);
+ const winci=read(".github/workflows/desktop-winui.yml");
+ assert.match(winci,/MAIN_WINDOW_OK/);
+ assert.match(winci,/COMPAT_WINDOW_OK/);
+});
