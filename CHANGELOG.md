@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased maintenance and privacy hardening (after v0.8.0-beta.1)
+
+- Correct a genuine telemetry-review edge case: anomaly types appearing after the first 1,000 visible findings now remain in complete per-code statistics, engineering next steps and Markdown exports.
+- Enforce a bounded byte budget when the native Windows app reads local HTML and CSV/TSV reports, including files that grow during import; support Unicode BOMs.
+- Remove optional third-party executable animation JavaScript and online Google Fonts requests from the default browser app. Preserve system typography, native Web Animations, reduced motion and offline use (browser v0.6.4).
+- Introduce a maintainer change workflow, CODEOWNERS, more useful PR review checklist, accurate public evidence log and a candid application-readiness assessment.
+- Add GitHub artifact provenance attestations for future Windows CI ZIP builds. Previously published v0.8.0-beta.1 release assets are **not retroactively attested**.
+- Add reproducible tests for late telemetry anomalies, file size limits, local animation and third-party request prevention.
+
+These changes must pass review and main-branch CI before being described as a released version.
+
 ## v0.8.0-beta.1 — 2026-11-02 (published)
 
 - Add functional native WinUI capacity-retention bars, single-battery capacity-history trends, four-signal telemetry charts, S/P cell topology diagrams and standby SOC/hour/optional Wh estimates.
