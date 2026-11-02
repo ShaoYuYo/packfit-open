@@ -26,14 +26,14 @@ test("real and demo battery colors share the theme accent",()=>{
  assert.match(app,/"#76515e"/);
  assert.doesNotMatch(app,/"#7ce4b4"/);
 });
-test("Motion integration is optional and never blocks the calculator",()=>{
+test("animation uses only browser-native APIs and works without network access",()=>{
  const ui=read("src/motion-enhance.js");
  const app=read("src/app.js");
  const worker=read("sw.js");
- assert.match(ui,/motion@13\.2\.0\/\+esm/);
- assert.match(ui,/catch\(\(\)=>\{motionAnimate = null;\}\)/);
+ assert.doesNotMatch(ui,/import\s*\(|cdn\.jsdelivr|https?:\/\//);
  assert.match(ui,/prefers-reduced-motion: reduce/);
  assert.match(ui,/element\.animate/);
+ assert.match(ui,/setupMotionLibrary/);
  assert.match(app,/animatePanelEntry\(shown\)/);
  assert.match(app,/animateCalculation\(element\)/);
  assert.match(worker,/"\.\/src\/motion-enhance\.js"/);
@@ -41,7 +41,7 @@ test("Motion integration is optional and never blocks the calculator",()=>{
 test("version number, theme color and app stylesheet agree",()=>{
  const pkg=JSON.parse(read("package.json"));
  const html=read("index.html");
- assert.equal(pkg.version,"0.6.3");
- assert.match(html,/VERSION 0\.6\.3/);
+ assert.equal(pkg.version,"0.6.4");
+ assert.match(html,/VERSION 0\.6\.4/);
  assert.match(html,/name="theme-color" content="#f6f3f0"/);
 });
