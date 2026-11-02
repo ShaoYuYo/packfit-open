@@ -89,11 +89,12 @@ internal static class Cli
             string output;
             if (command == "compare")
             {
-                var compare = TelemetryComparison.Compare(analyzed[0],analyzed[1]);
+                var compare = TelemetryComparison.Compare(analyzed[0],analyzed[1],thresholds);
                 output = format == "json"
                     ? JsonSerializer.Serialize(new
                     {
                         kind = "screening-comparison",
+                        appliedThresholds = thresholds,
                         baseline = Snapshot(compare.BaselineSource,compare.Baseline),
                         candidate = Snapshot(compare.CandidateSource,compare.Candidate),
                         findings = compare.Findings.Select(d => new
