@@ -39,7 +39,7 @@
             <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="*" /></Grid.RowDefinitions>
             <InfoBar Grid.Row="0" x:Name="NoticeBar" Title="PackFit" Severity="Informational"
                 IsOpen="False" IsClosable="True" Margin="0,0,0,10" />
-            <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <ScrollViewer x:Name="WorkspaceScroll" Grid.Row="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
               <StackPanel Spacing="20" MaxWidth="1140" HorizontalAlignment="Stretch">
                 <StackPanel x:Name="OverviewPanel" Spacing="20" Visibility="Collapsed"><StackPanel Spacing="8" Margin="0,0,0,12">
 <TextBlock Text="ENGINEERING / WORKSPACE" Style="{StaticResource PfEyebrowText}" />
@@ -49,7 +49,23 @@
  <ComboBoxItem Tag="basic" Content="Basic · 簡易排查"/>
  <ComboBoxItem Tag="engineering" Content="Engineering · 進階工程"/>
 </ComboBox>
-</StackPanel><Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="14" Padding="22"><StackPanel Spacing="13"><TextBlock Text="常用工作" Style="{StaticResource PfSectionHeading}" /><TextBlock Text="先讀取電池狀態、匯入量測資料，再確認測試門檻。所有運算都在本機執行。" TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/><StackPanel x:Name="QuickActions" Orientation="Horizontal" Spacing="12"><Button x:Name="QuickBattery" Content="產生電池報告" Click="GenerateBatteryClick" Style="{StaticResource AccentButtonStyle}" MinHeight="42" Padding="17,10" /><Button x:Name="QuickTelemetry" Content="匯入量測 CSV" Click="ImportTelemetryClick"  MinHeight="42" Padding="17,10" /><Button x:Name="QuickExport" Content="輸出工程報告" Click="ExportReportClick"  MinHeight="42" Padding="17,10" /><Button Content="問題排查引導" Click="GoGuideClick" MinHeight="42" Padding="17,10" /></StackPanel></StackPanel></Border>
+</StackPanel>
+<Border Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="18" Padding="22">
+ <Grid ColumnSpacing="18">
+  <Grid.ColumnDefinitions><ColumnDefinition Width="5"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+  <Border Grid.Column="0" Background="{ThemeResource AccentFillColorDefaultBrush}" CornerRadius="3"/>
+  <StackPanel Grid.Column="1" Spacing="9">
+   <TextBlock Text="SESSION / DATA PROVENANCE" Style="{StaticResource PfEyebrowText}"/>
+   <TextBlock x:Name="DataModeText" Text="尚未建立分析工作階段" FontSize="21" FontWeight="SemiBold" TextWrapping="Wrap"/>
+   <TextBlock x:Name="DataModeDetails" Text="請匯入自己的資料，或使用完全合成的範例試用。計算僅供初步篩選。" Style="{StaticResource PfLeadText}"/>
+   <StackPanel x:Name="SessionActions" Orientation="Horizontal" Spacing="10">
+    <Button Content="載入合成示範" Click="LoadDemoClick" MinHeight="40"/>
+    <Button Content="清除分析資料" Click="ClearWorkspaceClick" MinHeight="40" ToolTipService.ToolTip="清除已匯入、計算和示範數據；輸入設定仍會保留"/>
+   </StackPanel>
+  </StackPanel>
+ </Grid>
+</Border>
+<Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="14" Padding="22"><StackPanel Spacing="13"><TextBlock Text="常用工作" Style="{StaticResource PfSectionHeading}" /><TextBlock Text="先讀取電池狀態、匯入量測資料，再確認測試門檻。所有運算都在本機執行。" TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/><StackPanel x:Name="QuickActions" Orientation="Horizontal" Spacing="12"><Button x:Name="QuickBattery" Content="產生電池報告" Click="GenerateBatteryClick" Style="{StaticResource AccentButtonStyle}" MinHeight="42" Padding="17,10" /><Button x:Name="QuickTelemetry" Content="匯入量測 CSV" Click="ImportTelemetryClick"  MinHeight="42" Padding="17,10" /><Button x:Name="QuickExport" Content="輸出工程報告" Click="ExportReportClick" MinHeight="42" Padding="17,10" ToolTipService.ToolTip="輸出 Markdown 工程報告 (Ctrl+S)"><Button.KeyboardAccelerators><KeyboardAccelerator Key="S" Modifiers="Control"/></Button.KeyboardAccelerators></Button><Button Content="問題排查引導" Click="GoGuideClick" MinHeight="42" Padding="17,10" /></StackPanel></StackPanel></Border>
 <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="14" Padding="22">
  <StackPanel Spacing="13">
   <TextBlock Text="我今天遇到什麼問題？" Style="{StaticResource PfSectionHeading}" />
@@ -66,9 +82,9 @@
  </StackPanel>
 </Border>
 <Grid x:Name="OverviewStatsGrid" ColumnSpacing="12" RowSpacing="12"><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-<Border x:Name="OverviewStats1" Grid.Column="0" Padding="20" CornerRadius="14" Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"><StackPanel><TextBlock Text="BATTERY" Style="{StaticResource PfEyebrowText}"/><TextBlock x:Name="OverviewBattery" Text="尚未分析" Style="{StaticResource PfMetricValue}"/></StackPanel></Border>
-<Border x:Name="OverviewStats2" Grid.Column="1" Padding="20" CornerRadius="14" Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"><StackPanel><TextBlock Text="TELEMETRY" Style="{StaticResource PfEyebrowText}"/><TextBlock x:Name="OverviewTelemetry" Text="尚未匯入" Style="{StaticResource PfMetricValue}"/></StackPanel></Border>
-<Border x:Name="OverviewStats3" Grid.Column="2" Padding="20" CornerRadius="14" Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"><StackPanel><TextBlock Text="VALIDATION" Style="{StaticResource PfEyebrowText}"/><TextBlock x:Name="OverviewValidation" Text="尚未匯入" Style="{StaticResource PfMetricValue}"/></StackPanel></Border></Grid><Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="14" Padding="22"><StackPanel Spacing="13"><TextBlock Text="專案識別" Style="{StaticResource PfSectionHeading}" /><TextBlock Text="可以填入公開或內部專案代碼；資料只會用於本機產出的報告，不會自動上傳。" TextWrapping="Wrap" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+<Border x:Name="OverviewStats1" Grid.Column="0" Padding="20" CornerRadius="14" Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"><StackPanel><TextBlock Text="BATTERY" Style="{StaticResource PfEyebrowText}"/><TextBlock x:Name="OverviewBattery" Text="尚未分析" Style="{StaticResource PfMetricValue}"/><TextBlock x:Name="OverviewBatterySource" Text="尚無資料" Style="{StaticResource PfLeadText}"/></StackPanel></Border>
+<Border x:Name="OverviewStats2" Grid.Column="1" Padding="20" CornerRadius="14" Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"><StackPanel><TextBlock Text="TELEMETRY" Style="{StaticResource PfEyebrowText}"/><TextBlock x:Name="OverviewTelemetry" Text="尚未匯入" Style="{StaticResource PfMetricValue}"/><TextBlock x:Name="OverviewTelemetrySource" Text="尚無資料" Style="{StaticResource PfLeadText}"/></StackPanel></Border>
+<Border x:Name="OverviewStats3" Grid.Column="2" Padding="20" CornerRadius="14" Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"><StackPanel><TextBlock Text="VALIDATION" Style="{StaticResource PfEyebrowText}"/><TextBlock x:Name="OverviewValidation" Text="尚未匯入" Style="{StaticResource PfMetricValue}"/><TextBlock x:Name="OverviewValidationSource" Text="尚無資料" Style="{StaticResource PfLeadText}"/></StackPanel></Border></Grid><Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="14" Padding="22"><StackPanel Spacing="13"><TextBlock Text="專案識別" Style="{StaticResource PfSectionHeading}" /><TextBlock Text="可以填入公開或內部專案代碼；資料只會用於本機產出的報告，不會自動上傳。" TextWrapping="Wrap" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
 <TextBox x:Name="ProjectBox" Header="Project / 專案名稱" Text="Sample Battery Project" MinWidth="115" Margin="0,0,10,12" />
 <TextBox x:Name="AuthorBox" Header="Engineer / 工程師" Text="" MinWidth="115" Margin="0,0,10,12" /></StackPanel></Border><Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="14" Padding="22"><StackPanel Spacing="13"><TextBlock Text="工具的判斷邊界" Style="{StaticResource PfSectionHeading}" /><TextBlock TextWrapping="Wrap" Text="Pass/Fail 只依據你設定的量測門檻；電池安全、可靠度、機構、電性與認證仍需專業審查。範例數據不代表 HP 或任何供應商標準。" /></StackPanel></Border></StackPanel>
                 <StackPanel x:Name="BatteryPanel" Spacing="20" Visibility="Collapsed"><StackPanel Spacing="8" Margin="0,0,0,12">
@@ -98,7 +114,10 @@
   <Button Content="取得 Log 範例" Click="SaveTelemetryExampleClick" MinHeight="42" Padding="17,10"/>
 </StackPanel>
 <TextBlock Text="必要欄位：Timestamp（含時區）；至少再有一個訊號欄位。支援 Voltage_V / Voltage_mV、Current_A / Current_mA、Temp_C、SOC_pct。" TextWrapping="Wrap" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/></StackPanel></Border><Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="14" Padding="22"><StackPanel Spacing="13"><TextBlock Text="異常摘要" Style="{StaticResource PfSectionHeading}" /><TextBlock x:Name="TelemetryResult" Text="尚未匯入 CSV。" FontSize="14" TextWrapping="Wrap"/>
-<ListView x:Name="TelemetryList" MinHeight="175" MaxHeight="370" SelectionMode="None" /><StackPanel x:Name="TelemetryChartCanvas" Spacing="10"/><Expander Header="批次分析摘要（同一組門檻）" IsExpanded="True">
+<TextBox x:Name="FindingFilterBox" Header="搜尋異常（代碼、嚴重度、文字或列號）" PlaceholderText="例如 VOLTAGE_LOW、TEMP_HIGH、Warning" TextChanged="FindingFilter_TextChanged" MaxWidth="520" HorizontalAlignment="Stretch" AutomationProperties.Name="搜尋異常紀錄"/>
+<TextBlock x:Name="FindingCodeSummary" Text="匯入資料後顯示完整 Log 各類異常統計。" FontSize="12" TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+<TextBlock x:Name="FindingPreviewCaption" Text="目前沒有異常明細。" FontSize="12" TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+<ListView x:Name="TelemetryList" MinHeight="175" MaxHeight="370" SelectionMode="None" AutomationProperties.Name="量測異常預覽清單" /><StackPanel x:Name="TelemetryChartCanvas" Spacing="10"/><Expander Header="批次分析摘要（同一組門檻）" IsExpanded="True">
   <StackPanel Spacing="8" Padding="12">
     <TextBlock Text="最多 12 份 CSV，同時使用上方門檻。只讀取本機資料，不上傳；詳細結果可匯出至工程報告。" FontSize="12" TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
     <ListView x:Name="BatchTelemetryList" MinHeight="90" MaxHeight="240" SelectionMode="None"/>

@@ -23,6 +23,14 @@ public sealed partial class MainWindow
            VisualsPack.Children.Count==0 ||
            SleepGraphCanvas.Children.Count==0)
             throw new InvalidOperationException("Engineering visuals smoke test failed.");
+        if(!CreateReport().Contains("SYNTHETIC DEMO DATA",StringComparison.Ordinal) ||
+           !HasSyntheticData ||
+           !DataModeText.Text.Contains("混合資料來源",StringComparison.Ordinal))
+            throw new InvalidOperationException("Synthetic data provenance contract failed.");
+        ClearAnalysisData();
+        if(HasSessionData || HasSyntheticData || _telemetry is not null ||
+           TelemetryList.Items.Count != 0 || OverviewBattery.Text != "尚未分析")
+            throw new InvalidOperationException("Workspace reset smoke test failed.");
     }
 
     private void InitializeEngineeringInsights()
@@ -121,10 +129,15 @@ public sealed partial class MainWindow
         SelectPage("guide");
     }
 
-    private void LoadDemoClick(object sender,RoutedEventArgs e)
+    private async void LoadDemoClick(object sender,RoutedEventArgs e)
     {
         try
         {
+            // Validate user-defined screening limits BEFORE replacing an existing session.
+            // Invalid text input must not silently discard an engineer's prior results.
+            var demoThresholds = ReadThresholds();
+            if (!await ConfirmReplaceSessionAsync()) return;
+            ClearAnalysisData();
             const string report = "<html><h2>Installed batteries</h2><table>" +
                 "<tr><td>NAME</td><td>Synthetic Battery A</td></tr>" +
                 "<tr><td>DESIGN CAPACITY</td><td>56,000 mWh</td></tr>" +
@@ -150,15 +163,14 @@ public sealed partial class MainWindow
             _batteryRecords=BatteryReportParser.ParseAll(report);
             _batteryHistory=BatteryHistoryParser.Parse(report);
             _battery=_batteryRecords.Count==1?_batteryRecords[0]:null;
-            _limits=ReadThresholds();
+            _limits=demoThresholds;
             _telemetry=TelemetryAnalyzer.Analyze(sample,_limits);
             _matrix=ValidationMatrix.Parse(SampleMatrix);
+            _batterySynthetic = _telemetrySynthetic = _validationSynthetic = true;
             UpdateBattery();
             TelemetryResult.Text=$"合成示範 Log：{_telemetry.Samples} 筆 · {_telemetry.TotalFindings} 個篩選旗標";
             OverviewTelemetry.Text=$"{_telemetry.TotalFindings} sample flags";
-            TelemetryList.Items.Clear();
-            foreach(var finding in _telemetry.Findings)
-                TelemetryList.Items.Add($"{finding.Code} — {finding.Message}");
+            RenderTelemetryFindings();
             var val=ValidationMatrix.Summarize(_matrix);
             ValidationResult.Text=$"合成範例：{val.Passed} PASS · {val.Failed} FAIL · {val.NotRun} NOT RUN";
             OverviewValidation.Text=$"{val.Failed} FAIL / {val.NotRun} NOT RUN";
@@ -166,7 +178,9 @@ public sealed partial class MainWindow
             foreach(var item in _matrix)
                 ValidationList.Items.Add($"{item.Verdict} · {item.TestId} · {item.Metric}");
             CalculatePackClick(sender,e);
+            _packSynthetic = _pack is not null;
             RefreshVisuals();
+            UpdateSessionStatus();
             Notice("已載入完全虛構的示範資料。圖表和旗標可供試用，不代表實測或安全驗證。");
             SelectPage("visuals");
         }
@@ -185,6 +199,7 @@ public sealed partial class MainWindow
                 ReadNumber(SleepStartSoc),ReadNumber(SleepEndSoc),
                 ReadNumber(SleepHours),wh);
             EngineeringVisuals.Standby(SleepGraphCanvas,_sleepDrain);
+            UpdateSessionStatus();
             Notice("待機掉電估算完成。輸入為手動 SOC，不是實測待機電功率。");
         }
         catch(Exception ex){Notice("待機分析資料有誤："+ex.Message,true);}

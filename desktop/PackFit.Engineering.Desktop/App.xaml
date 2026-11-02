@@ -25,14 +25,14 @@
 
             <Style x:Key="PfPageHeading" TargetType="TextBlock">
                 <Setter Property="FontFamily" Value="{StaticResource PfHeadingFont}"/>
-                <Setter Property="FontSize" Value="30"/>
+                <Setter Property="FontSize" Value="32"/>
                 <Setter Property="FontWeight" Value="SemiBold"/>
                 <Setter Property="TextWrapping" Value="Wrap"/>
             </Style>
 
             <Style x:Key="PfSectionHeading" TargetType="TextBlock">
                 <Setter Property="FontFamily" Value="{StaticResource PfHeadingFont}"/>
-                <Setter Property="FontSize" Value="18"/>
+                <Setter Property="FontSize" Value="19"/>
                 <Setter Property="FontWeight" Value="SemiBold"/>
                 <Setter Property="TextWrapping" Value="Wrap"/>
             </Style>
@@ -46,7 +46,7 @@
 
             <Style x:Key="PfMetricValue" TargetType="TextBlock">
                 <Setter Property="FontFamily" Value="{StaticResource PfHeadingFont}"/>
-                <Setter Property="FontSize" Value="22"/>
+                <Setter Property="FontSize" Value="26"/>
                 <Setter Property="FontWeight" Value="SemiBold"/>
                 <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
                 <Setter Property="TextWrapping" Value="Wrap"/>

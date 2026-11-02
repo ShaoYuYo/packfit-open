@@ -11,11 +11,12 @@ const main=[
  read("desktop/PackFit.Engineering.Desktop/MainWindow.xaml.cs"),
  read("desktop/PackFit.Engineering.Desktop/MainWindow.Tools.cs"),
  read("desktop/PackFit.Engineering.Desktop/MainWindow.Batch.cs"),
- read("desktop/PackFit.Engineering.Desktop/MainWindow.Insights.cs")
+ read("desktop/PackFit.Engineering.Desktop/MainWindow.Insights.cs"),
+ read("desktop/PackFit.Engineering.Desktop/MainWindow.Premium.cs")
 ].join("\n");
 
 test("native WinUI events have C# handlers and every named control is unique",()=>{
- const handlers=[...source.matchAll(/(?:Click|SelectionChanged|PaneToggleRequested|SizeChanged)="([A-Za-z_]\w+)"/g)].map(x=>x[1]);
+ const handlers=[...source.matchAll(/(?:Click|SelectionChanged|PaneToggleRequested|SizeChanged|TextChanged)="([A-Za-z_]\w+)"/g)].map(x=>x[1]);
  const missing=[...new Set(handlers.filter(x=>!new RegExp("\\b"+x+"\\s*\\(").test(main)))];
  assert.deepEqual(missing,[]);
  const names=[...source.matchAll(/x:Name="([^"]+)"/g)].map(x=>x[1]);
@@ -122,4 +123,25 @@ test("independent compatibility UI receives the same visual and demo capabilitie
  const ci=read(".github/workflows/desktop-winui.yml");
  assert.match(ci,/VISUALS_OK/);
  assert.match(ci,/COMPAT_VISUALS_OK/);
+});
+
+test("premium workbench couples visible status with real source provenance",()=>{
+  const premium=read("desktop/PackFit.Engineering.Desktop/MainWindow.Premium.cs");
+  const insights=read("desktop/PackFit.Engineering.Desktop/MainWindow.Insights.cs");
+  for(const name of ["DataModeText","DataModeDetails","OverviewBatterySource",
+    "OverviewTelemetrySource","OverviewValidationSource","SessionActions",
+    "FindingFilterBox","FindingCodeSummary","FindingPreviewCaption","WorkspaceScroll"])
+    assert.match(source,new RegExp('x:Name="'+name+'"'));
+  for(const signal of ["HasSyntheticData","ConfirmReplaceSessionAsync",
+    "ClearWorkspaceClick","DataProvenanceMarkdown","RenderTelemetryFindings",
+    "FindingFilter_TextChanged","FindingCodeCounts","HiddenFindings"])
+    assert.match(premium,new RegExp(signal));
+  assert.match(main,/DataProvenanceMarkdown\(\)/);
+  assert.match(insights,/if\s*\(!await ConfirmReplaceSessionAsync\(\)\) return/);
+  assert.match(insights,/Synthetic data provenance contract failed/);
+  assert.match(insights,/Workspace reset smoke test failed/);
+  assert.match(source,/Key="S" Modifiers="Control"/);
+  assert.match(source,/AutomationProperties.Name="搜尋異常紀錄"/);
+  assert.match(main,/UpdateSessionStatus\(\)/);
+  assert.match(main,/WorkspaceScroll.ChangeView\(null, 0, null, true\)/);
 });

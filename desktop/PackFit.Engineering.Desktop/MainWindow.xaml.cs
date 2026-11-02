@@ -47,6 +47,7 @@ public sealed partial class MainWindow : Window
 
         SetupGuides();
         InitializeEngineeringInsights();
+        UpdateSessionStatus();
         Navigation.SelectedItem = Navigation.MenuItems[0];
         ShowPage("overview");
     }
@@ -65,6 +66,7 @@ public sealed partial class MainWindow : Window
         // The content width excludes the NavigationView sidebar.
         bool compact = args.NewSize.Width < 760;
         QuickActions.Orientation = compact ? Orientation.Vertical : Orientation.Horizontal;
+        SessionActions.Orientation = compact ? Orientation.Vertical : Orientation.Horizontal;
         SymptomActions.Orientation = compact ? Orientation.Vertical : Orientation.Horizontal;
         BatteryActions.Orientation = compact ? Orientation.Vertical : Orientation.Horizontal;
         TelemetryFileActions.Orientation = compact ? Orientation.Vertical : Orientation.Horizontal;
@@ -146,6 +148,7 @@ public sealed partial class MainWindow : Window
         ResourcesPanel.Visibility = name == "resources" ? Visibility.Visible : Visibility.Collapsed;
         if (_activePage == name) return;
         _activePage = name;
+        WorkspaceScroll.ChangeView(null, 0, null, true);
         var page = name switch
         {
             "overview" => OverviewPanel,
@@ -237,7 +240,9 @@ public sealed partial class MainWindow : Window
             _batteryRecords = await Task.Run(() => BatteryReportParser.ParseAll(html));
             _batteryHistory = await Task.Run(() => BatteryHistoryParser.Parse(html));
             _battery = _batteryRecords.Count == 1 ? _batteryRecords[0] : null;
+            _batterySynthetic = false;
             UpdateBattery();
+            UpdateSessionStatus();
             Notice("Windows 電池報告已在本機建立並分析。");
         }
         catch (Exception ex)
@@ -262,7 +267,9 @@ public sealed partial class MainWindow : Window
                 ((IReadOnlyList<BatteryHealth>)BatteryReportParser.ParseAll(html),
                  (IReadOnlyList<CapacityHistoryPoint>)BatteryHistoryParser.Parse(html)));
             _battery = _batteryRecords.Count == 1 ? _batteryRecords[0] : null;
+            _batterySynthetic = false;
             UpdateBattery();
+            UpdateSessionStatus();
             Notice("已匯入並分析電池容量報告。");
         }
         catch (Exception ex) { Notice(ex.Message, true); }
@@ -308,22 +315,17 @@ public sealed partial class MainWindow : Window
             string text = await LocalDataFiles.ReadTextAsync(path,12_000_000);
             _telemetry = await Task.Run(() => TelemetryAnalyzer.Analyze(text, thresholds));
             _limits = thresholds;
+            _telemetrySynthetic = false;
             TelemetryResult.Text = string.Format(Culture,
                 "{0:N0} 筆量測 · {1:N0} 項異常或提示 · 期間 {2:g}\n溫度 {3}～{4} °C · 放電能量估算 {5} Wh",
                 _telemetry.Samples, _telemetry.TotalFindings, _telemetry.Duration,
                 _telemetry.MinTemperatureC?.ToString("0.##",Culture) ?? "N/A",
                 _telemetry.MaxTemperatureC?.ToString("0.##",Culture) ?? "N/A",
                 _telemetry.EstimatedDischargedWh?.ToString("0.###",Culture) ?? "N/A");
-            TelemetryList.Items.Clear();
-            foreach (var f in _telemetry.Findings.Take(1000))
-                TelemetryList.Items.Add(
-                    $"Row {f.Row:00000}   [{f.Severity}] {f.Code} — {f.Message}");
-            if (_telemetry.HiddenFindings > 0)
-                TelemetryList.Items.Add($"...另有 {_telemetry.HiddenFindings} 筆未列於畫面。");
-            if (_telemetry.TotalFindings == 0)
-                TelemetryList.Items.Add("此輪門檻下未發現異常；不等於安全驗證通過。");
+            RenderTelemetryFindings();
             OverviewTelemetry.Text = _telemetry.TotalFindings.ToString("N0",Culture) + " flags";
             RefreshVisuals();
+            UpdateSessionStatus();
             Notice("量測 CSV 分析完成。請確認門檻、電流正負號及原始資料。");
         }
         catch (Exception ex) { Notice(ex.Message, true); }
@@ -337,6 +339,7 @@ public sealed partial class MainWindow : Window
             if (path is null) return;
             string matrixCsv = await LocalDataFiles.ReadTextAsync(path,4_000_000);
             _matrix = await Task.Run(() => ValidationMatrix.Parse(matrixCsv));
+            _validationSynthetic = false;
             var summary = ValidationMatrix.Summarize(_matrix);
             ValidationResult.Text = string.Format(Culture,
                 "Total {0:N0}   PASS {1:N0}   FAIL {2:N0}   NOT RUN {3:N0}   完成項目通過率 {4}%",
@@ -352,6 +355,7 @@ public sealed partial class MainWindow : Window
                 ValidationList.Items.Add($"另外 {_matrix.Count - 400} 筆未顯示；報告會包含全部案例。");
             OverviewValidation.Text = $"{summary.Failed} FAIL / {summary.NotRun} OPEN";
             RefreshVisuals();
+            UpdateSessionStatus();
             Notice("驗證矩陣已完成 PASS/FAIL/NOT RUN 整理。");
         }
         catch (Exception ex) { Notice(ex.Message, true); }
@@ -374,6 +378,7 @@ public sealed partial class MainWindow : Window
                 LoadW: ReadNumber(LoadBox));
             _packDesign = design;
             _pack = PackCalculator.Calculate(design);
+            _packSynthetic = false;
             PackResultText.Text = string.Format(Culture,
                 "電芯 {0} 顆 · 電壓 {1:0.##} V · 容量 {2:0.##} Ah\n" +
                 "名目能量 {3:0.##} Wh · 重量 {4:0.##} g · 包絡體積 {5:0.####} L\n" +
@@ -384,6 +389,7 @@ public sealed partial class MainWindow : Window
                 _pack.GravimetricWhKg, _pack.VolumetricWhL,
                 _pack.IdealRuntimeHours);
             RefreshVisuals();
+            UpdateSessionStatus();
             Notice("電池包名目數據已計算。不是機構可行性或安規簽核。");
         }
         catch (Exception ex) { Notice(ex.Message, true); }
@@ -393,6 +399,12 @@ public sealed partial class MainWindow : Window
     {
         string review=EngineeringReport.Build(ProjectBox.Text, AuthorBox.Text, _battery,
             _telemetry, _matrix, _pack, _limits);
+        // Keep the report title and metadata first, with provenance before results.
+        int firstSection = review.IndexOf("\n## ", StringComparison.Ordinal);
+        if (firstSection >= 0)
+            review = review.Insert(firstSection, "\n" + DataProvenanceMarkdown() + "\n");
+        else
+            review += "\n" + DataProvenanceMarkdown();
         string batch=BatchReport();
         if (_batteryRecords.Count > 1)
         {
