@@ -177,13 +177,13 @@ test("native irregular-space fit is a real selectable visualization with explici
    assert.match(source,new RegExp('x:Name="'+id+'"'));
  for(const handler of ["LoadSyntheticGeometryClick","CalculateGeometryClick",
    "GeometryCandidateChanged","GeometryJsonChanged"])
-   assert.match(ui,new RegExp('\\\\b'+handler+'\\\\s*\\\\('));
- assert.match(ui,/LayoutOptimizer\\.Optimize/);
- assert.match(ui,/GeometryMap\\.Children\\.Add/);
+   assert.match(ui,new RegExp('\\b'+handler+'\\s*\\('));
+ assert.match(ui,/LayoutOptimizer\.Optimize/);
+ assert.match(ui,/GeometryMap\.Children\.Add/);
  assert.match(ui,/RunLayoutSmokeTest/);
- assert.match(insights,/RunLayoutSmokeTest\\(\\)/);
- assert.match(premium,/InvalidateGeometry\\(clearText:true\\)/);
- assert.match(main,/_geometryResult\\.ToMarkdown\\(_geometryProblem\\)/);
+ assert.match(insights,/RunLayoutSmokeTest\(\)/);
+ assert.match(premium,/InvalidateGeometry\(clearText:true\)/);
+ assert.match(main,/_geometryResult\.ToMarkdown\(_geometryProblem\)/);
  assert.match(core,/KeepoutMarginMm/);
  assert.match(core,/MaxThicknessMm/);
  assert.match(core,/NOT AN OPTIMALITY CERTIFICATE/);
