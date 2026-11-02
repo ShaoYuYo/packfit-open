@@ -167,4 +167,30 @@ Assert(nextSteps.Any(s=>s.Contains("Temperature flags")) &&
     nextSteps.Any(s=>s.Contains("validation matrix")),
     "Evidence-based triage proposes next checks without claiming an automatic root cause");
 
+
+var longCsvRows=Enumerable.Range(0,1208).Select(index =>
+    $"2026-11-01T00:00:00Z".Replace("00:00:00Z",
+        DateTimeOffset.Parse("2026-11-01T00:00:00Z").AddSeconds(index)
+            .ToString("HH:mm:ss'Z'",System.Globalization.CultureInfo.InvariantCulture)) +
+    $",{(index==1207?9.0:11.5):0.0},2.0,{(index<1207?65:34)},80");
+var longLog="Timestamp,Voltage_V,Current_A,Temp_C,SOC_pct\\n"
+    +string.Join("\\n",longCsvRows)+"\\n";
+var longAnalysis=TelemetryAnalyzer.Analyze(longLog,
+    new TelemetryThresholds(MaximumTemperatureC:60,MinimumVoltageV:10));
+Assert(longAnalysis.TotalFindings>1000 && longAnalysis.HiddenFindings>0,
+    "large telemetry logs report truncated detailed findings explicitly");
+Assert(!longAnalysis.Findings.Any(f=>f.Code=="VOLTAGE_LOW") &&
+    longAnalysis.FindingCodeCounts.TryGetValue("VOLTAGE_LOW",out int lowCount) &&
+    lowCount==1 &&
+    longAnalysis.FindingCodeCounts.GetValueOrDefault("TEMP_HIGH")>=1200,
+    "full-log finding category counts preserve late anomalies beyond the first 1000 flags");
+var longNext=EngineeringTriage.NextSteps(longAnalysis,null,true);
+Assert(longNext.Any(step=>step.Contains("Voltage flags")),
+    "late voltage events still inform next-step triage");
+var longReport=EngineeringReport.Build("synthetic","",null,longAnalysis,null,null,
+    new TelemetryThresholds(MaximumTemperatureC:60,MinimumVoltageV:10));
+Assert(longReport.Contains("VOLTAGE_LOW: 1") &&
+    longReport.Contains("Full-log finding counts"),
+    "reviewable report includes anomalies suppressed from the detailed table");
+
 Console.WriteLine("All PackFit engineering core checks passed.");
