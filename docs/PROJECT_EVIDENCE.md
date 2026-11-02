@@ -58,6 +58,12 @@ An experienced battery engineer described a recurrent early-pack-design problem:
 
 The maintainer then merged [#11](https://github.com/ShaoYuYo/packfit-open/pull/11), an experimental offline irregular layout pre-screen with synthetic input, native candidate diagrams and a local CLI. Verifiable source checks: [Linux CI](https://github.com/ShaoYuYo/packfit-open/actions/runs/41460502989), [Windows WinUI smoke](https://github.com/ShaoYuYo/packfit-open/actions/runs/41460502991), and [CodeQL](https://github.com/ShaoYuYo/packfit-open/actions/runs/41460502972). Hardware geometry, independent CAD review and user adoption remain unverified.
 
+## Dimension-first needs discovery and verified code changes (2026-11-02)
+
+The engineer clarified that her early layout inputs are often just **outer battery length, width and thickness**, because she cannot open a 3D CAD file. This is a qualitative, anonymous **problem statement**, not a claim of product trial or endorsement. The code maintainer is a separate independent developer; do not attribute the engineer's professional experience to the maintainer.
+
+[Merged PR #13](https://github.com/ShaoYuYo/packfit-open/pull/13) adds dimension-first editing, two optional cell candidates, fixed S/parallel range, Z/edge/gap assumptions, opt-in rotation, outer-envelope Wh/L, a native diagram, and tested stale-result invalidation. [Linux CI](https://github.com/ShaoYuYo/packfit-open/actions/runs/41467867805), [Windows](https://github.com/ShaoYuYo/packfit-open/actions/runs/41467867448) and [CodeQL](https://github.com/ShaoYuYo/packfit-open/actions/runs/41467867400) passed on the final reviewed PR commit. All public cells and geometry are fictional; practical layout adoption remains unverified.
+
 ## Real laptop feedback and outstanding investigation
 
 A Windows user reported a native XAML parsing failure during startup; logs showed App initialization succeeded before MainWindow failed. This prompted [issue #4](https://github.com/ShaoYuYo/packfit-open/issues/4), diagnostics, an independent safe mode and a portable EXE packaging correction. The maintainer subsequently reported that the app could open, which is useful first-hand **maintainer feedback** but is not an independent multi-device acceptance study.
