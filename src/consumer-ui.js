@@ -63,6 +63,13 @@ function refreshBatteryOptions(){
   q("pf-battery-selector").hidden=healthRecords.length<=1;
   if(healthRecords.length)select.value=String(Math.min(previouslySelected,healthRecords.length-1));
 }
+function clearHealthOnImportError(){
+  healthRecords=[];healthResult=null;
+  refreshBatteryOptions();
+  q("pf-retention").hidden=true;
+  q("pf-design").value="";
+  q("pf-full").value="";
+}
 function selectReportBattery(index){
   const record=healthRecords[index];
   if(!record)return;
@@ -112,7 +119,7 @@ export function initializeConsumer(getLanguage){
   });
   q("pf-report").addEventListener("change",async(event)=>{
     const file=event.target.files?.[0];if(!file)return;
-    if(file.size>2000000){set("pf-report-status",t("bigReport"));event.target.value="";return;}
+    if(file.size>2000000){clearHealthOnImportError();set("pf-report-status",t("bigReport"));event.target.value="";return;}
     try{
       healthRecords=parseWindowsReportRecords(await file.text());
       refreshBatteryOptions();
@@ -120,9 +127,7 @@ export function initializeConsumer(getLanguage){
       const detail=healthRecords.length>1?" · "+healthRecords.length+" "+t("batteryCount"):"";
       set("pf-report-status",file.name+" ✓"+detail);
     }catch{
-      healthRecords=[];healthResult=null;
-      q("pf-battery-selector").hidden=true;
-      q("pf-retention").hidden=true;
+      clearHealthOnImportError();
       set("pf-report-status",t("badReport"));
     }
     finally{event.target.value="";}
