@@ -1,0 +1,73 @@
+name: CodeQL Security Analysis
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'desktop/**'
+      - '.github/workflows/codeql.yml'
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'desktop/**'
+      - '.github/workflows/codeql.yml'
+  schedule:
+    - cron: '17 2 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
+jobs:
+  javascript:
+    name: CodeQL / JavaScript
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Initialize CodeQL for web source
+        uses: github/codeql-action/init@v4
+        with:
+          languages: javascript-typescript
+          build-mode: none
+          queries: security-extended
+      - name: Analyze JavaScript source
+        uses: github/codeql-action/analyze@v4
+        with:
+          category: /language:javascript-typescript
+
+  csharp:
+    name: CodeQL / C# Windows
+    runs-on: windows-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Initialize CodeQL for desktop
+        uses: github/codeql-action/init@v4
+        with:
+          languages: csharp
+          build-mode: manual
+          queries: security-extended
+      - name: Compile tested C# core
+        shell: pwsh
+        run: |
+          dotnet build desktop/PackFit.Engineering.Core/PackFit.Engineering.Core.csproj --configuration Release
+          if ($LASTEXITCODE -ne 0) { throw "Core build failed" }
+      - name: Compile native Windows app
+        shell: pwsh
+        run: |
+          dotnet build desktop/PackFit.Engineering.Desktop/PackFit.Engineering.Desktop.csproj --configuration Release -p:Platform=x64 -p:WindowsPackageType=None
+          if ($LASTEXITCODE -ne 0) { throw "Windows app build failed" }
+      - name: Analyze C# code
+        uses: github/codeql-action/analyze@v4
+        with:
+          category: /language:csharp
