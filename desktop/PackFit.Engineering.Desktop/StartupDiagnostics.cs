@@ -11,6 +11,15 @@ namespace PackFit.Engineering.Desktop;
 internal static class StartupDiagnostics
 {
     private static readonly object Sync = new();
+    internal static void RecordEnvironment()
+    {
+        Record("Runtime: Windows " + Environment.OSVersion.Version +
+            " / " + System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture +
+            " / executable " + Path.GetFileName(Environment.ProcessPath));
+        if (!string.Equals(Path.GetFileName(Environment.ProcessPath),
+            "PackFit.Engineering.exe", StringComparison.OrdinalIgnoreCase))
+            Record("Warning: executable renamed; WinUI single-file XAML resources can fail to resolve after renaming");
+    }
     private const long MaxBytes = 512_000;
 
     internal static string LogPath
@@ -43,7 +52,15 @@ internal static class StartupDiagnostics
                     .Append(typeof(StartupDiagnostics).Assembly.GetName().Version)
                     .AppendLine();
                 if (exception is not null)
+                {
+                    line.Append("HRESULT: 0x")
+                        .Append(exception.HResult.ToString("X8"))
+                        .Append(" | Exception: ").AppendLine(exception.GetType().FullName);
                     line.AppendLine(exception.ToString());
+                    foreach (System.Collections.DictionaryEntry info in exception.Data)
+                        line.Append("XAML detail ").Append(info.Key).Append(": ")
+                            .AppendLine(info.Value?.ToString());
+                }
 
                 File.AppendAllText(file, line.ToString(), Encoding.UTF8);
             }
