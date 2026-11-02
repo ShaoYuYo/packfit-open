@@ -1,6 +1,21 @@
 # Changelog
 
-## Unreleased maintenance and privacy hardening (after v0.8.0-beta.1)
+## Source preview — cross-platform engineering comparison (PR #8)
+
+- Add baseline/candidate A/B comparison from two local telemetry logs under one explicit threshold set, including full-log per-code counts, per-1,000-row rates, temperature/voltage deltas, and comparability warnings.
+- Extend native WinUI Telemetry Screening with file selectors, native normalized-rate bars, and a Markdown comparison handoff; reset stale comparisons when the session or batch changes.
+- Add a no-backend .NET 10 CLI for Windows, Linux and macOS with Markdown/JSON output, strictly bounded local input and create-only exports.
+- Test synthetic before/after fixtures on Linux CI and native WinUI smoke tests on Windows CI. Publish test expectations and privacy limitations in docs/CLI_AND_COMPARISON.md.
+- **This PR is a source change, not an updated v0.8.0-beta.1 release or hardware-validation certificate.**
+
+## Unreleased native workbench usability improvements (merged PR #7)
+
+- Add provenance-aware WinUI session summaries, clearer native typography, filtered telemetry finding previews and explicit whole-log code counts.
+- Require confirmation before replacing active data with synthetic examples; preserve user settings on session reset.
+- Mark synthetic samples in engineering reports; validate session reset through actual native chart/demo smoke tests.
+- **The older published v0.8.0-beta.1 binary does not contain these changes.**
+
+## Unreleased maintenance and privacy hardening (merged PR #6; after v0.8.0-beta.1)
 
 - Correct a genuine telemetry-review edge case: anomaly types appearing after the first 1,000 visible findings now remain in complete per-code statistics, engineering next steps and Markdown exports.
 - Enforce a bounded byte budget when the native Windows app reads local HTML and CSV/TSV reports, including files that grow during import; support Unicode BOMs.
@@ -9,7 +24,7 @@
 - Add GitHub artifact provenance attestations for future Windows CI ZIP builds. Previously published v0.8.0-beta.1 release assets are **not retroactively attested**.
 - Add reproducible tests for late telemetry anomalies, file size limits, local animation and third-party request prevention.
 
-These changes must pass review and main-branch CI before being described as a released version.
+These changes passed source review gates and main-branch CI after PR #6 was merged, but are **not** retroactively part of the older tagged v0.8.0-beta.1 Windows binary.
 
 ## v0.8.0-beta.1 — 2026-11-02 (published)
 
