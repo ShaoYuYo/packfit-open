@@ -38,8 +38,9 @@ public sealed partial class MainWindow
                     totalBytes+=size;
                     if(size>12_000_000||totalBytes>50_000_000)
                         throw new FormatException("檔案超出單檔 12 MB / 總量 50 MB 限制。");
+                    string batchCsv = await LocalDataFiles.ReadTextAsync(file.Path,12_000_000);
                     TelemetryAnalysis analysis=await Task.Run(()=>
-                        TelemetryAnalyzer.Analyze(File.ReadAllText(file.Path),limits));
+                        TelemetryAnalyzer.Analyze(batchCsv,limits));
                     _batches.Add(new TelemetryBatchItem(file.Name,analysis));
                     BatchTelemetryList.Items.Add(
                         $"{file.Name}  ·  {analysis.Samples:N0} rows  ·  " +
