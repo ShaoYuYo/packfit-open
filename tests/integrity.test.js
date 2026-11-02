@@ -66,3 +66,13 @@ test("consumer controller can only reference present HTML controls",()=>{
   const used=[...consumer.matchAll(/\bq\("([^"]+)"\)/g)].map((m)=>m[1]);
   assert.deepEqual([...new Set(used.filter((id)=>!ids.has(id)))],[]);
 });
+
+
+test("privacy-first runtime never imports executable third-party scripts or remote fonts",()=>{
+  const motion=read("src/motion-enhance.js");
+  const css=read("styles.css");
+  assert.doesNotMatch(motion,/import\s*\(|cdn\.jsdelivr|https?:\/\//);
+  assert.doesNotMatch(css,/@import\s+url\s*\(\s*["']?https?:/i);
+  assert.doesNotMatch(html,/rel="preconnect"[^>]*href="https?:/i);
+  assert.match(motion,/element\.animate/);
+});
