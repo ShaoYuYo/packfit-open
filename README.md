@@ -38,13 +38,13 @@ The browser app also includes a daily energy budget, charging-cost calculator, W
 
 ### Windows engineering workbench: an example you can reproduce
 
-1. Download the [initial beta release](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.1). For a first trial, use the **win-x64 ZIP**, extract the whole folder and run \`PackFit.Engineering.exe\`. This is an unsigned developer preview; follow your IT policy.
+1. Download the [initial beta release](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.1). For a first trial, use the **win-x64 ZIP**, extract the whole folder and run `PackFit.Engineering.exe`. This is an unsigned developer preview; follow your IT policy.
 2. Import the [synthetic Windows battery report](desktop/samples/battery-report-sample.html). It contains **56 Wh** design capacity and **49 Wh** full-charge capacity. The calculated retention is **87.5%**.
 3. Import [synthetic telemetry](desktop/samples/telemetry-sample.csv), set project-specific screening limits and review time, voltage, SOC and temperature flags.
 4. Import the [synthetic test matrix](desktop/samples/validation-sample.csv). Unmeasured cases should remain **NOT RUN**, not silently counted as passing.
 5. Open **Guided Investigation** for a sleep-drain, charging or shutdown checklist, then export the Markdown engineering handoff.
 
-The desktop also offers read-only Windows \`powercfg\` queries, Energy/SleepStudy report creation when supported, batch comparison of up to 12 log files, and official Microsoft tool links for WPR/WPA and Procmon. The application does not automatically install extra software or elevate permissions.
+The desktop also offers read-only Windows `powercfg` queries, Energy/SleepStudy report creation when supported, batch comparison of up to 12 log files, and official Microsoft tool links for WPR/WPA and Procmon. The application does not automatically install extra software or elevate permissions.
 
 [Complete WinUI desktop guide](desktop/README.md) · [Windows troubleshooting](desktop/docs/TROUBLESHOOTING.md) · [Fluent design](desktop/docs/FLUENT.md)
 
@@ -60,7 +60,7 @@ The desktop also offers read-only Windows \`powercfg\` queries, Energy/SleepStud
 
 ## Architecture
 
-\`\`\`text
+```text
 index.html + src/ + assets/
   Browser experience: batteries, daily power, scenarios, import/export and PWA
 desktop/
@@ -70,17 +70,17 @@ desktop/
   samples/                        Public synthetic input files
 .github/workflows/               Web CI, Windows CI, versioned beta publisher
 docs/                             Methodology, guides, quality and evidence
-\`\`\`
+```
 
 To run the website locally:
 
-\`\`\`bash
+```bash
 git clone https://github.com/ShaoYuYo/packfit-open.git
 cd packfit-open
 npm run check
 npm test
 python -m http.server 8000
-\`\`\`
+```
 
 Open http://localhost:8000/ . To build the native app, use a Windows environment and the commands in [desktop/README.md](desktop/README.md).
 
