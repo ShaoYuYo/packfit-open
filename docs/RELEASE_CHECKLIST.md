@@ -1,37 +1,44 @@
-# Release checklist
+# PackFit release and engineering acceptance checklist
 
-Do not claim that this checklist has passed until tests are actually performed.
+This checklist separates **automated evidence**, **manual acceptance**, and **external usage**. Checkboxes reflect actual evidence, not intentions. A green CI badge does not establish hardware behavior or independent adoption.
 
-## Correctness and security
+## Automation, release integrity
 
-- [ ] npm run check and npm test pass on the release commit.
-- [ ] Verify all new formulas against independently calculated public/synthetic examples.
-- [ ] Reject malformed, excessive and untrusted file inputs.
-- [ ] Do not expose personal, employer, supplier or customer battery data.
-- [ ] Retain accurate risk and engineering assumptions.
+- [x] Browser syntax, calculation and integrity checks run in GitHub Actions. [Web CI](https://github.com/ShaoYuYo/packfit-open/actions/workflows/ci.yml).
+- [x] Pure .NET engineering test vectors run in Windows CI. [Desktop workflow](https://github.com/ShaoYuYo/packfit-open/actions/workflows/desktop-winui.yml).
+- [x] First public beta was built and published with Windows artifacts and SHA256 checksums. [v0.7.0-beta.1](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.1).
+- [ ] Ensure the **next** release is built from the same verified commit as its published tag; review its latest Actions result before claiming success.
+- [ ] Verify Windows binary signature and managed-device distribution before recommending corporate deployment.
 
-## User experience
+## Accuracy and safety
 
-- [ ] Check the Overview, My Battery, Everyday Tools, Pack Studio, Compare and Methodology routes.
-- [ ] Verify bilingual content, focus order, mobile layout, light/dark themes and reduced-motion setting.
-- [ ] Use real browser import/export roundtrips and confirm rejected inputs are clearly explained.
-- [ ] Verify Safari/Firefox fallback where live Battery Status API is unavailable.
+- [x] Synthetic public datasets and formula-based test cases exist in the repo.
+- [x] The Windows battery parser has test coverage for the installed-battery section, Chinese labels, historical capacity tables and two distinct batteries.
+- [x] Telemetry CSV/TSV calculations support explicit electrical units, sign and user-defined thresholds.
+- [ ] Independent domain review of formulas and atypical battery report structures.
+- [ ] Check malformed, excessively large and unexpected supplier file formats on actual devices.
+- [ ] Verify all thresholds against project-specific documentation before calling any measurement safe or unsafe.
 
-## PWA and deployment
+## Manual user acceptance (not yet confirmed)
 
-- [ ] Confirm every static dependency is in the service-worker cache list.
-- [ ] Bump service-worker CACHE identifier for new versioned asset changes.
-- [ ] Deploy the default branch and verify GitHub Pages actually loads.
-- [ ] Test the offline website after first connecting to the network.
-- [ ] Confirm browser installation behavior only on environments actually tested.
+- [ ] Windows 11 x64: launch **the released binary** from the ZIP on a real laptop.
+- [ ] Windows 10 x64: launch and verify fallback window materials and accessible navigation.
+- [ ] Multi-battery test with an authorized, anonymized real report; verify no capacity mixing.
+- [ ] SleepStudy / energy / powercfg checks on supported devices and correct permissions.
+- [ ] Test responsive layout, focus order, high DPI and screen reader.
+- [ ] Web trial on Chrome, Firefox, Safari/iOS including Battery API permission/fallback.
+- [ ] PWA offline behavior, reload and scenario import/export round-trip.
 
-## Community and releases
+## Community evidence (not yet confirmed)
 
-- [ ] Update changelog, README, model assumptions and translations.
-- [ ] Link issues/PRs that were truly resolved.
-- [ ] Create an actual tag/release only after the above checks.
-- [ ] Update docs/PROJECT_EVIDENCE.md only with independently verifiable community usage.
+- [ ] Receive at least one concrete, reproducible report from a genuine trial user.
+- [ ] Show issue triage and a test-backed fix in response to that report.
+- [ ] Obtain at least one independent code review or mathematical cross-check.
+- [ ] Collect consented real-world use feedback without exposing company or personal data.
+- [ ] Publish follow-up releases for bugfixes and keep the roadmap and known limitations updated.
 
-## v0.3 status
+Use [the 15-minute trial](TRY_PACKFIT.md). Never purchase Stars, invent feedback or upload private reports to public GitHub.
 
-Source files, documentation and regression tests have been committed. Cross-browser execution, live deployment status, CI result and offline installability still require independent confirmation.
+## Final release gate
+
+A release build must pass browser CI and .NET core checks, build the Windows app on an actual Windows runner, attach binaries/hashes, and document limitations. A release with these automated properties **remains a beta until manual hardware acceptance is recorded**.
