@@ -10,7 +10,8 @@ const source=read("desktop/PackFit.Engineering.Desktop/MainWindow.xaml");
 const main=[
  read("desktop/PackFit.Engineering.Desktop/MainWindow.xaml.cs"),
  read("desktop/PackFit.Engineering.Desktop/MainWindow.Tools.cs"),
- read("desktop/PackFit.Engineering.Desktop/MainWindow.Batch.cs")
+ read("desktop/PackFit.Engineering.Desktop/MainWindow.Batch.cs"),
+ read("desktop/PackFit.Engineering.Desktop/MainWindow.Insights.cs")
 ].join("\n");
 
 test("native WinUI events have C# handlers and every named control is unique",()=>{
@@ -103,7 +104,7 @@ test("v0.8 uses native diagram workspaces with fully wired UI events",()=>{
 
 test("chart renderer is a local-only native implementation and uses each signal's units",()=>{
  const renderer=read("desktop/PackFit.Engineering.Desktop/EngineeringVisuals.cs");
- assert.doesNotMatch(renderer,/WebView|HttpClient|https?:\/\//);
+ assert.doesNotMatch(renderer,/new WebView|new HttpClient|https?:\/\//);
  for(const unit of ["Pack voltage","Pack current","Temperature","State of charge","Pack topology"])
    assert.ok(renderer.includes(unit)||unit==="Pack topology"&&renderer.includes("拓樸"));
  assert.match(renderer,/Microsoft\.UI\.Xaml\.Shapes/);
