@@ -11,6 +11,20 @@ public sealed partial class MainWindow
     private PackDesign? _packDesign;
     private StandbyDrainResult? _sleepDrain;
 
+    /// <summary>CI-only native smoke test that exercises real chart construction and sample workflows.</summary>
+    internal void RunVisualSmokeTest()
+    {
+        LoadDemoClick(this,new RoutedEventArgs());
+        CalculateSleepClick(this,new RoutedEventArgs());
+        if(_batteryRecords.Count!=1 || _batteryHistory.Count<2 ||
+           _telemetry?.Trace.Count<2 || _matrix is null ||
+           _pack is null || _sleepDrain is null ||
+           VisualsTelemetry.Children.Count<4 ||
+           VisualsPack.Children.Count==0 ||
+           SleepGraphCanvas.Children.Count==0)
+            throw new InvalidOperationException("Engineering visuals smoke test failed.");
+    }
+
     private void InitializeEngineeringInsights()
     {
         // Default to Engineering so existing users retain access to every tool.
