@@ -12,8 +12,8 @@ PackFit is a practical calculator. Users should understand where inputs go and w
 
 ## Typography
 
-- **Inter** for Latin text and tabular numeric UI; **Noto Sans TC** for Traditional Chinese. Use local PingFang TC, Microsoft JhengHei and standard system sans-serif as fallbacks.
-- Both Google Fonts families are open-source under the SIL Open Font License. No font file is redistributed with this repository.
+- Use each OS's native system UI family. On Windows that normally means Segoe UI / Segoe UI Variable and Microsoft JhengHei UI for Traditional Chinese; on macOS/iOS, the platform system/PingFang stack. No remote web-font request is required.
+- Numeric readouts should be legible and use explicit units. This open-source repo does not redistribute proprietary or third-party font files.
 - Minimize font families and avoid excess uppercase labels.
 - Main reading copy targets 13–14 px on desktop; input labels use 12 px or larger and standard controls stay at least 44 px tall. Heading size scales down on phones.
 - Keep visible focus rings and reasonable text scaling; test at 200% browser zoom.
@@ -68,10 +68,9 @@ Previous versions leaned too strongly toward cool green. This revision uses neut
 
 The final override stylesheet is `assets/atelier.css`. Earlier CSS files remain for layout compatibility, but their green and blue decorative rules are superseded. This is a staged visual refactor; style consolidation remains future work.
 
-### Optional Motion (MIT)
+### Browser-native motion (no external JavaScript)
 
-After checking [Motion](https://motion.dev/), [Anime.js](https://animejs.com/) and [Popmotion](https://github.com/Popmotion/popmotion), Motion was selected because it works in vanilla JavaScript without converting the project to React and offers a simple hardware-accelerated `animate` API. We keep a native Web Animations API fallback, and disable animations for users who prefer reduced motion. External module loading is version-pinned and never blocks primary functions.
+From web version 0.6.4 onward, UI transitions are implemented entirely with `Element.animate()` and the native Web Animations API. No runtime CDN JavaScript is imported. A basic functional calculator works regardless of animation support.
 
-**No decorative infinite movement:** motion is limited to a 240 ms page reveal and 170 ms changed-number response. The chosen accent is not used as the sole way to distinguish values.
+Respect `prefers-reduced-motion` and avoid interpreting a transition as changing sensor data. Optional visual effects must remain nonblocking and must not capture, upload or store Windows battery report contents.
 
-References: [Apple HIG Color](https://developer.apple.com/design/human-interface-guidelines/color), [Apple HIG Motion](https://developer.apple.com/design/human-interface-guidelines/motion), [Motion MIT License](https://github.com/motiondivision/motion/blob/main/LICENSE.md).
