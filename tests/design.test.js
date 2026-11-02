@@ -38,11 +38,13 @@ test("design copy keys exist in both supported languages",()=>{
   }
 });
 
-test("font stylesheet uses the selected open-source families and has local fallback",()=>{
+test("system font stack is readable offline without remote font stylesheets",()=>{
   const css=read("styles.css");
   const editorial=read("assets/editorial.css");
-  assert.match(css,/Inter/);
-  assert.match(css,/Noto\+Sans\+TC/);
+  assert.match(css,/font-family:system-ui/);
+  assert.match(css,/Segoe UI Variable Text/);
+  assert.match(css,/Microsoft JhengHei UI/);
+  assert.doesNotMatch(css,/@import\s+url\s*\(\s*["']?https?:/i);
   assert.match(editorial,/PingFang TC/);
   assert.match(editorial,/Microsoft JhengHei/);
   assert.match(editorial,/system-ui/);
