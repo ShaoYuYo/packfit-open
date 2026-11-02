@@ -18,6 +18,8 @@ public sealed record TelemetryComparisonResult(
     IReadOnlyList<FindingDifference> Findings,
     IReadOnlyList<string> Cautions)
 {
+    public TelemetryThresholds? AppliedThresholds { get; init; }
+
     private static readonly CultureInfo C = CultureInfo.InvariantCulture;
     private static string F(double? value, string format="0.##")
         => value?.ToString(format, C) ?? "N/A";
@@ -38,8 +40,19 @@ public sealed record TelemetryComparisonResult(
         b.AppendLine("## Baseline vs candidate — telemetry screening");
         b.AppendLine();
         b.AppendLine("> **REVIEW ONLY — not a release, root-cause, or safety decision.**");
-        b.AppendLine("Candidate minus baseline. Both files were screened using identical user-selected thresholds.");
+        b.AppendLine("Candidate minus baseline. The same thresholds are required for both sources.");
         b.AppendLine("Finding rates are counts per 1,000 sample rows, **not** event frequencies per hour.");
+        if (AppliedThresholds is { } limits)
+        {
+            b.AppendLine();
+            b.AppendLine("### Recorded screening parameters (applied to both files)");
+            b.AppendLine($"- Temperature: {F(limits.MinimumTemperatureC)} to {F(limits.MaximumTemperatureC)} °C");
+            b.AppendLine($"- Pack voltage: min {F(limits.MinimumVoltageV)} V; max {F(limits.MaximumVoltageV)} V (N/A = disabled)");
+            b.AppendLine($"- Absolute current: {F(limits.MaximumAbsCurrentA)} A (N/A = disabled)");
+            b.AppendLine($"- Maximum SOC slope: {F(limits.MaxSocRatePctPerMinute)} %/min; sample gap: {F(limits.MaximumGapSeconds)} seconds");
+            b.AppendLine("- Discharge sign: " + (limits.PositiveCurrentMeansDischarge ? "positive current" : "negative current"));
+        }
+        else b.AppendLine("**Threshold values were not supplied with this comparison; do not assume matching conditions.**");
         b.AppendLine();
         b.AppendLine($"- Baseline: {Safe(BaselineSource)} ({Baseline.Samples:N0} samples, {Baseline.Duration})");
         b.AppendLine($"- Candidate: {Safe(CandidateSource)} ({Candidate.Samples:N0} samples, {Candidate.Duration})");
@@ -77,8 +90,10 @@ public sealed record TelemetryComparisonResult(
 public static class TelemetryComparison
 {
     public static TelemetryComparisonResult Compare(
-        TelemetryBatchItem baseline, TelemetryBatchItem candidate)
+        TelemetryBatchItem baseline, TelemetryBatchItem candidate,
+        TelemetryThresholds? appliedThresholds = null)
     {
+        appliedThresholds?.Validate();
         ArgumentNullException.ThrowIfNull(baseline);
         ArgumentNullException.ThrowIfNull(candidate);
         var before = baseline.Analysis;
@@ -101,6 +116,8 @@ public static class TelemetryComparison
             "Confirm both CSV logs use the same timestamp meaning, voltage/current units and discharge-current sign.",
             "Screening flags indicate threshold crossings; fewer flags alone do not establish improvement or safety."
         };
+        if (appliedThresholds is null)
+            cautions.Add("The caller did not provide the thresholds used for both analyses; independently verify exact screening settings.");
         if (RatioBeyond(before.Samples, after.Samples, .25))
             cautions.Add("Sample counts differ by more than 25%; compare row-normalized rates with extra care.");
         var durationLeft = before.Duration.TotalSeconds;
@@ -124,7 +141,10 @@ public static class TelemetryComparison
             cautions.Add("Some detailed findings were truncated in the UI, but category totals cover the entire imported logs.");
         return new TelemetryComparisonResult(
             baseline.FileName, candidate.FileName,
-            before, after, Array.AsReadOnly(differences), cautions.AsReadOnly());
+            before, after, Array.AsReadOnly(differences), cautions.AsReadOnly())
+        {
+            AppliedThresholds = appliedThresholds
+        };
     }
 
     private static bool RatioBeyond(double x, double y, double tolerance)
