@@ -11,6 +11,7 @@ public sealed partial class MainWindow
     private readonly List<TelemetryBatchItem> _batches=[];
     private readonly List<string> _batchImportErrors=[];
     private TelemetryComparisonResult? _comparison;
+    private TelemetryThresholds? _batchLimits;
 
     private async void ImportTelemetryBatchClick(object sender,RoutedEventArgs e)
     {
@@ -32,6 +33,7 @@ public sealed partial class MainWindow
             _batchImportErrors.Clear();
             BatchTelemetryList.Items.Clear();
             ResetComparison();
+            _batchLimits = limits;
             long totalBytes=0;
             foreach(var file in selected)
             {
@@ -92,17 +94,20 @@ public sealed partial class MainWindow
         _batches.Add(new TelemetryBatchItem("synthetic-before.csv", _telemetry));
         _batches.Add(new TelemetryBatchItem("synthetic-after.csv", _telemetry));
         ResetComparison();
+        _batchLimits = _limits;
         PopulateComparisonChoices();
         CompareBatchClick(this, new RoutedEventArgs());
         if (_comparison is null || _comparison.Findings.Count == 0 ||
             !ComparisonResult.Text.Contains("synthetic-after.csv", StringComparison.Ordinal) ||
-            !CreateReport().Contains("Baseline vs candidate", StringComparison.Ordinal))
+            !CreateReport().Contains("Baseline vs candidate", StringComparison.Ordinal) ||
+            !CreateReport().Contains("Recorded screening parameters", StringComparison.Ordinal))
             throw new InvalidOperationException("Native batch comparison rendering or report handoff failed.");
     }
 
     private void ResetComparison()
     {
         _comparison = null;
+        _batchLimits = null;
         if (BaselineChoice is null || CandidateChoice is null) return;
         BaselineChoice.Items.Clear();
         CandidateChoice.Items.Clear();
@@ -153,7 +158,7 @@ public sealed partial class MainWindow
                 throw new InvalidOperationException("請選擇兩份已成功匯入的量測資料。");
             if (before == after)
                 throw new InvalidOperationException("基準與候選必須是兩份不同的量測檔案。");
-            _comparison = TelemetryComparison.Compare(_batches[before], _batches[after]);
+            _comparison = TelemetryComparison.Compare(_batches[before], _batches[after],_batchLimits);
             RenderComparison();
             Notice("已比較相同門檻下的兩份 Log；結論仍須核對負載、SOC 範圍與試驗條件。");
         }
