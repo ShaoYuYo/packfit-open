@@ -84,3 +84,41 @@ test("portable WinUI release retains its original .exe filename to preserve reso
  assert.match(winci,/MAIN_WINDOW_OK/);
  assert.match(winci,/COMPAT_WINDOW_OK/);
 });
+
+test("v0.8 uses native diagram workspaces with fully wired UI events",()=>{
+ const requiredPanels=["VisualsPanel","SleepPanel","BatteryPanel","TelemetryPanel",
+   "ValidationPanel","PackPanel","GuidePanel","ResourcesPanel"];
+ for(const p of requiredPanels)assert.match(source,new RegExp('x:Name="'+p+'"'));
+ for(const control of ["BatteryVisualCanvas","TelemetryChartCanvas","PackDiagramCanvas",
+   "SleepGraphCanvas","VisualsBattery","VisualsTelemetry","VisualsPack","GuideFlowCanvas",
+   "WorkflowDiagram","ExperienceMode"])assert.match(source,new RegExp('x:Name="'+control+'"'));
+ const insights=read("desktop/PackFit.Engineering.Desktop/MainWindow.Insights.cs");
+ assert.match(insights,/LoadDemoClick/);
+ assert.match(insights,/StandbyDrainEstimator\.Estimate/);
+ assert.match(insights,/ExperienceModeChanged/);
+ assert.match(insights,/EngineeringVisuals\.Telemetry/);
+ assert.match(insights,/EngineeringVisuals\.Pack/);
+ assert.match(insights,/RunVisualSmokeTest/);
+});
+
+test("chart renderer is a local-only native implementation and uses each signal's units",()=>{
+ const renderer=read("desktop/PackFit.Engineering.Desktop/EngineeringVisuals.cs");
+ assert.doesNotMatch(renderer,/WebView|HttpClient|https?:\/\//);
+ for(const unit of ["Pack voltage","Pack current","Temperature","State of charge","Pack topology"])
+   assert.ok(renderer.includes(unit)||unit==="Pack topology"&&renderer.includes("拓樸"));
+ assert.match(renderer,/Microsoft\.UI\.Xaml\.Shapes/);
+ assert.match(renderer,/Viewbox/);
+ assert.match(renderer,/trace\.Select\(p=>p\.TemperatureC\)/);
+});
+
+test("independent compatibility UI receives the same visual and demo capabilities",()=>{
+ const app=read("desktop/PackFit.Engineering.Desktop/App.xaml.cs");
+ const compat=read("desktop/PackFit.Engineering.Desktop/RecoveryWindow.cs");
+ for(const method of ["LoadDemoAsync","CalculateStandbyAsync","UpdateVisuals","RunVisualSmokeTest"])
+   assert.ok(compat.includes(method));
+ assert.match(app,/--selftest-visuals/);
+ assert.match(app,/--selftest-compat-visuals/);
+ const ci=read(".github/workflows/desktop-winui.yml");
+ assert.match(ci,/VISUALS_OK/);
+ assert.match(ci,/COMPAT_VISUALS_OK/);
+});
