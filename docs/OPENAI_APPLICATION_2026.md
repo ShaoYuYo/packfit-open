@@ -23,23 +23,30 @@ This application is about a genuine engineering problem, the practical usefulnes
 | Anything else we should know? | Paste text C below (maximum 500 characters) |
 | Terms | Read and accept the official program terms when you personally submit |
 
-## A. Why does this repository qualify? (484/500 characters)
+## A. Why does this repository qualify? (497/500 characters)
 
-> I am the primary maintainer and a battery development engineer building PackFit Open, an MIT-licensed toolkit for practical laptop battery problems. Its bilingual web app helps anyone understand runtime, capacity reports and charging costs. The native WinUI 3 beta helps engineers screen telemetry logs, compare validation cases, use Windows diagnostics and generate traceable reports. The repository has tests, documentation and ongoing maintenance; external adoption is still early.
+> I maintain PackFit Open, an MIT-licensed project from my work in laptop battery development. It addresses two needs: understandable battery tools for everyday laptop owners and a WinUI 3 workbench for repetitive engineering tasks. It parses Windows battery reports, screens CSV/TSV logs with explicit limits, tracks validation results, and creates reviewable handoffs. I maintain synthetic regression tests, documented limitations, tracked issues and public beta releases. Adoption is still early.
 
 This emphasizes practical domain value and honest early adoption. If actual stars or users become independently verifiable later, add them **only after checking** the character limit and evidence.
 
-## B. How will you use API credits for your project? (453/500 characters)
+## B. How will you use API credits for your project? (499/500 characters)
 
-> I would use API credits for opt-in open-source maintenance: triaging public issues, drafting regression tests for new battery log formats, reviewing pull requests for unit, privacy and safety mistakes, improving bilingual documentation, and preparing releases. Only public or synthetic data would be sent to an API; personal diagnostic reports and proprietary engineering logs would remain local. All AI-generated changes would be reviewed before merge.
+> I would use OpenAI API credits for opt-in maintainer automation: triaging public GitHub issues, drafting regression tests for new battery-report and log formats, reviewing PRs for unit mistakes, unsafe file handling and security risks, and improving bilingual documentation. Only synthetic or explicitly authorized public data would be used with APIs. Personal Windows diagnostics and confidential supplier or employer data would remain local. All generated changes would be reviewed before merging.
 
 **Important:** describes intended *future* uses, not features that already send logs to OpenAI. The current project analyzes files locally. Never upload proprietary or identifiable Windows battery, process or diagnostic logs into public AI workflows without authorization.
 
-## C. Anything else we should know? (462/500 characters)
+## C. Anything else we should know? (493/500 characters)
 
-> I'm a battery development engineer solving both professional workflow bottlenecks and everyday laptop problems. AI has helped me turn specialized knowledge into working open-source software, tests and clearer user guidance. I value AI as an engineering collaborator, not a substitute for verifying measurements or safety decisions. PackFit is a new project, and I want to earn adoption through useful features, transparent limitations and consistent maintenance.
+> I'm a battery development engineer, not a software company. I started PackFit because I repeatedly saw both engineers and ordinary laptop owners struggle with battery information and time-consuming diagnostics. AI helped me prototype, test and explain a tool based on real domain knowledge. I'm now concentrating on reliability, reproducible public examples, release discipline and genuine user feedback. I don't treat AI output as a substitute for measurement, code review or safety judgment.
 
 This is where the maintainer's personal motivation appears without overclaiming organization-wide impact or implying an employer endorses the project.
+
+## What has actually changed since the first beta
+
+- The public first beta contains signed-off GitHub Actions build artifacts, **not code-signed binaries**; Windows smoke testing is still outstanding.
+- New parser tests cover separate installed batteries, capacity-history scoping and localized headings. Issue [#2](https://github.com/ShaoYuYo/packfit-open/issues/2) tracks unsupported variants and the remaining verification.
+- A public [15-minute trial](https://github.com/ShaoYuYo/packfit-open/blob/main/docs/TRY_PACKFIT.md) and feedback template help collect genuine reproducible reports. No independent adoption is claimed.
+- Do not claim the second beta has been published until its release workflow is green and the release is visible.
 
 ## Factual context and links
 
