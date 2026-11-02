@@ -4,6 +4,8 @@
 **Source:** https://developers.openai.com/community/codex-for-oss  
 **Status:** Draft for the human project maintainer to review and submit. **Submitting this repository document is NOT submitting an application.**
 
+**Identity and submission note (corrected 2026-11-02):** The repository's independent software maintainer and the battery engineer who provided needs-discovery feedback are different people. Never describe the maintainer as a battery development engineer unless that is independently true. This document is a **revised reference draft only**; changing it does not modify an already-submitted OpenAI form. If an earlier form made an inaccurate identity claim, the applicant should clarify it through an official follow-up rather than reusing the claim.
+
 This application is about a genuine engineering problem, the practical usefulness of an MIT-licensed public project, and responsible use of AI. We do **not** claim unverified stars, download counts, review activity from outside contributors, external users, or an official OpenAI endorsement.
 
 ## Every form field (verified 2026-11-02)
@@ -23,9 +25,9 @@ This application is about a genuine engineering problem, the practical usefulnes
 | Anything else we should know? | Paste text C below (maximum 500 characters) |
 | Terms | Read and accept the official program terms when you personally submit |
 
-## A. Why does this repository qualify? (497/500 characters)
+## A. Why does this repository qualify? (490/500 characters)
 
-> I maintain PackFit Open, an MIT-licensed project from my work in laptop battery development. It addresses two needs: understandable battery tools for everyday laptop owners and a WinUI 3 workbench for repetitive engineering tasks. It parses Windows battery reports, screens CSV/TSV logs with explicit limits, tracks validation results, and creates reviewable handoffs. I maintain synthetic regression tests, documented limitations, tracked issues and public beta releases. Adoption is still early.
+> I maintain PackFit Open, an MIT project for laptop battery tools. It includes a bilingual browser app and WinUI 3 workbench for battery reports, CSV/TSV logs, validation and dimension-first cell layouts. Engineering workflows were shaped by discussions with a battery engineer; that is needs discovery, not product endorsement. I maintain synthetic regression tests, public CI and beta builds without confidential data. Adoption is early; independent testers and reviewers are still needed.
 
 This emphasizes practical domain value and honest early adoption. If actual stars or users become independently verifiable later, add them **only after checking** the character limit and evidence.
 
@@ -35,9 +37,9 @@ This emphasizes practical domain value and honest early adoption. If actual star
 
 **Important:** describes intended *future* uses, not features that already send logs to OpenAI. The current project analyzes files locally. Never upload proprietary or identifiable Windows battery, process or diagnostic logs into public AI workflows without authorization.
 
-## C. Anything else we should know? (493/500 characters)
+## C. Anything else we should know? (489/500 characters)
 
-> I'm a battery development engineer, not a software company. I started PackFit because I repeatedly saw both engineers and ordinary laptop owners struggle with battery information and time-consuming diagnostics. AI helped me prototype, test and explain a tool based on real domain knowledge. I'm now concentrating on reliability, reproducible public examples, release discipline and genuine user feedback. I don't treat AI output as a substitute for measurement, code review or safety judgment.
+> I'm an independent developer, not a battery design engineer or a company. PackFit grew from battery questions and discussions with a battery engineer, including how to compare cells when only an L/W/H envelope is provided. AI accelerated coding and documentation, but I check changes with synthetic fixtures, native Windows builds, Linux CLI tests and documented limitations. I seek independent testers and engineering reviewers; I do not claim widespread use or certified battery designs.
 
 This is where the maintainer's personal motivation appears without overclaiming organization-wide impact or implying an employer endorses the project.
 
