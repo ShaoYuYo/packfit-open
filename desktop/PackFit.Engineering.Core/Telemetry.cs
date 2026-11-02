@@ -43,6 +43,10 @@ public sealed record TelemetryAnalysis(
 {
     public TimeSpan Duration => Last - First;
     public int HiddenFindings => Math.Max(0, TotalFindings - Findings.Count);
+    /// <summary>Counts ALL findings, including those omitted from the 1,000-row UI preview.</summary>
+    public IReadOnlyDictionary<string,int> FindingCodeCounts { get; init; } =
+        new System.Collections.ObjectModel.ReadOnlyDictionary<string,int>(
+            new Dictionary<string,int>(StringComparer.Ordinal));
     /// <summary>Bounded, chronological sample for visualization, not the full original log.</summary>
     public IReadOnlyList<TelemetrySample> Trace { get; init; } = Array.Empty<TelemetrySample>();
 }
@@ -85,6 +89,7 @@ public static class TelemetryAnalyzer
 
         int count=0, totalFindings=0;
         var findings=new List<TelemetryFinding>();
+        var findingCounts=new Dictionary<string,int>(StringComparer.Ordinal);
         const int MaxChartPoints = 320;
         var trace = new List<TelemetrySample>(MaxChartPoints);
         int chartStride = 1;
@@ -121,6 +126,7 @@ public static class TelemetryAnalyzer
             void Find(string code,string severity,string message)
             {
                 totalFindings++;
+                findingCounts[code]=findingCounts.GetValueOrDefault(code)+1;
                 if (findings.Count < MaxReportFindings)
                     findings.Add(new(current.SourceRow,code,severity,message));
             }
@@ -182,7 +188,8 @@ public static class TelemetryAnalyzer
         return new TelemetryAnalysis(count,start.Value,previous.Timestamp,minV,maxV,minT,maxT,
             minSoc,maxSoc,hasPowerIntegration?dischargedWh:null,totalFindings,findings)
         {
-            Trace = trace.AsReadOnly()
+            Trace = trace.AsReadOnly(),
+            FindingCodeCounts = new System.Collections.ObjectModel.ReadOnlyDictionary<string,int>(findingCounts)
         };
     }
 
