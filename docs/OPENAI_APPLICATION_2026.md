@@ -64,6 +64,16 @@ OpenAI says that active maintainers may apply, and its review weighs actual usag
 
 If the applicant's employer has confidentiality or external software publication rules, comply with those policies and omit private internal design data and proprietary metrics. A publicly owned repo does not imply employer endorsement.
 
+## After submitting: confirmation email and review timing
+
+The official form says OpenAI **reviews applications on a rolling basis and emails selected applicants**. It does **not** promise an immediate receipt email or an email for every rejection. OpenAI Support wrote on 2026-04-29 that several weeks without a reply can occur. A later official support clarification on 2026-10-06 says that seeing a **success confirmation after submitting the form indicates the submission completed successfully**.
+
+- Official form: https://openai.com/form/codex-for-oss/
+- OpenAI Support on uncertain waiting periods: https://community.openai.com/t/when-should-i-expect-a-response-to-my-codex-for-oss-application/1379830/2
+- OpenAI Support on successful submission screen: https://community.openai.com/t/codex-for-open-source-application-receipt-and-localized-forms/1402329/5
+
+If you submitted on November 1, no email by November 2 is normal and **not proof of rejection or a failed submission**. Check the address provided on the form (including junk/spam). Avoid submitting duplicates just because no email arrived. Continue improving the existing public repository; reviewers can inspect the current source and release records.
+
 ## Submission checklist
 
 - [ ] Verify personal contact name, ChatGPT account email and OpenAI Organization ID.
