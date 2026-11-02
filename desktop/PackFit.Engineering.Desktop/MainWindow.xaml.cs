@@ -41,6 +41,7 @@ public sealed partial class MainWindow : Window
         catch (Exception ex)
         {
             StartupDiagnostics.Record("Custom Fluent title bar unavailable; using system title bar", ex);
+            AppTitleBar.Visibility = Visibility.Collapsed;
             ExtendsContentIntoTitleBar = false;
         }
 
