@@ -1,10 +1,11 @@
-import {estimateChargeCost,estimatePowerBank,estimateChargeTime,calculateRetention,parseWindowsReport} from "./consumer.js";
+import {estimateChargeCost,estimatePowerBank,estimateChargeTime,calculateRetention,parseWindowsReportRecords} from "./consumer.js";
 import {formatNumber,formatDuration} from "./format.js";
 import {consumerText} from "./consumer-i18n.js";
 let language="zh-TW";
 let battery=null;
 let batteryStatus="notChecked";
 let healthResult=null;
+let healthRecords=[];
 const q=(id)=>document.getElementById(id);
 const t=(key)=>consumerText(language,key);
 const fmt=(number,digits=1)=>formatNumber(number,language,digits);
@@ -49,6 +50,28 @@ function renderHealth(){
   const advice=h.percent>105?"over":h.percent>=85?"high":h.percent>=75?"mid":"low";
   set("pf-health-advice",t(advice));
 }
+function refreshBatteryOptions(){
+  const select=q("pf-battery-choice");
+  const previouslySelected=Math.max(0,Number(select.value)||0);
+  select.replaceChildren();
+  healthRecords.forEach((record,i)=>{
+    const option=document.createElement("option");
+    option.value=String(i);
+    option.textContent=t("batteryNumber")+" "+(i+1)+" · "+fmt(record.fullWh,1)+" Wh";
+    select.appendChild(option);
+  });
+  q("pf-battery-selector").hidden=healthRecords.length<=1;
+  if(healthRecords.length)select.value=String(Math.min(previouslySelected,healthRecords.length-1));
+}
+function selectReportBattery(index){
+  const record=healthRecords[index];
+  if(!record)return;
+  healthResult=record;
+  q("pf-battery-choice").value=String(index);
+  q("pf-design").value=String(record.designWh);
+  q("pf-full").value=String(record.fullWh);
+  renderHealth();
+}
 export function consumerSectionTitle(id,lang){
   return consumerText(lang,id==="health"?"navHealth":"navEveryday");
 }
@@ -57,6 +80,7 @@ export function translateConsumer(lang){
   document.querySelectorAll("[data-pf]").forEach(el=>{el.textContent=t(el.dataset.pf);});
   set("pf-status",t(batteryStatus));
   if(battery)updateBattery();
+  refreshBatteryOptions();
   renderHealth();
   showCalculators();
 }
@@ -83,21 +107,32 @@ export function initializeConsumer(getLanguage){
     try{await navigator.clipboard.writeText(q("pf-command").textContent);set("pf-copy",t("copied"));}
     catch{set("pf-report-status",t("badInput"));}
   });
+  q("pf-battery-choice").addEventListener("change",event=>{
+    selectReportBattery(Number(event.target.value));
+  });
   q("pf-report").addEventListener("change",async(event)=>{
     const file=event.target.files?.[0];if(!file)return;
     if(file.size>2000000){set("pf-report-status",t("bigReport"));event.target.value="";return;}
     try{
-      healthResult=parseWindowsReport(await file.text());
-      renderHealth();
-      q("pf-design").value=healthResult.designWh;
-      q("pf-full").value=healthResult.fullWh;
-      set("pf-report-status",file.name+" ✓");
-    }catch{set("pf-report-status",t("badReport"));}
+      healthRecords=parseWindowsReportRecords(await file.text());
+      refreshBatteryOptions();
+      selectReportBattery(0);
+      const detail=healthRecords.length>1?" · "+healthRecords.length+" "+t("batteryCount"):"";
+      set("pf-report-status",file.name+" ✓"+detail);
+    }catch{
+      healthRecords=[];healthResult=null;
+      q("pf-battery-selector").hidden=true;
+      q("pf-retention").hidden=true;
+      set("pf-report-status",t("badReport"));
+    }
     finally{event.target.value="";}
   });
   q("pf-analyze").addEventListener("click",()=>{
-    try{healthResult={...calculateRetention(get("pf-design"),get("pf-full")),cycles:null};
-      renderHealth();set("pf-report-status","");}
+    try{
+      healthRecords=[];refreshBatteryOptions();
+      healthResult={...calculateRetention(get("pf-design"),get("pf-full")),cycles:null};
+      renderHealth();set("pf-report-status","");
+    }
     catch{set("pf-report-status",t("badInput"));}
   });
   q("pf-use-capacity").addEventListener("click",()=>{
