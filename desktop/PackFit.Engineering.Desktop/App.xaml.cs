@@ -35,6 +35,40 @@ public partial class App : Application
         StartupDiagnostics.Record("OnLaunched");
         StartupDiagnostics.RecordEnvironment();
         var commandLine = Environment.GetCommandLineArgs();
+        if (commandLine.Any(a => a.Equals("--selftest-visuals", StringComparison.OrdinalIgnoreCase)))
+        {
+            try
+            {
+                var window = new MainWindow();
+                window.RunVisualSmokeTest();
+                _mainWindow = window;
+                StartupDiagnostics.Record("Engineering visuals self-test: VISUALS_OK");
+                Environment.Exit(0);
+            }
+            catch (Exception ex)
+            {
+                StartupDiagnostics.Record("Engineering visuals self-test: VISUALS_FAILED",ex);
+                Environment.Exit(25);
+            }
+            return;
+        }
+        if (commandLine.Any(a => a.Equals("--selftest-compat-visuals", StringComparison.OrdinalIgnoreCase)))
+        {
+            try
+            {
+                var window = new RecoveryWindow(null);
+                window.RunVisualSmokeTest();
+                _mainWindow = window;
+                StartupDiagnostics.Record("Compatibility visuals self-test: COMPAT_VISUALS_OK");
+                Environment.Exit(0);
+            }
+            catch (Exception ex)
+            {
+                StartupDiagnostics.Record("Compatibility visuals self-test: COMPAT_VISUALS_FAILED",ex);
+                Environment.Exit(26);
+            }
+            return;
+        }
         if (commandLine.Any(a => a.Equals("--selftest-compat", StringComparison.OrdinalIgnoreCase)))
         {
             try
