@@ -164,9 +164,65 @@
  <StackPanel Spacing="13">
   <TextBlock Text="不規則空間配置最佳化 · LAYOUT EXPLORER" Style="{StaticResource PfSectionHeading}"/>
   <TextBlock Text="用多個不重疊的 XY 區域表示 L 形／階梯形空間，每區可設定不同 Z 厚度。電芯不能重疊、侵犯禁放區或超出區域。候選排列只是有界幾何搜尋，不是 CAD 製造或安規簽核。" TextWrapping="Wrap" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
-  <Button Content="載入完全合成的 L 形空間範例" Click="LoadSyntheticGeometryClick" MinHeight="40" HorizontalAlignment="Left" ToolTipService.ToolTip="只套用到下方配置編輯區，不會覆蓋其他工程工作階段"/>
-  <TextBox x:Name="GeometryJsonBox" Header="XY 區域、Keepout、電芯候選與 S/P 組合（JSON，mm）" PlaceholderText="先按上方按鈕載入合成示例，或貼上自己的去識別化幾何設定" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="150" MaxHeight="250" FontFamily="Consolas" FontSize="12" TextChanged="GeometryJsonChanged" AutomationProperties.Name="編輯不規則空間與電芯幾何 JSON"/>
-  <Button x:Name="GeometryRunButton" Content="尋找可行排列並比較" Click="CalculateGeometryClick" MinHeight="42" HorizontalAlignment="Left" Style="{StaticResource AccentButtonStyle}"/>
+  <Border BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="12" Padding="16">
+   <StackPanel Spacing="11">
+    <TextBlock Text="01 / 只要 L × W × H，先比較電芯配置" Style="{StaticResource PfSectionHeading}"/>
+    <TextBlock Text="不需要 CAD 或 JSON。請填系統給的電池外框上限，以及候選電芯的規格；若不知道內部禁放區，這只是包絡預篩，不能宣稱已可製造。" TextWrapping="Wrap" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+    <Button Content="填入完全虛構的尺寸範例" Click="QuickLayoutSampleClick" HorizontalAlignment="Left" MinHeight="38"/>
+    <TextBlock Text="電池外框可用上限（mm）" FontWeight="SemiBold"/>
+    <Grid ColumnSpacing="9" RowSpacing="8">
+     <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+     <TextBox x:Name="QuickPackLength" Grid.Column="0" Header="長 L" PlaceholderText="mm" TextChanged="QuickLayoutChanged"/>
+     <TextBox x:Name="QuickPackWidth" Grid.Column="1" Header="寬 W" PlaceholderText="mm" TextChanged="QuickLayoutChanged"/>
+     <TextBox x:Name="QuickPackHeight" Grid.Column="2" Header="厚 H" PlaceholderText="mm" TextChanged="QuickLayoutChanged"/>
+    </Grid>
+    <TextBlock Text="候選 Cell A（mm；Ah 與 g 依候選電芯資料表）" FontWeight="SemiBold"/>
+    <Grid ColumnSpacing="9" RowSpacing="8">
+     <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+     <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+     <TextBox x:Name="QuickCellALength" Grid.Column="0" Grid.Row="0" Header="長 L" TextChanged="QuickLayoutChanged"/>
+     <TextBox x:Name="QuickCellAWidth" Grid.Column="1" Grid.Row="0" Header="寬 W" TextChanged="QuickLayoutChanged"/>
+     <TextBox x:Name="QuickCellAHeight" Grid.Column="2" Grid.Row="0" Header="厚 H" TextChanged="QuickLayoutChanged"/>
+     <TextBox x:Name="QuickCellACapacity" Grid.Column="0" Grid.Row="1" Header="容量 Ah" TextChanged="QuickLayoutChanged"/>
+     <TextBox x:Name="QuickCellAMass" Grid.Column="1" Grid.Row="1" Header="質量 g" TextChanged="QuickLayoutChanged"/>
+     <TextBlock Grid.Column="2" Grid.Row="1" Text="電芯 A 預設不可旋轉限制：目前允許 90° 旋轉；實際極耳方向要人工確認。" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="11" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+    </Grid>
+    <TextBlock Text="候選 Cell B（選填；填齊五個欄位才加入比較）" FontWeight="SemiBold"/>
+    <Grid ColumnSpacing="9" RowSpacing="8">
+     <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+     <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+     <TextBox x:Name="QuickCellBLength" Grid.Column="0" Grid.Row="0" Header="長 L" TextChanged="QuickLayoutChanged"/>
+     <TextBox x:Name="QuickCellBWidth" Grid.Column="1" Grid.Row="0" Header="寬 W" TextChanged="QuickLayoutChanged"/>
+     <TextBox x:Name="QuickCellBHeight" Grid.Column="2" Grid.Row="0" Header="厚 H" TextChanged="QuickLayoutChanged"/>
+     <TextBox x:Name="QuickCellBCapacity" Grid.Column="0" Grid.Row="1" Header="容量 Ah" TextChanged="QuickLayoutChanged"/>
+     <TextBox x:Name="QuickCellBMass" Grid.Column="1" Grid.Row="1" Header="質量 g" TextChanged="QuickLayoutChanged"/>
+     <TextBlock Grid.Column="2" Grid.Row="1" Text="不同尺寸先比較幾何可放入性與 Wh；不能假設兩款不同電芯可混接。" TextWrapping="Wrap" FontSize="11" VerticalAlignment="Center" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+    </Grid>
+    <TextBlock Text="02 / 拓樸、保留空間與名目目標" FontWeight="SemiBold"/>
+    <Grid ColumnSpacing="9" RowSpacing="8">
+     <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+     <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+     <TextBox x:Name="QuickSeries" Grid.Column="0" Grid.Row="0" Header="固定串聯數 S" PlaceholderText="例如 3" TextChanged="QuickLayoutChanged"/>
+     <TextBox x:Name="QuickParallel" Grid.Column="1" Grid.Row="0" Header="最高並聯數 P" PlaceholderText="例如 2" TextChanged="QuickLayoutChanged"/>
+     <TextBox x:Name="QuickNominalV" Grid.Column="2" Grid.Row="0" Header="單顆名目 V" PlaceholderText="例如 3.85" TextChanged="QuickLayoutChanged"/>
+     <TextBox x:Name="QuickEdge" Grid.Column="0" Grid.Row="1" Header="四邊預留 mm" PlaceholderText="例如 2" TextChanged="QuickLayoutChanged"/>
+     <TextBox x:Name="QuickZReserve" Grid.Column="1" Grid.Row="1" Header="總厚度預留 mm" PlaceholderText="例如 0.8" TextChanged="QuickLayoutChanged"/>
+     <TextBox x:Name="QuickCellGap" Grid.Column="2" Grid.Row="1" Header="電芯間距 mm" PlaceholderText="例如 2" TextChanged="QuickLayoutChanged"/>
+     <TextBox x:Name="QuickOverhead" Grid.Column="0" Grid.Row="2" Header="非電芯估計 g" PlaceholderText="例如 35" TextChanged="QuickLayoutChanged"/>
+     <TextBox x:Name="QuickTargetWh" Grid.Column="1" Grid.Row="2" Header="目標 Wh" PlaceholderText="例如 50" TextChanged="QuickLayoutChanged"/>
+    </Grid>
+    <TextBlock x:Name="QuickLayoutStatus" Text="尚未提供外框尺寸及候選 Cell 規格。系統外框 L/W/H ≠ 真正無干涉的電池內部可用體積。" TextWrapping="Wrap" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+    <Button x:Name="QuickLayoutRunButton" Content="用長寬高找配置方案" Click="QuickLayoutRunClick" Style="{StaticResource AccentButtonStyle}" MinHeight="45" HorizontalAlignment="Left"/>
+   </StackPanel>
+  </Border>
+  <Expander Header="進階模式：不規則 XY 區域、禁放區與 JSON" IsExpanded="False">
+   <StackPanel Spacing="12" Padding="4,12,4,4">
+    <TextBlock Text="需要描述 L 形與多區域厚度限制時才使用。這些參數無法只靠外框 L/W/H 自動推測。" TextWrapping="Wrap" FontSize="12"/>
+    <Button Content="載入完全合成的 L 形空間範例" Click="LoadSyntheticGeometryClick" MinHeight="40" HorizontalAlignment="Left"/>
+    <TextBox x:Name="GeometryJsonBox" Header="XY 區域、Keepout、電芯候選與 S/P 組合（JSON，mm）" PlaceholderText="貼上已去識別化的幾何設定，或先載入合成示例" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="150" MaxHeight="250" FontFamily="Consolas" FontSize="12" TextChanged="GeometryJsonChanged" AutomationProperties.Name="編輯不規則空間與電芯幾何 JSON"/>
+    <Button x:Name="GeometryRunButton" Content="用進階設定尋找配置" Click="CalculateGeometryClick" MinHeight="42" HorizontalAlignment="Left"/>
+   </StackPanel>
+  </Expander>
   <ComboBox x:Name="GeometryCandidateChoice" Header="查看候選排列" MinWidth="220" HorizontalAlignment="Stretch" SelectionChanged="GeometryCandidateChanged" AutomationProperties.Name="選擇不規則電池布局候選"/>
   <TextBlock x:Name="GeometrySummary" Text="請載入合成範例或輸入自己的幾何設定，再執行有界排列搜尋。" FontSize="13" TextWrapping="Wrap" IsTextSelectionEnabled="True"/>
   <StackPanel x:Name="GeometryMap" Spacing="9"/>
