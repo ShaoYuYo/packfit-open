@@ -1,6 +1,6 @@
 # PackFit CLI & baseline/candidate telemetry review
 
-**Status:** Source-level feature on the development branch until its PR is reviewed, Windows/Linux CI succeeds and a main-branch merge is completed. It is **not** included in the older v0.8.0-beta.1 download.
+**Status:** Merged into `main` via [PR #8](https://github.com/ShaoYuYo/packfit-open/pull/8), with Linux CLI, native WinUI and CodeQL checks passing on the reviewed commit. Available to build from source; **not** included in the older v0.8.0-beta.1 binary. Real hardware and independent engineering QA remain open.
 
 PackFit's shared C# engine is now available from a dependency-light `.NET 10` CLI on Windows, Linux and macOS (the native GUI still requires Windows). The CLI does not contact any server, model or API; all inputs are local, user-selected, and limited to 12,000,000 bytes each.
 
