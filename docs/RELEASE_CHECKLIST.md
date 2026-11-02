@@ -7,7 +7,7 @@ This checklist separates **automated evidence**, **manual acceptance**, and **ex
 - [x] Browser syntax, calculation and integrity checks run in GitHub Actions. [Web CI](https://github.com/ShaoYuYo/packfit-open/actions/workflows/ci.yml).
 - [x] Pure .NET engineering test vectors run in Windows CI. [Desktop workflow](https://github.com/ShaoYuYo/packfit-open/actions/workflows/desktop-winui.yml).
 - [x] First public beta was built and published with Windows artifacts and SHA256 checksums. [v0.7.0-beta.1](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.1).
-- [ ] Ensure the **next** release is built from the same verified commit as its published tag; review its latest Actions result before claiming success.
+- [x] The second public beta [v0.7.0-beta.2](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.2) was built from one verified checkout with browser, C# and Windows build gates. [Release workflow](https://github.com/ShaoYuYo/packfit-open/actions/workflows/publish-beta2.yml).
 - [ ] Verify Windows binary signature and managed-device distribution before recommending corporate deployment.
 
 ## Accuracy and safety
