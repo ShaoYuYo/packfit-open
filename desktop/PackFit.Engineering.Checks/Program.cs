@@ -292,6 +292,9 @@ Assert(layouts.Options.Any(x=>x.CellId=="SYNTH-COMPACT"&&
 Assert(!layouts.Options.Any(x=>x.CellId=="SYNTH-LONG" &&
     x.Topology==new LayoutTopology(4,1)),
     "Oversized long-cell 4S layout is not spuriously reported as feasible");
+Assert(layouts.Options[0].ParetoOnEnergyMass &&
+    layouts.Options.Any(x=>x.CellId=="SYNTH-COMPACT" && x.ParetoOnEnergyMass),
+    "Energy-vs-mass Pareto front retains lightweight alternatives without a single fake optimum");
 Assert(layouts.Options[0].CellId=="SYNTH-LONG"&&
     layouts.ToMarkdown(layoutCase).Contains("NOT AN OPTIMALITY CERTIFICATE")&&
     layouts.ToMarkdown(layoutCase).Contains("NOT pack envelope volume"),
