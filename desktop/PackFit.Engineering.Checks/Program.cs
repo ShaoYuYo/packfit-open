@@ -29,6 +29,47 @@ try
 }
 catch(FormatException){Console.WriteLine("PASS: multiple battery data rejected");}
 
+// A realistic Windows report has capacity history after Installed batteries.
+// Old parsers could mix these unrelated tables and create false extra records.
+string installed="<h2><span>Installed batteries</span></h2><table>" +
+    "<tr><td>NAME</td><td>Battery A</td></tr>" +
+    "<tr><td>DESIGN CAPACITY</td><td>56,000 mWh</td></tr>" +
+    "<tr><td>FULL CHARGE CAPACITY</td><td>49,000 mWh</td></tr>" +
+    "<tr><td>CYCLE COUNT</td><td>234</td></tr></table>";
+string history="<h2>Battery capacity history</h2><table>" +
+    "<tr><td>FULL CHARGE CAPACITY</td><td>40,000 mWh</td></tr></table>";
+var scoped=BatteryReportParser.ParseAll("<html><body>"+installed+history+"</body></html>");
+Assert(scoped.Count==1 && Close(scoped[0].RetentionPercent,87.5),
+    "capacity history ignored; Installed batteries section is authoritative");
+string second="<table><tr><td>NAME</td><td>Battery B</td></tr>" +
+    "<tr><td>DESIGN CAPACITY</td><td>30,000 mWh</td></tr>" +
+    "<tr><td>FULL CHARGE CAPACITY</td><td>27,000 mWh</td></tr></table>";
+var multi=BatteryReportParser.ParseAll("<h2>Installed batteries</h2>"+
+    installed.Substring(installed.IndexOf("<table>",StringComparison.Ordinal))+second+history);
+Assert(multi.Count==2 && Close(multi[0].RetentionPercent,87.5) &&
+    Close(multi[1].RetentionPercent,90),
+    "two physical batteries remain distinct without combining Wh");
+try
+{
+    BatteryReportParser.Parse("<h2>Installed batteries</h2>"+
+        installed.Substring(installed.IndexOf("<table>",StringComparison.Ordinal))+second+history);
+    throw new Exception("FAIL: single-battery compatibility API must reject multi-battery reports");
+}
+catch(FormatException){Console.WriteLine("PASS: ambiguous multi-battery single-record read rejected");}
+string localized="<h2>已安裝電池</h2><table>" +
+    "<tr><td>設計容量</td><td>62,000 mWh</td></tr>" +
+    "<tr><td>完整充電容量</td><td>55,000 mWh</td></tr></table>";
+Assert(Close(BatteryReportParser.Parse(localized).DesignWh,62),
+    "localized Chinese installed battery labels supported");
+try
+{
+    BatteryReportParser.ParseAll("<h2>Installed batteries</h2><table>" +
+        "<tr><td>DESIGN CAPACITY</td><td>Unknown</td></tr>" +
+        "<tr><td>FULL CHARGE CAPACITY</td><td>48,000 mWh</td></tr></table>");
+    throw new Exception("FAIL: unknown capacity units must not be silently accepted");
+}
+catch(FormatException){Console.WriteLine("PASS: unsupported capacity formats rejected");}
+
 string telemetry="Timestamp,Voltage_V,Current_A,Temp_C,SOC_pct\n"+
     "2026-11-01T00:00:00Z,11.5,2,35,80\n"+
     "2026-11-01T00:00:10Z,11.4,2.1,66,77\n"+
