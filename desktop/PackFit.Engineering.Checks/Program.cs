@@ -384,6 +384,8 @@ Assert(dimensionalGeometry.Zones.Count==1 &&
     Close(dimensionalGeometry.Zones[0].WidthMm,200) &&
     Close(dimensionalGeometry.Zones[0].HeightMm,118),
     "External battery L/W/H becomes one provisional XY zone with explicit reserved Z");
+Assert(Close(dimensionalGeometry.OuterEnvelopeVolumeL ?? 0,200*118*7/1_000_000.0),
+    "Outer envelope volume uses original H, not thickness left after reserved Z");
 Assert(dimensionalGeometry.Topologies.Count==2 &&
     dimensionalGeometry.Topologies.All(x=>x.Series==3) &&
     dimensionalGeometry.Topologies[0].Parallel==1 &&
