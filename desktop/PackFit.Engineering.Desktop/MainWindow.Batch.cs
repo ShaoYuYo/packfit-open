@@ -84,6 +84,22 @@ public sealed partial class MainWindow
         return markdown;
     }
 
+    internal void RunComparisonSmokeTest()
+    {
+        if (_telemetry is null)
+            throw new InvalidOperationException("Load the synthetic telemetry fixture first.");
+        _batches.Clear();
+        _batches.Add(new TelemetryBatchItem("synthetic-before.csv", _telemetry));
+        _batches.Add(new TelemetryBatchItem("synthetic-after.csv", _telemetry));
+        ResetComparison();
+        PopulateComparisonChoices();
+        CompareBatchClick(this, new RoutedEventArgs());
+        if (_comparison is null || _comparison.Findings.Count == 0 ||
+            !ComparisonResult.Text.Contains("synthetic-after.csv", StringComparison.Ordinal) ||
+            !CreateReport().Contains("Baseline vs candidate", StringComparison.Ordinal))
+            throw new InvalidOperationException("Native batch comparison rendering or report handoff failed.");
+    }
+
     private void ResetComparison()
     {
         _comparison = null;
