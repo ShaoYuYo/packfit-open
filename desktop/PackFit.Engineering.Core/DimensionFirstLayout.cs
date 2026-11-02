@@ -79,6 +79,8 @@ public static class DimensionFirstLayout
             TargetEnergyWh: request.TargetNominalWh,
             MaxSearchNodes: request.SearchBudgetPerCombination)
         {
+            OuterEnvelopeVolumeL = request.Envelope.LengthMm *
+                request.Envelope.WidthMm * request.Envelope.ThicknessMm / 1_000_000,
             InputBasis = "OUTER PACK L/W/H ONLY. Assumed rectangular XY area, no known internal " +
                 "keepouts; Z budget is outer thickness minus the user-supplied total Z reserve. " +
                 "Do not treat nominal geometry as cleared CAD or a production pack."
