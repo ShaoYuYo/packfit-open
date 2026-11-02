@@ -27,6 +27,18 @@ This is a **real user trial plan**, not a request for stars. Please report what 
 5. Open Guided Investigation. Select Sleep Drain; review the checklist and create a Markdown handoff with *fictional* notes.
 6. Open Reporting. Confirm imported results are represented without claiming safety/compliance approval.
 
+## Trial C: cross-platform engineering CLI (3–5 minutes, .NET 10 SDK)
+
+This developer trial uses **only public synthetic data** and works on Windows, Linux and macOS. It is available from the source repository after the [A/B PR](https://github.com/ShaoYuYo/packfit-open/pull/8) is merged; it is not part of the older v0.8 Windows release binary.
+
+1. From the repository root, run `dotnet run --project desktop/PackFit.Engineering.Cli -- compare desktop/samples/telemetry-sample.csv desktop/samples/telemetry-after-synthetic.csv --min-voltage 11 --format json`.
+2. Expect a JSON object with `kind: screening-comparison`, where baseline `TEMP_HIGH` count is **1**, candidate `TEMP_HIGH` is **0**, and baseline `VOLTAGE_LOW` is **1** with candidate **0**. Both may contain additional time-gap or SOC flags.
+3. Repeat with `--format markdown` and check whether an engineering colleague could understand the cautions without reading the source code.
+4. Try `--output review.md` twice: the second run must **refuse to overwrite** the existing report.
+5. Report unclear units, malformed/ambiguous errors, incompatibilities or misleading interpretations. Testers are not required to disclose real device data.
+
+See the [full A/B comparison method](CLI_AND_COMPARISON.md) for limitations and runnable examples.
+
 ## Tell us what happened
 
 For a useful public issue, please share:

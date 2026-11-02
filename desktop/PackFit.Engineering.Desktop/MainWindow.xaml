@@ -121,6 +121,17 @@
   <StackPanel Spacing="8" Padding="12">
     <TextBlock Text="最多 12 份 CSV，同時使用上方門檻。只讀取本機資料，不上傳；詳細結果可匯出至工程報告。" FontSize="12" TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
     <ListView x:Name="BatchTelemetryList" MinHeight="90" MaxHeight="240" SelectionMode="None"/>
+    <Border BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="12" Padding="15" Margin="0,8,0,0">
+      <StackPanel Spacing="12">
+        <TextBlock Text="A/B 工程比較 · Baseline vs Candidate" Style="{StaticResource PfSectionHeading}"/>
+        <TextBlock Text="用同一組門檻比較兩份量測，查看溫度／電壓差異與每千筆樣本的異常率。測試條件不同時，數字不能直接判定產品變好。" TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="12"/>
+        <ComboBox x:Name="BaselineChoice" Header="基準資料（Before）" MinWidth="230" MaxWidth="460" HorizontalAlignment="Stretch" SelectionChanged="ComparisonSelectionChanged"/>
+        <ComboBox x:Name="CandidateChoice" Header="候選資料（After）" MinWidth="230" MaxWidth="460" HorizontalAlignment="Stretch" SelectionChanged="ComparisonSelectionChanged"/>
+        <Button x:Name="CompareFilesButton" Content="比較兩份量測" Click="CompareBatchClick" IsEnabled="False" Style="{StaticResource AccentButtonStyle}" HorizontalAlignment="Left" MinHeight="42"/>
+        <TextBlock x:Name="ComparisonResult" Text="請先批次匯入至少兩份 CSV / TSV。" TextWrapping="Wrap" IsTextSelectionEnabled="True" FontSize="13"/>
+        <StackPanel x:Name="ComparisonFlags" Spacing="11"/>
+      </StackPanel>
+    </Border>
   </StackPanel>
 </Expander>
 <TextBlock Text="異常清單最多顯示 1,000 筆；報告會註明其餘筆數，方便追查完整原始資料。" FontSize="12" TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/></StackPanel></Border></StackPanel>

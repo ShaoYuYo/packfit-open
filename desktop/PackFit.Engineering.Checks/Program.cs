@@ -217,4 +217,48 @@ finally
     if(File.Exists(boundedFixture)) File.Delete(boundedFixture);
 }
 
+// Reproducible two-log investigation: same timestamp/window, explicit pack-V limit.
+string compareBefore = "Timestamp,Voltage_V,Current_A,Temp_C,SOC_pct\n" +
+    "2026-11-01T00:00:00Z,11.5,1,34,80\n" +
+    "2026-11-01T00:00:10Z,10.9,1,64,79\n";
+string compareAfter = "Timestamp,Voltage_V,Current_A,Temp_C,SOC_pct\n" +
+    "2026-11-01T00:00:00Z,11.5,1,34,80\n" +
+    "2026-11-01T00:00:10Z,11.1,1,54,79\n";
+var compareLimits=new TelemetryThresholds(MinimumVoltageV:11,MaximumTemperatureC:60);
+var oldLog=TelemetryAnalyzer.Analyze(compareBefore,compareLimits);
+var newLog=TelemetryAnalyzer.Analyze(compareAfter,compareLimits);
+var comparison=TelemetryComparison.Compare(
+    new TelemetryBatchItem("before.csv",oldLog),
+    new TelemetryBatchItem("after.csv",newLog),compareLimits);
+var tempDiff=comparison.Findings.Single(x=>x.Code=="TEMP_HIGH");
+var voltageDiff=comparison.Findings.Single(x=>x.Code=="VOLTAGE_LOW");
+Assert(tempDiff.BaselineCount==1 && tempDiff.CandidateCount==0 &&
+    Close(tempDiff.RateDelta,-500),
+    "same-limit A/B comparison reports lower temperature flags per thousand rows");
+Assert(voltageDiff.CountDelta==-1 && comparison.ToMarkdown().Contains("REVIEW ONLY"),
+    "comparison retains exact voltage delta without an automatic Pass/Fail claim");
+Assert(comparison.ToMarkdown().Contains("| TEMP_HIGH | 1 | 0 | -1 |") &&
+    comparison.ToMarkdown().Contains("Recorded screening parameters") &&
+    comparison.ToMarkdown().Contains("min 11 V"),
+    "Markdown handoff includes exact threshold assumptions and candidate-minus-baseline counts");
+
+var divergentTimeLog=TelemetryAnalyzer.Analyze("Timestamp,Voltage_V\n" +
+    "2026-11-01T00:00:00Z,11.5\n" +
+    "2026-11-01T00:10:00Z,11.4\n",compareLimits);
+var unequal=TelemetryComparison.Compare(
+    new TelemetryBatchItem("before.csv",oldLog),
+    new TelemetryBatchItem("after.csv",divergentTimeLog));
+Assert(unequal.Cautions.Any(x=>x.Contains("durations differ")) &&
+    unequal.Cautions.Any(x=>x.Contains("temperature column")),
+    "non-comparable duration and absent temperature are disclosed, never fabricated");
+
+var denseComparison=TelemetryComparison.Compare(
+    new TelemetryBatchItem("long-before.csv",longAnalysis),
+    new TelemetryBatchItem("long-after.csv",oldLog));
+Assert(denseComparison.Findings.Any(x=>x.Code=="VOLTAGE_LOW"&&
+    x.BaselineCount==1) && denseComparison.Cautions.Any(x=>x.Contains("truncated")),
+    "late anomalies omitted from preview remain visible in full-log A/B comparisons");
+Assert(!comparison.ToMarkdown().Contains("C:\\private\\path"),
+    "comparison never invents machine paths into the report");
+
 Console.WriteLine("All PackFit engineering core checks passed.");
