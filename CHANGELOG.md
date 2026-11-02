@@ -1,6 +1,15 @@
 # Changelog
 
 
+## v0.7.0-beta.4 — 2026-11-02 (published)
+
+- Investigated an actual Windows startup log showing successful App.xaml initialization followed by a MainWindow.InitializeComponent XAML parse failure.
+- Fixed release packaging to preserve `PackFit.Engineering.exe` on portable builds; prior renamed binaries could affect XAML resource lookup on some Windows App SDK versions.
+- Rebuilt `--safe-ui` as a XAML-independent native WinUI workspace with useful battery, CSV/TSV, validation, Pack and report tools, rather than relying on the failing main XAML.
+- Added Windows startup diagnostic context, exception HRESULT/resource data and release tests that refuse to count a recovery-only process as a normal successful launch.
+- Published native ZIP, unrenamed single-file executable and SHA-256 hashes. [Download beta.4](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.4).
+- Original user-device XAML failure remains open until the user confirms on-device startup.
+
 ## v0.7.0-beta.3 — 2026-11-02 (published)
 
 - Fix desktop deployment defaults: prefer a complete self-contained WinUI folder and include an easy-to-use CMD launcher and PowerShell diagnostics.
