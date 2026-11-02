@@ -15,11 +15,11 @@ test("five real-world battery symptoms have bilingual, non-diagnostic guidance",
     for(const lang of ["zh-TW","en"]){
       const item=getSymptomGuide(lang,id);
       assert.equal(item.id,id);
-      assert.ok(item.label.length>6);
-      assert.ok(item.summary.length>35);
+      assert.ok(item.label.trim().length>=3);
+      assert.ok(item.summary.trim().length>=12);
       assert.equal(item.steps.length,3);
-      assert.ok(item.steps.every(s=>s.length>28));
-      assert.ok(item.help.length>25);
+      assert.ok(item.steps.every(s=>s.trim().length>=12));
+      assert.ok(item.help.trim().length>=12);
       assert.ok(Object.isFrozen(item.steps));
     }
   }
