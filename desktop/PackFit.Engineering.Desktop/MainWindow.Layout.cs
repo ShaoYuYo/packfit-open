@@ -114,7 +114,8 @@ public sealed partial class MainWindow
         foreach(var o in result.Options.Take(20))
             GeometryCandidateChoice.Items.Add(
                 $"{o.CellId} · {o.Topology.Series}S{o.Topology.Parallel}P · {o.NominalEnergyWh:0.##} Wh"+
-                (o.MeetsEnergyTarget?" · 達標":" · 未達 Wh 目標"));
+                (o.MeetsEnergyTarget?" · 達標":" · 未達 Wh 目標") +
+                (o.ParetoOnEnergyMass?" · Wh/重量 Pareto":""));
         if(result.Options.Count>0)
             GeometryCandidateChoice.SelectedIndex=0;
         else
@@ -146,6 +147,7 @@ public sealed partial class MainWindow
             $"Gross zone 能量載入 {selected.GrossZoneEnergyLoadingWhL:0.#} Wh/L（不是實際 Pack ED）·"+
             $" 電芯 XY 占全部區域 {selected.GrossFootprintFillPct:0.#}%\n"+
             (selected.MeetsEnergyTarget?"名目 Wh 達到輸入目標；仍需工程審核。":"未達到輸入的名目 Wh 目標。")+
+            (selected.ParetoOnEnergyMass?" 本候選位於 Wh↑／假設重量↓ 的兩目標 Pareto 前緣。":" 其他候選在 Wh 與假設重量上同時不差且至少一項更好。")+
             "\n有界排列搜尋找到幾何方案；沒有證明全域最佳，也沒有驗證連線、極耳、BMS 或散熱。";
 
         double left=problem.Zones.Min(z=>z.XMm),top=problem.Zones.Min(z=>z.YMm);
