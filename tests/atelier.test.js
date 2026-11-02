@@ -41,7 +41,7 @@ test("animation uses only browser-native APIs and works without network access",
 test("version number, theme color and app stylesheet agree",()=>{
  const pkg=JSON.parse(read("package.json"));
  const html=read("index.html");
- assert.equal(pkg.version,"0.6.4");
- assert.match(html,/VERSION 0\.6\.4/);
+ assert.equal(pkg.version,"0.6.5");
+ assert.ok(html.includes("VERSION "+pkg.version),"page version should match the release manifest");
  assert.match(html,/name="theme-color" content="#f6f3f0"/);
 });
