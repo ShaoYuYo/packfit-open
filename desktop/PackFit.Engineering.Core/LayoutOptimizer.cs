@@ -22,7 +22,13 @@ public sealed record LayoutProblem(
     double KeepoutMarginMm = 1,
     double NonCellMassG = 40,
     double TargetEnergyWh = 0,
-    int MaxSearchNodes = 6000);
+    int MaxSearchNodes = 6000)
+{
+    /// <summary>Human-readable, untrusted provenance note; not a CAD clearance claim.</summary>
+    public string? InputBasis { get; init; }
+    /// <summary>Optional source L×W×H gross outer-envelope volume, for transparent provisional energy loading.</summary>
+    public double? OuterEnvelopeVolumeL { get; init; }
+}
 
 public sealed record LayoutPlacement(
     int Index, int ZoneIndex, double XMm, double YMm,
@@ -37,6 +43,8 @@ public sealed record LayoutOption(
     // Pareto only for nominal energy ↑ and assumed total mass ↓, across user-allowed topologies.
     // Not a statement about voltage, thickness, costs, wiring or safety.
     public bool ParetoOnEnergyMass { get; init; }
+    /// <summary>Nominal Wh per L of supplied outer envelope; NOT a validated pack Wh/L value.</summary>
+    public double? NominalOuterEnvelopeWhL { get; init; }
 }
 
 public sealed record LayoutResult(
@@ -58,21 +66,31 @@ public sealed record LayoutResult(
         b.AppendLine();
         b.AppendLine($"- Usable zone definitions: {p.Zones.Count} · keepouts: {p.Keepouts.Count} · cell candidates: {p.Cells.Count} · topologies: {p.Topologies.Count}");
         b.AppendLine($"- Gross allowed-zone area: {F(TotalZoneAreaMm2)} mm²; gross volume: {F(TotalZoneVolumeL)} L (includes XY keepouts; NOT pack envelope volume)");
+        if(p.OuterEnvelopeVolumeL is double outer)
+            b.AppendLine($"- Supplied **outer** L×W×H envelope: {F(outer)} L (not verified internally usable space).");
         b.AppendLine($"- Cell gap: {F(p.CellGapMm)} mm; boundary margin: {F(p.BoundaryMarginMm)} mm; keepout margin: {F(p.KeepoutMarginMm)} mm");
         b.AppendLine($"- Assumed NON-cell mass: {F(p.NonCellMassG)} g; target nominal energy: {F(p.TargetEnergyWh)} Wh");
         b.AppendLine($"- Maximum nodes per attempted topology/cell: {p.MaxSearchNodes}; any capped runs: {AnySearchBudgetExceeded}");
+        if (!string.IsNullOrWhiteSpace(p.InputBasis))
+        {
+            // Escape markup and line breaks; no absolute paths or proprietary fields.
+            string basis = p.InputBasis.Replace("|", "/").Replace("<", "&lt;")
+                .Replace(">", "&gt;").Replace("\r", " ").Replace("\n", " ");
+            b.AppendLine("- Input basis: " + (basis.Length > 500 ? basis[..500] : basis));
+        }
         b.AppendLine();
         b.AppendLine("## Candidate screening table");
         b.AppendLine();
-        b.AppendLine("| Rank | Cell | S/P | Nominal Wh | Assumed pack g | Estimated Wh/kg | Wh/L of GROSS allowed zones | Gross XY cell fill | Meets Wh target | Wh/mass Pareto |");
-        b.AppendLine("|---:|---|---|---:|---:|---:|---:|---:|---|---|");
-        if (Options.Count == 0) b.AppendLine("| — | No arrangement found within the search budget | — | — | — | — | — | — | — | — |");
+        b.AppendLine("| Rank | Cell | S/P | Nominal Wh | Assumed pack g | Estimated Wh/kg | Wh/L of GROSS allowed zones | Nominal Wh/L of OUTER envelope | Gross XY cell fill | Meets Wh target | Wh/mass Pareto |");
+        b.AppendLine("|---:|---|---|---:|---:|---:|---:|---:|---:|---|---|");
+        if (Options.Count == 0) b.AppendLine("| — | No arrangement found within the search budget | — | — | — | — | — | — | — | — | — |");
         for (int i = 0; i < Options.Count; i++)
         {
             var o=Options[i];
-            b.AppendLine($"| {i+1} | {o.CellId} | {o.Topology.Series}S{o.Topology.Parallel}P | {F(o.NominalEnergyWh)} | {F(o.EstimatedMassG)} | {F(o.EstimatedPackWhKg)} | {F(o.GrossZoneEnergyLoadingWhL)} | {F(o.GrossFootprintFillPct)}% | {(o.MeetsEnergyTarget ? "Yes" : "No")} | {(o.ParetoOnEnergyMass ? "Yes" : "No")} |");
+            b.AppendLine($"| {i+1} | {o.CellId} | {o.Topology.Series}S{o.Topology.Parallel}P | {F(o.NominalEnergyWh)} | {F(o.EstimatedMassG)} | {F(o.EstimatedPackWhKg)} | {F(o.GrossZoneEnergyLoadingWhL)} | {(o.NominalOuterEnvelopeWhL is double outerWhL ? F(outerWhL) : "N/A")} | {F(o.GrossFootprintFillPct)}% | {(o.MeetsEnergyTarget ? "Yes" : "No")} | {(o.ParetoOnEnergyMass ? "Yes" : "No")} |");
         }
         b.AppendLine();
+        b.AppendLine("Outer-envelope Wh/L is nominal Wh divided by the user-entered *external* L×W×H; it assumes that hypothetical arrangement is feasible, and it is **not a validated pack ED**.");
         b.AppendLine("Wh/mass Pareto means no other **listed** candidate has both at least as much nominal Wh and no more assumed mass, with one strict improvement. It ignores voltage compatibility, thermal limits, routing, costs and true pack Wh/L.");
         foreach (var option in Options.Take(5))
         {
@@ -132,6 +150,9 @@ public static class LayoutOptimizer
         Require(IsIn(p.NonCellMassG,0,20000) && IsIn(p.TargetEnergyWh,0,2000),
             "Assumed non-cell mass or target Wh is outside limits.");
         Require(p.MaxSearchNodes is >=100 and <=30000,"MaxSearchNodes must be 100–30000.");
+        if(p.OuterEnvelopeVolumeL is double volume)
+            Require(double.IsFinite(volume) && volume>0 && volume<=1000,
+                "Outer-envelope volume must be a finite, positive number of liters.");
         Require((long)p.MaxSearchNodes*p.Cells.Count*p.Topologies.Count<=600_000,
             "Requested aggregate search budget is too large; reduce candidate cells, topologies or MaxSearchNodes.");
         foreach (var zone in p.Zones)
@@ -193,7 +214,11 @@ public static class LayoutOptimizer
                 options.Add(new LayoutOption(cell.Id,topology,layout!,
                     topology.Series*cell.NominalVoltageV,topology.Parallel*cell.CapacityAh,
                     wh,grams,wh/(grams/1000),wh/zoneVolumeL,
-                    area/zoneArea*100,wh+Eps>=p.TargetEnergyWh,engine.Visited));
+                    area/zoneArea*100,wh+Eps>=p.TargetEnergyWh,engine.Visited)
+                {
+                    NominalOuterEnvelopeWhL = p.OuterEnvelopeVolumeL is double outer
+                        ? wh/outer : null
+                });
             }
             else
                 failures.Add(cell.Id+" "+topology.Series+"S"+topology.Parallel+"P"+

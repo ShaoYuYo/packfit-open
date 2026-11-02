@@ -15,6 +15,7 @@ public sealed partial class MainWindow
     private LayoutProblem? _geometryProblem;
     private LayoutResult? _geometryResult;
     private bool _layoutSynthetic;
+    private string? _lastGeometryInputText;
     private static readonly CultureInfo GeometryCulture=CultureInfo.InvariantCulture;
 
     private static LayoutProblem ExampleLayout() => new(
@@ -40,6 +41,9 @@ public sealed partial class MainWindow
         {
             WriteIndented=true
         });
+        // WinUI may dispatch TextChanged on another UI iteration. Treat the
+        // programmatically populated fixture as the current text state.
+        _lastGeometryInputText=GeometryJsonBox.Text;
         // TextChanged invalidates a prior geometry model; only this exact generated
         // source state is labeled as a synthetic fixture.
         _layoutSynthetic=true;
@@ -50,6 +54,9 @@ public sealed partial class MainWindow
     private void GeometryJsonChanged(object sender,TextChangedEventArgs e)
     {
         if(GeometryCandidateChoice is null || GeometryMap is null) return;
+        if(string.Equals(_lastGeometryInputText,GeometryJsonBox.Text,StringComparison.Ordinal))
+            return;
+        _lastGeometryInputText=GeometryJsonBox.Text;
         InvalidateGeometry(clearText:false);
         if(!string.IsNullOrWhiteSpace(GeometryJsonBox.Text))
             GeometrySummary.Text="幾何輸入已修改。請重新執行搜尋，避免使用舊配置結果。";
@@ -67,7 +74,10 @@ public sealed partial class MainWindow
         if(GeometrySummary is not null)
             GeometrySummary.Text="尚未計算幾何配置。";
         if(clearText && GeometryJsonBox is not null)
+        {
             GeometryJsonBox.Text="";
+            _lastGeometryInputText="";
+        }
     }
 
     private async void CalculateGeometryClick(object sender,RoutedEventArgs e)
@@ -146,6 +156,9 @@ public sealed partial class MainWindow
             $"假設 Pack 重量 {selected.EstimatedMassG:0.##} g · {selected.EstimatedPackWhKg:0.#} Wh/kg (含手動設定的非電芯重量)\n"+
             $"Gross zone 能量載入 {selected.GrossZoneEnergyLoadingWhL:0.#} Wh/L（不是實際 Pack ED）·"+
             $" 電芯 XY 占全部區域 {selected.GrossFootprintFillPct:0.#}%\n"+
+            (selected.NominalOuterEnvelopeWhL is double outerWhL
+                ? $"外框 L×W×H 名目能量載入 {outerWhL:0.#} Wh/L（僅尺寸參考，不是已驗證 Pack ED）\n"
+                : "")+
             (selected.MeetsEnergyTarget?"名目 Wh 達到輸入目標；仍需工程審核。":"未達到輸入的名目 Wh 目標。")+
             (selected.ParetoOnEnergyMass?" 本候選位於 Wh↑／假設重量↓ 的兩目標 Pareto 前緣。":" 其他候選在 Wh 與假設重量上同時不差且至少一項更好。")+
             "\n有界排列搜尋找到幾何方案；沒有證明全域最佳，也沒有驗證連線、極耳、BMS 或散熱。";

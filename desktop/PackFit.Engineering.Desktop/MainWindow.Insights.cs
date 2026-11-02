@@ -29,6 +29,7 @@ public sealed partial class MainWindow
             throw new InvalidOperationException("Synthetic data provenance contract failed.");
         RunComparisonSmokeTest();
         RunLayoutSmokeTest();
+        RunDimensionFirstSmokeTest();
         ClearAnalysisData();
         if(HasSessionData || HasSyntheticData || _telemetry is not null ||
            _comparison is not null || _geometryResult is not null ||

@@ -366,4 +366,78 @@ try
 }
 catch(ArgumentException){Console.WriteLine("PASS: NaN geometry rejected");}
 
+
+// Envelope-first workflow: engineers may only receive a maximum battery L/W/H.
+// Never infer available interior CAD space, connector location or pouch-tab geometry.
+var dimensionRequest = new DimensionFirstRequest(
+    new PackEnvelopeMm(200,118,7),
+    [
+        new LayoutCellSpec("A-SYNTH",62,55,5.8,3.85,5,57,false),
+        new LayoutCellSpec("B-SYNTH",42,52,5.2,3.85,3,38,false)
+    ],
+    RequiredSeries:3,MaximumParallel:2,EdgeAllowanceMm:2,
+    TotalThicknessReserveMm:.8,MinimumCellGapMm:2,
+    AssumedNonCellMassG:35,TargetNominalWh:50);
+var dimensionalGeometry=DimensionFirstLayout.Build(dimensionRequest);
+Assert(dimensionalGeometry.Zones.Count==1 &&
+    Close(dimensionalGeometry.Zones[0].MaxThicknessMm,6.2) &&
+    Close(dimensionalGeometry.Zones[0].WidthMm,200) &&
+    Close(dimensionalGeometry.Zones[0].HeightMm,118),
+    "External battery L/W/H becomes one provisional XY zone with explicit reserved Z");
+Assert(Close(dimensionalGeometry.OuterEnvelopeVolumeL ?? 0,200*118*7/1_000_000.0),
+    "Outer envelope volume uses original H, not thickness left after reserved Z");
+Assert(dimensionalGeometry.Topologies.Count==2 &&
+    dimensionalGeometry.Topologies.All(x=>x.Series==3) &&
+    dimensionalGeometry.Topologies[0].Parallel==1 &&
+    dimensionalGeometry.Topologies[1].Parallel==2,
+    "Dimension-first mode keeps voltage topology fixed while comparing P alternatives");
+Assert(dimensionalGeometry.Cells.All(x=>!x.Allow90DegreeRotation) &&
+    dimensionalGeometry.Keepouts.Count==0,
+    "No speculative tab rotation or invented internal CAD keepouts");
+var dimensionalOptions=LayoutOptimizer.Optimize(dimensionalGeometry);
+Assert(dimensionalOptions.Options.Any(x=>x.CellId=="A-SYNTH"&&
+    x.Topology==new LayoutTopology(3,1) && Close(x.NominalEnergyWh,57.75)),
+    "2D dimensions screen a three-cell pack with transparent nominal energy arithmetic");
+Assert(dimensionalOptions.Options.Any(x=>x.CellId=="A-SYNTH"&&
+    x.Topology==new LayoutTopology(3,1) &&
+    Close(x.NominalOuterEnvelopeWhL ?? 0,57.75/(200*118*7/1_000_000.0))),
+    "Nominal Wh per L of external envelope uses unreserved outer H");
+Assert(dimensionalOptions.Options.Any(x=>x.CellId=="B-SYNTH"&&
+    x.Topology==new LayoutTopology(3,1)),
+    "Second qualified cell outline is actually compared using the same outer envelope");
+Assert(dimensionalOptions.ToMarkdown(dimensionalGeometry)
+    .Contains("OUTER PACK L/W/H ONLY") &&
+    dimensionalOptions.ToMarkdown(dimensionalGeometry)
+    .Contains("NOT AN OPTIMALITY CERTIFICATE"),
+    "Engineering report exposes dimension-only source and non-CAD feasibility limits");
+try
+{
+    DimensionFirstLayout.Build(dimensionRequest with { TotalThicknessReserveMm=7 });
+    throw new Exception("FAIL: Z reserve must not consume all height.");
+}
+catch(ArgumentException){Console.WriteLine("PASS: zero available cell Z height rejected");}
+try
+{
+    DimensionFirstLayout.Build(dimensionRequest with { EdgeAllowanceMm=100 });
+    throw new Exception("FAIL: edge margin cannot consume the whole XY envelope.");
+}
+catch(ArgumentException){Console.WriteLine("PASS: unusable XY after margins rejected");}
+try
+{
+    DimensionFirstLayout.Build(dimensionRequest with { RequiredSeries=4,MaximumParallel=4 });
+    throw new Exception("FAIL: unsupported topology count must not be silently reduced.");
+}
+catch(ArgumentException){Console.WriteLine("PASS: impossible requested S/P topology count rejected");}
+try
+{
+    DimensionFirstLayout.Build(dimensionRequest with { MinimumCellGapMm=double.NaN });
+    throw new Exception("FAIL: NaN gap must not reach optimizer.");
+}
+catch(ArgumentException){Console.WriteLine("PASS: nonfinite dimensional margin rejected");}
+var thickCell=dimensionRequest with { Cells=[
+    new LayoutCellSpec("SYNTH-THICK",60,50,6.3,3.85,5,57,false)
+] };
+Assert(LayoutOptimizer.Optimize(DimensionFirstLayout.Build(thickCell)).Options.Count==0,
+    "Cell thicker than reserved Z clearance is rejected even with enough XY area");
+
 Console.WriteLine("All PackFit engineering core checks passed.");

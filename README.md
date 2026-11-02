@@ -39,6 +39,14 @@ The browser build uses **system fonts and native browser animations**, not third
 | **Data handling** | Local calculations and file parsing | Files processed locally; no analytics/backend |
 | **Scope** | Estimates and education | First-pass screening and handoff, **not** certified validation |
 
+### Enter L × W × H directly — native engineering workflow (PR #13)
+
+A battery engineer told us that system design often provides **only the battery's allowed length, width and thickness**, without a 3D file she can open. The Windows workbench now starts from these dimensions, an optional second candidate cell, **fixed series S**, parallel range, user-entered side/Z reserves and target Wh. It invokes the same offline placement engine and generates a geometry diagram and traceable engineering report. The advanced JSON/L-shaped editor is optional.
+
+This is [PR #13](https://github.com/ShaoYuYo/packfit-open/pull/13) source-preview functionality until its final CI and merge. The outer dimensions do **not** prove an internally unobstructed battery volume; this model does not certify CAD feasibility, tab routing or pack safety. All default showcase values are explicitly fictional.
+
+Read the [dimension-first engineering walkthrough](docs/DIMENSION_FIRST_LAYOUT.md).
+
 ### Irregular laptop battery-space layout explorer (merged source)
 
 A real pre-design question from a battery engineer: **how can different pouch-cell outlines and S/P combinations fit a small, irregular allocation, with local Z restrictions and keepout zones?** PackFit now has an experimental **offline geometry-first layout engine** and native Windows candidate diagrams. It screens XY fit, per-zone height, 90° rotation, required gaps and forbidden areas, then compares nominal Wh, assumed Wh/kg, gross-zone Wh/L and a limited Wh-vs-mass Pareto frontier.
