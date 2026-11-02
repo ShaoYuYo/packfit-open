@@ -7,7 +7,7 @@ This is a **real user trial plan**, not a request for stars. Please report what 
 ## Before you start
 
 - **Privacy first:** use the included synthetic files. Battery reports, ETL, event logs and supplier measurements may contain machine names, paths, serial numbers or confidential IP. Do not attach your unredacted personal or company reports to a public issue.
-- If using the Windows beta, download from [the verified release page](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.1). It is unsigned and experimental; obey organization IT policy.
+- If using the Windows beta, download from [the verified release page](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.2). It is unsigned and experimental; obey organization IT policy.
 - All scores are *screening*, not diagnostic certification. Never use a PackFit result as the sole basis for charging, thermal, safety, or release decisions.
 
 ## Trial A: browser (5 minutes)
