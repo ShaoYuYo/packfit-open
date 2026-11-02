@@ -25,6 +25,13 @@ OpenAI states that it reviews repository usage, ecosystem importance, and proof 
 - [PR #8](https://github.com/ShaoYuYo/packfit-open/pull/8) added A/B telemetry comparison and a local-only .NET CLI usable on Linux/macOS/Windows. Its [Linux CLI tests](https://github.com/ShaoYuYo/packfit-open/actions/runs/41450896154), [Windows native tests](https://github.com/ShaoYuYo/packfit-open/actions/runs/41450896156) and [CodeQL](https://github.com/ShaoYuYo/packfit-open/actions/runs/41450896221) passed before merge.
 - These are self-maintained code and CI facts. They **do not** establish external adoption, independent technical review, on-device safety, or sustained maintenance over months.
 
+### Additional source evidence: spatial design problem and geometry pre-screen (2026-11-02)
+
+- [Merged PR #11](https://github.com/ShaoYuYo/packfit-open/pull/11) addresses a **qualitative design-stage problem** raised by an experienced battery engineer: small/irregular assigned battery space complicates cell form-factor choice and placement. The tool implements conservative XY zones, local Z ceilings, keepouts, mandatory gaps, S/P candidate comparison, and a bounded local-search visualization plus CLI.
+- [Linux](https://github.com/ShaoYuYo/packfit-open/actions/runs/41460502989), [native Windows](https://github.com/ShaoYuYo/packfit-open/actions/runs/41460502991) and [CodeQL](https://github.com/ShaoYuYo/packfit-open/actions/runs/41460502972) passed on the merge-reviewed commit.
+- This **is not** proof of independent PackFit use or endorsement; the source of the problem did not run an independent PackFit trial. No customer, employer or proprietary model geometry appears in the repository.
+- The first solver is intentionally not a mathematical global optimum, has no CAD import and does not certify manufacturability, electrical feasibility or safety.
+
 ### Biggest weakness
 
 **The gap is adoption and long-term relevance, not one more feature.** More UI elements, test totals or frequent beta tags cannot by themselves establish meaningful real-world use. Avoid guessing a probability such as 80%; the decision and weights are not public.
