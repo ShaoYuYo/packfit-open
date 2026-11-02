@@ -397,9 +397,14 @@ public sealed partial class MainWindow : Window
 
     private string CreateReport()
     {
-        string review=DataProvenanceMarkdown() + "\n" +
-            EngineeringReport.Build(ProjectBox.Text, AuthorBox.Text, _battery,
-                _telemetry, _matrix, _pack, _limits);
+        string review=EngineeringReport.Build(ProjectBox.Text, AuthorBox.Text, _battery,
+            _telemetry, _matrix, _pack, _limits);
+        // Keep the report title and metadata first, with provenance before results.
+        int firstSection = review.IndexOf("\n## ", StringComparison.Ordinal);
+        if (firstSection >= 0)
+            review = review.Insert(firstSection, "\n" + DataProvenanceMarkdown() + "\n");
+        else
+            review += "\n" + DataProvenanceMarkdown();
         string batch=BatchReport();
         if (_batteryRecords.Count > 1)
         {
