@@ -18,6 +18,17 @@ AI has helped me turn those ideas into code and documentation faster. I still tr
 
 This project is personal and independent. It is **not endorsed by my employer or any battery supplier**, and none of the included example measurements are proprietary company data.
 
+## Independent maintenance, privacy and verification
+
+PackFit is an **early-stage** project. Its practical value comes from domain-specific input validation, reproducible examples and report handoffs — not claims of wide adoption. There are no verified downstream deployments or independent PRs to cite yet.
+
+- **Engineering evidence:** [real metrics, regression work and the gaps still open](docs/PROJECT_EVIDENCE.md).
+- **How maintenance works:** [issue → reproduction → PR → CI → release](docs/MAINTAINER_WORKFLOW.md).
+- **Security and privacy:** [local file handling, unsigned Windows betas and vulnerability reporting](SECURITY.md).
+- **Interested in reviewing?** Start with the [15-minute synthetic-data trial](docs/TRY_PACKFIT.md), then [report an observation](https://github.com/ShaoYuYo/packfit-open/issues/new/choose). An independent formula or accessibility review is especially useful.
+
+The browser build uses **system fonts and native browser animations**, not third-party executable animation scripts. It does not transmit local reports to an AI service. The public website itself is delivered through GitHub Pages; following external help links contacts their destinations.
+
 ## Start here
 
 | | **Web: Everyday Battery Tools** | **Windows: Engineering Desktop** |
