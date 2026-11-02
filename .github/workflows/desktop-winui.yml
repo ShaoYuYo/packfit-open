@@ -14,6 +14,8 @@ on:
 
 permissions:
   contents: read
+  id-token: write
+  attestations: write
 
 jobs:
   windows-x64:
@@ -109,6 +111,12 @@ jobs:
         run: |
           Compress-Archive -Path "dist/PackFit-Engineering-WinUI/*" `
             -DestinationPath "dist/PackFit-Engineering-win-x64.zip" -Force
+
+      - name: Attest Windows ZIP build provenance on trusted pushes
+        if: github.event_name != 'pull_request'
+        uses: actions/attest@v4
+        with:
+          subject-path: dist/PackFit-Engineering-win-x64.zip
 
       - name: Upload working Windows executable and dependencies
         uses: actions/upload-artifact@v4
