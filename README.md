@@ -39,11 +39,11 @@ The browser build uses **system fonts and native browser animations**, not third
 | **Data handling** | Local calculations and file parsing | Files processed locally; no analytics/backend |
 | **Scope** | Estimates and education | First-pass screening and handoff, **not** certified validation |
 
-### Engineering A/B comparison and cross-platform CLI (source preview)
+### Engineering A/B comparison and cross-platform CLI (merged source)
 
 PackFit's shared C# engine can compare two battery telemetry logs under the **same user-defined screening limits**. Engineers can inspect voltage and temperature extrema, per-code anomaly deltas, and normalized flags per 1,000 samples — without pretending those results establish safety or root cause.
 
-The native Windows engineering workspace includes interactive baseline/candidate selections and comparison bars; the new **.NET 10 CLI** exposes the same logic on Linux, macOS and Windows, returning Markdown or JSON for local scripts and CI. The feature is tracked in [PR #8](https://github.com/ShaoYuYo/packfit-open/pull/8) and is **not included in the older tagged v0.8.0-beta.1 Windows binary**.
+The native Windows engineering workspace includes interactive baseline/candidate selections and comparison bars; the new **.NET 10 CLI** exposes the same logic on Linux, macOS and Windows, returning Markdown or JSON for local scripts and CI. The feature was merged in [PR #8](https://github.com/ShaoYuYo/packfit-open/pull/8) after Linux CLI, native Windows and CodeQL tests. It is available to source builders, but **not included in the older tagged v0.8.0-beta.1 Windows binary**.
 
 ```bash
 dotnet run --project desktop/PackFit.Engineering.Cli -- compare \

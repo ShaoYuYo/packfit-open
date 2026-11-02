@@ -18,6 +18,13 @@ OpenAI states that it reviews repository usage, ecosystem importance, and proof 
 | Sustained maintenance | Many iterated betas over the first two days | **Too early to claim sustained activity** |
 | Maintainer benefit from Codex | Proposed opt-in public-issue triage, reviews, test drafting and translations | **Concrete plan; automation not deployed** |
 
+### Verified source progress after the original prerelease (2026-11-02)
+
+- [PR #6](https://github.com/ShaoYuYo/packfit-open/pull/6) resolved a finding-summary accuracy bug, bounded local file reads and removed runtime external JS/fonts.
+- [PR #7](https://github.com/ShaoYuYo/packfit-open/pull/7) added source provenance, sample-data safeguards, searchable flags and native Windows smoke checks.
+- [PR #8](https://github.com/ShaoYuYo/packfit-open/pull/8) added A/B telemetry comparison and a local-only .NET CLI usable on Linux/macOS/Windows. Its [Linux CLI tests](https://github.com/ShaoYuYo/packfit-open/actions/runs/41450896154), [Windows native tests](https://github.com/ShaoYuYo/packfit-open/actions/runs/41450896156) and [CodeQL](https://github.com/ShaoYuYo/packfit-open/actions/runs/41450896221) passed before merge.
+- These are self-maintained code and CI facts. They **do not** establish external adoption, independent technical review, on-device safety, or sustained maintenance over months.
+
 ### Biggest weakness
 
 **The gap is adoption and long-term relevance, not one more feature.** More UI elements, test totals or frequent beta tags cannot by themselves establish meaningful real-world use. Avoid guessing a probability such as 80%; the decision and weights are not public.

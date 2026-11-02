@@ -42,6 +42,16 @@ PackFit combines a public bilingual browser calculator with a local-first native
 
 These are **CI/build facts**, not test certificates from a laboratory or independent domain reviewers.
 
+## New self-maintained source evidence — November 2, 2026
+
+Three maintainer-authored PRs have been merged after the first v0.8 Windows prerelease:
+
+- [#6](https://github.com/ShaoYuYo/packfit-open/pull/6): full-log anomaly truthfulness, bounded local imports and network-independent web runtime.
+- [#7](https://github.com/ShaoYuYo/packfit-open/pull/7): native WinUI session provenance, safe sample replacement, searchable finding previews and report warnings.
+- [#8](https://github.com/ShaoYuYo/packfit-open/pull/8): same-threshold A/B screening, recorded parameter assumptions, before/after charts, Markdown/JSON outputs and a cross-platform local CLI. [CI](https://github.com/ShaoYuYo/packfit-open/actions/runs/41450896154), [native Windows](https://github.com/ShaoYuYo/packfit-open/actions/runs/41450896156) and [CodeQL](https://github.com/ShaoYuYo/packfit-open/actions/runs/41450896221) passed on the PR head before merge.
+
+The [synthetic two-run trial](CLI_AND_COMPARISON.md) makes it possible for an unrelated engineer to reproduce A/B numbers without private logs. **No such independent trial report is yet claimed.** These source changes have not been retroactively inserted into the published v0.8.0-beta.1 binary.
+
 ## Real laptop feedback and outstanding investigation
 
 A Windows user reported a native XAML parsing failure during startup; logs showed App initialization succeeded before MainWindow failed. This prompted [issue #4](https://github.com/ShaoYuYo/packfit-open/issues/4), diagnostics, an independent safe mode and a portable EXE packaging correction. The maintainer subsequently reported that the app could open, which is useful first-hand **maintainer feedback** but is not an independent multi-device acceptance study.

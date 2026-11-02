@@ -1,12 +1,12 @@
 # Changelog
 
-## Source preview — cross-platform engineering comparison (PR #8)
+## Unreleased source — cross-platform engineering comparison (merged PR #8)
 
 - Add baseline/candidate A/B comparison from two local telemetry logs under one explicit threshold set, including full-log per-code counts, per-1,000-row rates, temperature/voltage deltas, and comparability warnings.
 - Extend native WinUI Telemetry Screening with file selectors, native normalized-rate bars, and a Markdown comparison handoff; reset stale comparisons when the session or batch changes.
 - Add a no-backend .NET 10 CLI for Windows, Linux and macOS with Markdown/JSON output, strictly bounded local input and create-only exports.
 - Test synthetic before/after fixtures on Linux CI and native WinUI smoke tests on Windows CI. Publish test expectations and privacy limitations in docs/CLI_AND_COMPARISON.md.
-- **This PR is a source change, not an updated v0.8.0-beta.1 release or hardware-validation certificate.**
+- **Merged source change, not an updated v0.8.0-beta.1 release or hardware-validation certificate.**
 
 ## Unreleased native workbench usability improvements (merged PR #7)
 
