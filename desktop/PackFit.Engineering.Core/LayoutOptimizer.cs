@@ -125,6 +125,8 @@ public static class LayoutOptimizer
         Require(IsIn(p.NonCellMassG,0,20000) && IsIn(p.TargetEnergyWh,0,2000),
             "Assumed non-cell mass or target Wh is outside limits.");
         Require(p.MaxSearchNodes is >=100 and <=30000,"MaxSearchNodes must be 100–30000.");
+        Require((long)p.MaxSearchNodes*p.Cells.Count*p.Topologies.Count<=600_000,
+            "Requested aggregate search budget is too large; reduce candidate cells, topologies or MaxSearchNodes.");
         foreach (var zone in p.Zones)
         {
             Require(zone is not null && IsIn(zone.XMm,-10000,10000) &&
