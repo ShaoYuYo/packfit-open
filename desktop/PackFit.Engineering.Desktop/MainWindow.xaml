@@ -39,24 +39,24 @@
                 IsOpen="False" IsClosable="True" Margin="0,0,0,10" />
             <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
               <StackPanel Spacing="20" MaxWidth="1140" HorizontalAlignment="Stretch">
-                <StackPanel x:Name="OverviewPanel" Spacing="17" Visibility="Collapsed"><StackPanel Spacing="8" Margin="0,0,0,12">
+                <StackPanel x:Name="OverviewPanel" Spacing="20" Visibility="Collapsed"><StackPanel Spacing="8" Margin="0,0,0,12">
 <TextBlock Text="ENGINEERING / WORKSPACE" Style="{StaticResource PfEyebrowText}" />
 <TextBlock Text="工程工作台" Style="{StaticResource PfPageHeading}" />
 <TextBlock Text="筆電電池工程驗證工作台 · 整理資料、標記異常、產生可複查的測試摘要。" Style="{StaticResource PfLeadText}" />
 </StackPanel><Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="14" Padding="22"><StackPanel Spacing="13"><TextBlock Text="常用工作" Style="{StaticResource PfSectionHeading}" /><TextBlock Text="先讀取電池狀態、匯入量測資料，再確認測試門檻。所有運算都在本機執行。" TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/><StackPanel x:Name="QuickActions" Orientation="Horizontal" Spacing="12"><Button x:Name="QuickBattery" Content="產生電池報告" Click="GenerateBatteryClick" Style="{StaticResource AccentButtonStyle}" MinHeight="42" Padding="17,10" /><Button x:Name="QuickTelemetry" Content="匯入量測 CSV" Click="ImportTelemetryClick"  MinHeight="42" Padding="17,10" /><Button x:Name="QuickExport" Content="輸出工程報告" Click="ExportReportClick"  MinHeight="42" Padding="17,10" /><Button Content="問題排查引導" Click="GoGuideClick" MinHeight="42" Padding="17,10" /></StackPanel></StackPanel></Border><Grid x:Name="OverviewStatsGrid" ColumnSpacing="12" RowSpacing="12"><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-<Border x:Name="OverviewStats1" Grid.Column="0" Padding="20" CornerRadius="14" Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"><StackPanel><TextBlock Text="BATTERY" FontSize="11"/><TextBlock x:Name="OverviewBattery" Text="尚未分析" Style="{StaticResource PfMetricValue}"/></StackPanel></Border>
-<Border x:Name="OverviewStats2" Grid.Column="1" Padding="20" CornerRadius="14" Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"><StackPanel><TextBlock Text="TELEMETRY" FontSize="11"/><TextBlock x:Name="OverviewTelemetry" Text="尚未匯入" Style="{StaticResource PfMetricValue}"/></StackPanel></Border>
-<Border x:Name="OverviewStats3" Grid.Column="2" Padding="20" CornerRadius="14" Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"><StackPanel><TextBlock Text="VALIDATION" FontSize="11"/><TextBlock x:Name="OverviewValidation" Text="尚未匯入" Style="{StaticResource PfMetricValue}"/></StackPanel></Border></Grid><Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="14" Padding="22"><StackPanel Spacing="13"><TextBlock Text="專案識別" Style="{StaticResource PfSectionHeading}" /><TextBlock Text="可以填入公開或內部專案代碼；資料只會用於本機產出的報告，不會自動上傳。" TextWrapping="Wrap" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+<Border x:Name="OverviewStats1" Grid.Column="0" Padding="20" CornerRadius="14" Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"><StackPanel><TextBlock Text="BATTERY" Style="{StaticResource PfEyebrowText}"/><TextBlock x:Name="OverviewBattery" Text="尚未分析" Style="{StaticResource PfMetricValue}"/></StackPanel></Border>
+<Border x:Name="OverviewStats2" Grid.Column="1" Padding="20" CornerRadius="14" Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"><StackPanel><TextBlock Text="TELEMETRY" Style="{StaticResource PfEyebrowText}"/><TextBlock x:Name="OverviewTelemetry" Text="尚未匯入" Style="{StaticResource PfMetricValue}"/></StackPanel></Border>
+<Border x:Name="OverviewStats3" Grid.Column="2" Padding="20" CornerRadius="14" Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"><StackPanel><TextBlock Text="VALIDATION" Style="{StaticResource PfEyebrowText}"/><TextBlock x:Name="OverviewValidation" Text="尚未匯入" Style="{StaticResource PfMetricValue}"/></StackPanel></Border></Grid><Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="14" Padding="22"><StackPanel Spacing="13"><TextBlock Text="專案識別" Style="{StaticResource PfSectionHeading}" /><TextBlock Text="可以填入公開或內部專案代碼；資料只會用於本機產出的報告，不會自動上傳。" TextWrapping="Wrap" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
 <TextBox x:Name="ProjectBox" Header="Project / 專案名稱" Text="Sample Battery Project" MinWidth="115" Margin="0,0,10,12" />
 <TextBox x:Name="AuthorBox" Header="Engineer / 工程師" Text="" MinWidth="115" Margin="0,0,10,12" /></StackPanel></Border><Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="14" Padding="22"><StackPanel Spacing="13"><TextBlock Text="工具的判斷邊界" Style="{StaticResource PfSectionHeading}" /><TextBlock TextWrapping="Wrap" Text="Pass/Fail 只依據你設定的量測門檻；電池安全、可靠度、機構、電性與認證仍需專業審查。範例數據不代表 HP 或任何供應商標準。" /></StackPanel></Border></StackPanel>
-                <StackPanel x:Name="BatteryPanel" Spacing="17" Visibility="Collapsed"><StackPanel Spacing="8" Margin="0,0,0,12">
+                <StackPanel x:Name="BatteryPanel" Spacing="20" Visibility="Collapsed"><StackPanel Spacing="8" Margin="0,0,0,12">
 <TextBlock Text="01 / WINDOWS DIAGNOSTICS" Style="{StaticResource PfEyebrowText}" />
 <TextBlock Text="電池健康度" Style="{StaticResource PfPageHeading}" />
 <TextBlock Text="一鍵執行 Windows powercfg 電池報告，或者匯入既有的 battery-report.html。" Style="{StaticResource PfLeadText}" />
 </StackPanel><Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="14" Padding="22"><StackPanel Spacing="13"><TextBlock Text="讀取本機電池" Style="{StaticResource PfSectionHeading}" /><StackPanel Orientation="Horizontal" Spacing="12"><Button x:Name="PowerCfgButton" Content="在本機建立報告" Click="GenerateBatteryClick" Style="{StaticResource AccentButtonStyle}" MinHeight="42" Padding="17,10" /><Button x:Name="BatteryFileButton" Content="匯入 HTML" Click="ImportBatteryClick"  MinHeight="42" Padding="17,10" /></StackPanel>
 <TextBlock Text="powercfg 是 Windows 內建工具；程式只解析容量欄位，不會將報告上傳。" FontSize="12" TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
 <TextBlock x:Name="BatteryResult" Text="尚未讀取。請先執行報告或匯入 HTML。" FontSize="17" TextWrapping="Wrap" FontWeight="SemiBold"/></StackPanel></Border></StackPanel>
-                <StackPanel x:Name="TelemetryPanel" Spacing="17" Visibility="Collapsed"><StackPanel Spacing="8" Margin="0,0,0,12">
+                <StackPanel x:Name="TelemetryPanel" Spacing="20" Visibility="Collapsed"><StackPanel Spacing="8" Margin="0,0,0,12">
 <TextBlock Text="02 / TELEMETRY SCREENING" Style="{StaticResource PfEyebrowText}" />
 <TextBlock Text="量測紀錄與異常檢查" Style="{StaticResource PfPageHeading}" />
 <TextBlock Text="將 CSV 中常見的電壓、電流、溫度與 SOC 資料整理成可追蹤的異常清單。" Style="{StaticResource PfLeadText}" />
@@ -83,7 +83,7 @@
   </StackPanel>
 </Expander>
 <TextBlock Text="異常清單最多顯示 1,000 筆；報告會註明其餘筆數，方便追查完整原始資料。" FontSize="11" TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/></StackPanel></Border></StackPanel>
-                <StackPanel x:Name="ValidationPanel" Spacing="17" Visibility="Collapsed"><StackPanel Spacing="8" Margin="0,0,0,12">
+                <StackPanel x:Name="ValidationPanel" Spacing="20" Visibility="Collapsed"><StackPanel Spacing="8" Margin="0,0,0,12">
 <TextBlock Text="03 / TEST MATRIX" Style="{StaticResource PfEyebrowText}" />
 <TextBlock Text="測試驗證矩陣" Style="{StaticResource PfPageHeading}" />
 <TextBlock Text="讀入測試標準和量測結果，快速歸類 PASS、FAIL、NOT RUN，避免每次手動整理表格。" Style="{StaticResource PfLeadText}" />
@@ -94,21 +94,21 @@
 </StackPanel>
 <TextBlock x:Name="ValidationResult" Text="尚未匯入。" FontSize="16" FontWeight="SemiBold" TextWrapping="Wrap"/>
 <ListView x:Name="ValidationList" MinHeight="180" MaxHeight="420" SelectionMode="None" /></StackPanel></Border></StackPanel>
-                <StackPanel x:Name="PackPanel" Spacing="17" Visibility="Collapsed"><StackPanel Spacing="8" Margin="0,0,0,12">
+                <StackPanel x:Name="PackPanel" Spacing="20" Visibility="Collapsed"><StackPanel Spacing="8" Margin="0,0,0,12">
 <TextBlock Text="04 / DESIGN ESTIMATION" Style="{StaticResource PfEyebrowText}" />
 <TextBlock Text="電池包設計估算" Style="{StaticResource PfPageHeading}" />
 <TextBlock Text="比較串並聯、Wh、外部包絡體積、總重量及能量密度。這是名目估算，不代表實際可製造。" Style="{StaticResource PfLeadText}" />
-</StackPanel><Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="14" Padding="22"><StackPanel Spacing="13"><TextBlock Text="電芯與包絡參數" Style="{StaticResource PfSectionHeading}" /><StackPanel Orientation="Horizontal" Spacing="6">
+</StackPanel><Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="14" Padding="22"><StackPanel Spacing="13"><TextBlock Text="電芯與包絡參數" Style="{StaticResource PfSectionHeading}" /><StackPanel x:Name="PackParametersPrimary" Orientation="Horizontal" Spacing="10">
 <TextBox x:Name="SeriesBox" Header="Series (S)" Text="3" MinWidth="115" Margin="0,0,10,12" /><TextBox x:Name="ParallelBox" Header="Parallel (P)" Text="1" MinWidth="115" Margin="0,0,10,12" />
 <TextBox x:Name="CellVoltageBox" Header="Cell voltage (V)" Text="3.85" MinWidth="115" Margin="0,0,10,12" /><TextBox x:Name="CellCapacityBox" Header="Cell capacity (Ah)" Text="5.0" MinWidth="115" Margin="0,0,10,12" />
-</StackPanel><StackPanel Orientation="Horizontal" Spacing="6">
+</StackPanel><StackPanel x:Name="PackParametersSecondary" Orientation="Horizontal" Spacing="10">
 <TextBox x:Name="CellMassBox" Header="Cell mass (g)" Text="57" MinWidth="115" Margin="0,0,10,12" /><TextBox x:Name="OverheadBox" Header="Other mass (g)" Text="65" MinWidth="115" Margin="0,0,10,12" />
 <TextBox x:Name="LoadBox" Header="Avg load (W)" Text="16" MinWidth="115" Margin="0,0,10,12" />
-</StackPanel><StackPanel Orientation="Horizontal" Spacing="6">
+</StackPanel><StackPanel x:Name="PackParametersDimensions" Orientation="Horizontal" Spacing="10">
 <TextBox x:Name="LengthBox" Header="Length (mm)" Text="240" MinWidth="115" Margin="0,0,10,12" /><TextBox x:Name="WidthBox" Header="Width (mm)" Text="70" MinWidth="115" Margin="0,0,10,12" />
 <TextBox x:Name="HeightBox" Header="Thickness (mm)" Text="6.8" MinWidth="115" Margin="0,0,10,12" />
 </StackPanel><Button x:Name="PackCalculateButton" Content="計算設計" Click="CalculatePackClick" Style="{StaticResource AccentButtonStyle}" MinHeight="42" Padding="17,10" /></StackPanel></Border><Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="14" Padding="22"><StackPanel Spacing="13"><TextBlock Text="計算結果" Style="{StaticResource PfSectionHeading}" /><TextBlock x:Name="PackResultText" Text="尚未計算。" TextWrapping="Wrap" FontSize="15" /></StackPanel></Border></StackPanel>
-                <StackPanel x:Name="ReportPanel" Spacing="17" Visibility="Collapsed"><StackPanel Spacing="8" Margin="0,0,0,12">
+                <StackPanel x:Name="ReportPanel" Spacing="20" Visibility="Collapsed"><StackPanel Spacing="8" Margin="0,0,0,12">
 <TextBlock Text="05 / REPORTING" Style="{StaticResource PfEyebrowText}" />
 <TextBlock Text="工程摘要產生器" Style="{StaticResource PfPageHeading}" />
 <TextBlock Text="整合已讀取的數據、驗證結論、使用門檻與複查清單，輸出能供同事審閱的 Markdown。" Style="{StaticResource PfLeadText}" />
@@ -116,7 +116,7 @@
 <Button x:Name="PreviewReportButton" Content="產生報告預覽" Click="PreviewReportClick"  MinHeight="42" Padding="17,10" /><Button x:Name="ExportReportButton" Content="儲存 Markdown 報告" Click="ExportReportClick" Style="{StaticResource AccentButtonStyle}" MinHeight="42" Padding="17,10" />
 <TextBox x:Name="ReportPreview" Header="Preview" TextWrapping="Wrap" AcceptsReturn="True" IsReadOnly="True" Height="450" FontFamily="Consolas" FontSize="12" /></StackPanel></Border></StackPanel>
 
-                <StackPanel x:Name="GuidePanel" Spacing="17" Visibility="Collapsed">
+                <StackPanel x:Name="GuidePanel" Spacing="20" Visibility="Collapsed">
                   <StackPanel Spacing="8" Margin="0,0,0,12">
                     <TextBlock Text="WORKFLOW / INVESTIGATION" Style="{StaticResource PfEyebrowText}" />
                     <TextBlock Text="問題排查引導" Style="{StaticResource PfPageHeading}" />
@@ -155,7 +155,7 @@
                     </StackPanel>
                   </Border>
                 </StackPanel>
-                <StackPanel x:Name="DiagnosticsPanel" Spacing="17" Visibility="Collapsed">
+                <StackPanel x:Name="DiagnosticsPanel" Spacing="20" Visibility="Collapsed">
                   <StackPanel Spacing="8" Margin="0,0,0,12">
                     <TextBlock Text="SYSTEM / TOOLS" Style="{StaticResource PfEyebrowText}" />
                     <TextBlock Text="Windows 診斷工具箱" FontSize="30" FontWeight="SemiBold"/>
@@ -202,7 +202,7 @@
                     </StackPanel>
                   </Border>
                 </StackPanel>
-                <StackPanel x:Name="ResourcesPanel" Spacing="17" Visibility="Collapsed">
+                <StackPanel x:Name="ResourcesPanel" Spacing="20" Visibility="Collapsed">
                   <StackPanel Spacing="8" Margin="0,0,0,12">
                     <TextBlock Text="RESOURCES / OFFICIAL" Style="{StaticResource PfEyebrowText}" />
                     <TextBlock Text="需要額外工具時，從這裡開始" FontSize="30" FontWeight="SemiBold"/>
