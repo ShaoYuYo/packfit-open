@@ -11,6 +11,7 @@ namespace PackFit.Engineering.Desktop;
 public sealed partial class MainWindow : Window
 {
     private BatteryHealth? _battery;
+    private IReadOnlyList<BatteryHealth> _batteryRecords = [];
     private TelemetryAnalysis? _telemetry;
     private TelemetryThresholds? _limits;
     private IReadOnlyList<ValidationItem>? _matrix;
@@ -117,7 +118,8 @@ public sealed partial class MainWindow : Window
                 throw new InvalidOperationException(
                     $"powercfg 失敗（結束碼：{process.ExitCode}）。部分桌機沒有可用電池。");
             string html = await File.ReadAllTextAsync(reportPath);
-            _battery = await Task.Run(() => BatteryReportParser.Parse(html));
+            _batteryRecords = await Task.Run(() => BatteryReportParser.ParseAll(html));
+            _battery = _batteryRecords.Count == 1 ? _batteryRecords[0] : null;
             UpdateBattery();
             Notice("Windows 電池報告已在本機建立並分析。");
         }
@@ -138,7 +140,8 @@ public sealed partial class MainWindow : Window
         {
             var path = await PickFileAsync(".html", ".htm");
             if (path is null) return;
-            _battery = await Task.Run(() => BatteryReportParser.Parse(File.ReadAllText(path)));
+            _batteryRecords = await Task.Run(() => BatteryReportParser.ParseAll(File.ReadAllText(path)));
+            _battery = _batteryRecords.Count == 1 ? _batteryRecords[0] : null;
             UpdateBattery();
             Notice("已匯入並分析電池容量報告。");
         }
@@ -147,12 +150,21 @@ public sealed partial class MainWindow : Window
 
     private void UpdateBattery()
     {
-        if (_battery is null) return;
-        BatteryResult.Text = string.Format(Culture,
-            "設計容量 {0:0.##} Wh\n滿充容量 {1:0.##} Wh\n容量保留率 {2:0.0}%\n循環次數 {3}",
-            _battery.DesignWh, _battery.FullChargeWh, _battery.RetentionPercent,
-            _battery.Cycles?.ToString(Culture) ?? "未提供");
-        OverviewBattery.Text = _battery.RetentionPercent.ToString("0.0", Culture) + "%";
+        if (_batteryRecords.Count == 0) return;
+        var lines = new List<string>();
+        for (int i = 0; i < _batteryRecords.Count; i++)
+        {
+            var b = _batteryRecords[i];
+            lines.Add(string.Format(Culture,
+                "電池 {0}\n設計容量 {1:0.##} Wh · 滿充容量 {2:0.##} Wh\n容量保留率 {3:0.0}% · 循環次數 {4}",
+                i + 1, b.DesignWh, b.FullChargeWh, b.RetentionPercent,
+                b.Cycles?.ToString(Culture) ?? "未提供"));
+        }
+        BatteryResult.Text = string.Join("\n\n", lines) +
+            "\n\n容量保留率僅為參考，個別電池不會自動合併。";
+        OverviewBattery.Text = _batteryRecords.Count == 1
+            ? _batteryRecords[0].RetentionPercent.ToString("0.0", Culture) + "%"
+            : $"{_batteryRecords.Count} batteries";
     }
 
     private TelemetryThresholds ReadThresholds() => new(
@@ -256,6 +268,19 @@ public sealed partial class MainWindow : Window
         string review=EngineeringReport.Build(ProjectBox.Text, AuthorBox.Text, _battery,
             _telemetry, _matrix, _pack, _limits);
         string batch=BatchReport();
+        if (_batteryRecords.Count > 1)
+        {
+            review += "\n\n## Multiple installed batteries (separate readings)\n\n";
+            for (int i = 0; i < _batteryRecords.Count; i++)
+            {
+                var b = _batteryRecords[i];
+                review += string.Format(Culture,
+                    "- Battery {0}: design {1:0.###} Wh; full charge {2:0.###} Wh; retention {3:0.0}%; cycles {4}\n",
+                    i + 1, b.DesignWh, b.FullChargeWh, b.RetentionPercent,
+                    b.Cycles?.ToString(Culture) ?? "not reported");
+            }
+            review += "\nThese batteries are not combined or treated as a single pack.\n";
+        }
         return string.IsNullOrWhiteSpace(batch)?review:review+"\n\n"+batch;
     }
 
