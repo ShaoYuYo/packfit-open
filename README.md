@@ -6,17 +6,17 @@
 
 ![Web tests](https://github.com/ShaoYuYo/packfit-open/actions/workflows/ci.yml/badge.svg) ![Native Windows build](https://github.com/ShaoYuYo/packfit-open/actions/workflows/desktop-winui.yml/badge.svg) ![License](https://img.shields.io/badge/license-MIT-6b6271)
 
-PackFit is an independent, **MIT-licensed**, bilingual (English / 繁體中文) project maintained by a battery development engineer. There are two products in one repository: a free browser app for people who want practical answers about their laptop batteries, and a native WinUI 3 workbench for repetitive battery validation and Windows troubleshooting tasks.
+PackFit is an independent, **MIT-licensed**, bilingual (English / 繁體中文) project maintained by an independent developer, with engineering workflow direction informed by conversations with a battery engineer. There are two products in one repository: a free browser app for people who want practical answers about their laptop batteries, and a native WinUI 3 workbench for repetitive battery validation and Windows troubleshooting tasks.
 
 ## Why I built this
 
-Working with laptop batteries, I've learned that a surprisingly large part of engineering is not about deriving a formula. It is checking where a measurement came from, converting mV into V, investigating a suspicious temperature or SOC change, and rewriting the same findings in a report so another engineer can follow them.
+I started PackFit to make everyday battery information easier to understand and to explore repetitive engineering tasks such as checking measurement provenance, converting units, screening abnormal values and preparing reviewable handoffs. Discussions with a battery engineer have informed specific design problems; these conversations are needs discovery, not evidence of product adoption or professional qualifications.
 
 People outside engineering have related questions: *How long should my battery last? Is capacity dropping? Why is my computer draining overnight?* I wanted a tool that answers ordinary questions without jargon and gives engineers something they can actually use at work.
 
 AI has helped me turn those ideas into code and documentation faster. I still treat its output as a draft to test and review. **The application doesn't use AI to invent a battery diagnosis**, and it never sends local reports to an AI service.
 
-This project is personal and independent. It is **not endorsed by my employer or any battery supplier**, and none of the included example measurements are proprietary company data.
+This project is personal and independent. It is **not endorsed by any employer, customer or battery supplier**, and none of the included example measurements are proprietary company data.
 
 ## Independent maintenance, privacy and verification
 
@@ -39,11 +39,11 @@ The browser build uses **system fonts and native browser animations**, not third
 | **Data handling** | Local calculations and file parsing | Files processed locally; no analytics/backend |
 | **Scope** | Estimates and education | First-pass screening and handoff, **not** certified validation |
 
-### Enter L × W × H directly — native engineering workflow (PR #13)
+### Enter L × W × H directly — native engineering workflow (merged PR #13)
 
 A battery engineer told us that system design often provides **only the battery's allowed length, width and thickness**, without a 3D file she can open. The Windows workbench now starts from these dimensions, an optional second candidate cell, **fixed series S**, parallel range, user-entered side/Z reserves and target Wh. It invokes the same offline placement engine and generates a geometry diagram and traceable engineering report. The advanced JSON/L-shaped editor is optional.
 
-This is [PR #13](https://github.com/ShaoYuYo/packfit-open/pull/13) source-preview functionality until its final CI and merge. The outer dimensions do **not** prove an internally unobstructed battery volume; this model does not certify CAD feasibility, tab routing or pack safety. All default showcase values are explicitly fictional.
+This feature was merged in [PR #13](https://github.com/ShaoYuYo/packfit-open/pull/13), following green Linux, native Windows and CodeQL checks. It is available from source but **not** part of the older tagged v0.8.0-beta.1 Windows binary. The outer dimensions do **not** prove an internally unobstructed battery volume; this model does not certify CAD feasibility, tab routing or pack safety. All default showcase values are explicitly fictional.
 
 Read the [dimension-first engineering walkthrough](docs/DIMENSION_FIRST_LAYOUT.md).
 
