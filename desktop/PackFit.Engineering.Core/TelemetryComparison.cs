@@ -26,10 +26,10 @@ public sealed record TelemetryComparisonResult(
         // Strip both Windows and Unix path separators even when run on another OS.
         var name = Path.GetFileName(source.Replace('\\', '/'));
         if (string.IsNullOrWhiteSpace(name)) name = "Unnamed local file";
-        return name.Replace("|", "/").Replace("\r", " ").Replace("\n", " ")
+        string safe = name.Replace("|", "/").Replace("\r", " ").Replace("\n", " ")
             .Replace("<", "&lt;").Replace(">", "&gt;")
-            .Replace("[", "&#91;").Replace("]", "&#93;")
-            .Trim()[..Math.Min(name.Trim().Length, 160)];
+            .Replace("[", "&#91;").Replace("]", "&#93;").Trim();
+        return safe.Length <= 160 ? safe : safe[..160] + "…";
     }
 
     public string ToMarkdown()
