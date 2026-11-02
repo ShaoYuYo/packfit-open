@@ -52,6 +52,12 @@ Three maintainer-authored PRs have been merged after the first v0.8 Windows prer
 
 The [synthetic two-run trial](CLI_AND_COMPARISON.md) makes it possible for an unrelated engineer to reproduce A/B numbers without private logs. **No such independent trial report is yet claimed.** These source changes have not been retroactively inserted into the published v0.8.0-beta.1 binary.
 
+## Qualitative needs discovery — geometry pre-screen (2026-11-02)
+
+An experienced battery engineer described a recurrent early-pack-design problem: irregular and severely restricted chassis space makes it difficult to compare cell footprints, orientations and energy-density tradeoffs. This observation was **problem discovery only**; there was no independent test of PackFit, no actual company drawing and no endorsement. It has no attributable personal or employer details.
+
+The maintainer then merged [#11](https://github.com/ShaoYuYo/packfit-open/pull/11), an experimental offline irregular layout pre-screen with synthetic input, native candidate diagrams and a local CLI. Verifiable source checks: [Linux CI](https://github.com/ShaoYuYo/packfit-open/actions/runs/41460502989), [Windows WinUI smoke](https://github.com/ShaoYuYo/packfit-open/actions/runs/41460502991), and [CodeQL](https://github.com/ShaoYuYo/packfit-open/actions/runs/41460502972). Hardware geometry, independent CAD review and user adoption remain unverified.
+
 ## Real laptop feedback and outstanding investigation
 
 A Windows user reported a native XAML parsing failure during startup; logs showed App initialization succeeded before MainWindow failed. This prompted [issue #4](https://github.com/ShaoYuYo/packfit-open/issues/4), diagnostics, an independent safe mode and a portable EXE packaging correction. The maintainer subsequently reported that the app could open, which is useful first-hand **maintainer feedback** but is not an independent multi-device acceptance study.
