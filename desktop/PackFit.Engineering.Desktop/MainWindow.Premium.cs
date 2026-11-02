@@ -166,6 +166,7 @@ public sealed partial class MainWindow
         BatteryResult.Text = "尚未讀取。請先執行報告或匯入 HTML。";
         TelemetryResult.Text = "尚未匯入 CSV。";
         ValidationResult.Text = "尚未匯入驗證矩陣。";
+        PackResultText.Text = "尚未計算電池包估算。";
         ReportPreview.Text = "";
         SleepCommandOutput.Text = "";
         SleepGraphCanvas.Children.Clear();
