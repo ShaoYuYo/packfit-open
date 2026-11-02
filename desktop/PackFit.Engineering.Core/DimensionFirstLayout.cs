@@ -20,7 +20,9 @@ public sealed record DimensionFirstRequest(
     double MinimumCellGapMm,
     double AssumedNonCellMassG,
     double TargetNominalWh,
-    int SearchBudgetPerCombination = 4000);
+    int SearchBudgetPerCombination = 4000,
+    IReadOnlyList<LayoutKeepout>? Keepouts = null,
+    double KeepoutMarginMm = 0);
 
 public static class DimensionFirstLayout
 {
@@ -46,6 +48,7 @@ public static class DimensionFirstLayout
         Between(request.EdgeAllowanceMm, 0, 100, nameof(request.EdgeAllowanceMm));
         Between(request.TotalThicknessReserveMm, 0, 100, nameof(request.TotalThicknessReserveMm));
         Between(request.MinimumCellGapMm, 0, 100, nameof(request.MinimumCellGapMm));
+        Between(request.KeepoutMarginMm, 0, 100, nameof(request.KeepoutMarginMm));
         Between(request.AssumedNonCellMassG, 0, 20000, nameof(request.AssumedNonCellMassG));
         Between(request.TargetNominalWh, 0, 2000, nameof(request.TargetNominalWh));
         if (request.Envelope.LengthMm - 2 * request.EdgeAllowanceMm <= 0 ||
@@ -65,25 +68,42 @@ public static class DimensionFirstLayout
                 "Require 1–12 series and 1–4 parallel, with at most twelve cells in each candidate topology.");
         if (request.SearchBudgetPerCombination is < 100 or > 30000)
             throw new ArgumentOutOfRangeException(nameof(request.SearchBudgetPerCombination));
+        var keepouts = request.Keepouts?.ToArray() ?? [];
+        if (keepouts.Length > 12)
+            throw new ArgumentException("Dimension-first editor supports at most twelve blocked rectangles.");
+        foreach (var block in keepouts)
+        {
+            ArgumentNullException.ThrowIfNull(block);
+            Between(block.XMm, 0, request.Envelope.LengthMm, "Keepout.X");
+            Between(block.YMm, 0, request.Envelope.WidthMm, "Keepout.Y");
+            Between(block.WidthMm, .1, request.Envelope.LengthMm, "Keepout.Width");
+            Between(block.HeightMm, .1, request.Envelope.WidthMm, "Keepout.Height");
+            if (block.XMm + block.WidthMm > request.Envelope.LengthMm + 1e-7 ||
+                block.YMm + block.HeightMm > request.Envelope.WidthMm + 1e-7)
+                throw new ArgumentException("Blocked area extends beyond the provided outer L/W envelope.");
+        }
 
         var topologies = Enumerable.Range(1, request.MaximumParallel)
             .Select(p => new LayoutTopology(request.RequiredSeries, p)).ToArray();
         var problem = new LayoutProblem(
             [new LayoutZone(0, 0, request.Envelope.LengthMm,
                 request.Envelope.WidthMm, availableZ)],
-            [], request.Cells.ToArray(), topologies,
+            keepouts, request.Cells.ToArray(), topologies,
             CellGapMm: request.MinimumCellGapMm,
             BoundaryMarginMm: request.EdgeAllowanceMm,
-            KeepoutMarginMm: 0,
+            KeepoutMarginMm: request.KeepoutMarginMm,
             NonCellMassG: request.AssumedNonCellMassG,
             TargetEnergyWh: request.TargetNominalWh,
             MaxSearchNodes: request.SearchBudgetPerCombination)
         {
             OuterEnvelopeVolumeL = request.Envelope.LengthMm *
                 request.Envelope.WidthMm * request.Envelope.ThicknessMm / 1_000_000,
-            InputBasis = "OUTER PACK L/W/H ONLY. Assumed rectangular XY area, no known internal " +
-                "keepouts; Z budget is outer thickness minus the user-supplied total Z reserve. " +
-                "Do not treat nominal geometry as cleared CAD or a production pack."
+            InputBasis = "OUTER PACK L/W/H ONLY. Rectangular XY envelope; " +
+                (keepouts.Length==0
+                    ? "NO INTERNAL KEEPOUTS PROVIDED (unknown obstructions may exist); "
+                    : $"{keepouts.Length} user-marked 2D FULL-HEIGHT keepout rectangles; ") +
+                "Z budget is outer thickness minus the user-supplied total Z reserve. " +
+                "Do not treat estimated geometry as cleared CAD or a production pack."
         };
         LayoutOptimizer.Validate(problem);
         return problem;
