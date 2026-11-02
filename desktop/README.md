@@ -4,7 +4,7 @@
 
 PackFit Engineering Desktop is a companion to the [browser edition](https://shaoyuyo.github.io/packfit-open/). The web app helps consumers estimate runtime; the desktop app is intended for **laptop battery, power, validation, reliability and system engineers** who need to turn scattered test measurements into clear, reproducible follow-up items.
 
-> **Public beta available:** [v0.7.0-beta.4](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.4). Automated browser and C# tests passed; GitHub Actions built both Windows distributions and passed an exploratory native process startup probe on a hosted Windows runner. **Real Windows hardware smoke-testing and enterprise code signing remain unverified.** No engineering safety or regulatory certification is implied.
+> **Public beta available:** [v0.8.0-beta.1](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.8.0-beta.1). Automated browser and C# tests passed; GitHub Actions built both Windows distributions and passed an exploratory native process startup probe on a hosted Windows runner. **Real Windows hardware smoke-testing and enterprise code signing remain unverified.** No engineering safety or regulatory certification is implied.
 
 ## Important: troubleshooting when Windows does not launch the app
 
@@ -20,7 +20,7 @@ Official Microsoft documentation confirms that single-file WinUI 3 executables e
 
 ### Portable EXE naming — beta.4 fix
 
-Earlier beta releases renamed the self-contained single-file WinUI executable to `PackFit.Engineering.exe`. Microsoft has documented cases in which renaming a published self-contained WinUI EXE breaks XAML resource resolution. **Beta.4 ships the portable artifact as `PackFit.Engineering.exe` without renaming it.** Never rename this file after downloading.
+Earlier beta releases renamed the self-contained single-file WinUI executable to `PackFit.Engineering.exe`. Microsoft has documented cases in which renaming a published self-contained WinUI EXE breaks XAML resource resolution. **Beta.4 and subsequent releases ship the portable artifact as `PackFit.Engineering.exe` without renaming it.** Never rename this file after downloading.
 
 The file the user launched for the previously reported failure is unknown, so the exact on-device root cause is not yet proven. Read [GitHub issue #4](https://github.com/ShaoYuYo/packfit-open/issues/4) for evidence and status.
 
@@ -93,13 +93,13 @@ This desktop edition targets those repetitive steps:
 
 ## Download and run the latest public beta
 
-**[Open GitHub Releases — v0.7.0-beta.4](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.4)**
+**[Open GitHub Releases — v0.8.0-beta.1](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.8.0-beta.1)**
 
 The initial beta release has three verified attached assets:
 
-1. [**PackFit-Engineering-win-x64.zip**](https://github.com/ShaoYuYo/packfit-open/releases/download/v0.7.0-beta.4/PackFit-Engineering-win-x64.zip) — recommended. Download, extract every file, then run `Start-PackFit.cmd` in the extracted folder (or `PackFit.Engineering.exe` directly).
-2. [**PackFit.Engineering.exe**](https://github.com/ShaoYuYo/packfit-open/releases/download/v0.7.0-beta.4/PackFit.Engineering.exe) — a larger, optional single-file build. It may extract runtime files at startup; do not assume it is zero-extraction.
-3. [**SHA256SUMS.txt**](https://github.com/ShaoYuYo/packfit-open/releases/download/v0.7.0-beta.4/SHA256SUMS.txt) — checksums for confirming the downloaded file matches the published artifact.
+1. [**PackFit-Engineering-win-x64.zip**](https://github.com/ShaoYuYo/packfit-open/releases/download/v0.8.0-beta.1/PackFit-Engineering-win-x64.zip) — recommended. Download, extract every file, then run `Start-PackFit.cmd` in the extracted folder (or `PackFit.Engineering.exe` directly).
+2. [**PackFit.Engineering.exe**](https://github.com/ShaoYuYo/packfit-open/releases/download/v0.8.0-beta.1/PackFit.Engineering.exe) — a larger, optional single-file build. It may extract runtime files at startup; do not assume it is zero-extraction.
+3. [**SHA256SUMS.txt**](https://github.com/ShaoYuYo/packfit-open/releases/download/v0.8.0-beta.1/SHA256SUMS.txt) — checksums for confirming the downloaded file matches the published artifact.
 
 The release workflow performed web tests, engineering core tests and native WinUI compilation, then published the binaries from the **same commit**. Compilation and artifact presence are verified; **manual Windows 10/11 launch, hardware diagnostics, accessibility and performance are not yet independently validated**.
 
