@@ -22,7 +22,11 @@ public sealed record LayoutProblem(
     double KeepoutMarginMm = 1,
     double NonCellMassG = 40,
     double TargetEnergyWh = 0,
-    int MaxSearchNodes = 6000);
+    int MaxSearchNodes = 6000)
+{
+    /// <summary>Human-readable, untrusted provenance note; not a CAD clearance claim.</summary>
+    public string? InputBasis { get; init; }
+}
 
 public sealed record LayoutPlacement(
     int Index, int ZoneIndex, double XMm, double YMm,
@@ -61,6 +65,13 @@ public sealed record LayoutResult(
         b.AppendLine($"- Cell gap: {F(p.CellGapMm)} mm; boundary margin: {F(p.BoundaryMarginMm)} mm; keepout margin: {F(p.KeepoutMarginMm)} mm");
         b.AppendLine($"- Assumed NON-cell mass: {F(p.NonCellMassG)} g; target nominal energy: {F(p.TargetEnergyWh)} Wh");
         b.AppendLine($"- Maximum nodes per attempted topology/cell: {p.MaxSearchNodes}; any capped runs: {AnySearchBudgetExceeded}");
+        if (!string.IsNullOrWhiteSpace(p.InputBasis))
+        {
+            // Escape markup and line breaks; no absolute paths or proprietary fields.
+            string basis = p.InputBasis.Replace("|", "/").Replace("<", "&lt;")
+                .Replace(">", "&gt;").Replace("\r", " ").Replace("\n", " ");
+            b.AppendLine("- Input basis: " + (basis.Length > 500 ? basis[..500] : basis));
+        }
         b.AppendLine();
         b.AppendLine("## Candidate screening table");
         b.AppendLine();
