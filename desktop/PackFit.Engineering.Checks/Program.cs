@@ -169,12 +169,11 @@ Assert(nextSteps.Any(s=>s.Contains("Temperature flags")) &&
 
 
 var longCsvRows=Enumerable.Range(0,1208).Select(index =>
-    $"2026-11-01T00:00:00Z".Replace("00:00:00Z",
-        DateTimeOffset.Parse("2026-11-01T00:00:00Z").AddSeconds(index)
-            .ToString("HH:mm:ss'Z'",System.Globalization.CultureInfo.InvariantCulture)) +
+    DateTimeOffset.Parse("2026-11-01T00:00:00Z")
+        .AddSeconds(index).ToString("O",System.Globalization.CultureInfo.InvariantCulture) +
     $",{(index==1207?9.0:11.5):0.0},2.0,{(index<1207?65:34)},80");
-var longLog="Timestamp,Voltage_V,Current_A,Temp_C,SOC_pct\\n"
-    +string.Join("\\n",longCsvRows)+"\\n";
+var longLog="Timestamp,Voltage_V,Current_A,Temp_C,SOC_pct\n"
+    +string.Join("\n",longCsvRows)+"\n";
 var longAnalysis=TelemetryAnalyzer.Analyze(longLog,
     new TelemetryThresholds(MaximumTemperatureC:60,MinimumVoltageV:10));
 Assert(longAnalysis.TotalFindings>1000 && longAnalysis.HiddenFindings>0,
