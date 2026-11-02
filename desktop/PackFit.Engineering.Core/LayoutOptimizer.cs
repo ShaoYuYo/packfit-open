@@ -32,7 +32,12 @@ public sealed record LayoutOption(
     double NominalVoltageV, double NominalCapacityAh, double NominalEnergyWh,
     double EstimatedMassG, double EstimatedPackWhKg,
     double GrossZoneEnergyLoadingWhL, double GrossFootprintFillPct,
-    bool MeetsEnergyTarget, int ExploredNodes);
+    bool MeetsEnergyTarget, int ExploredNodes)
+{
+    // Pareto only for nominal energy ↑ and assumed total mass ↓, across user-allowed topologies.
+    // Not a statement about voltage, thickness, costs, wiring or safety.
+    public bool ParetoOnEnergyMass { get; init; }
+}
 
 public sealed record LayoutResult(
     IReadOnlyList<LayoutOption> Options,
@@ -59,14 +64,16 @@ public sealed record LayoutResult(
         b.AppendLine();
         b.AppendLine("## Candidate screening table");
         b.AppendLine();
-        b.AppendLine("| Rank | Cell | S/P | Nominal Wh | Assumed pack g | Estimated Wh/kg | Wh/L of GROSS allowed zones | Gross XY cell fill | Meets Wh target |");
-        b.AppendLine("|---:|---|---|---:|---:|---:|---:|---:|---|");
-        if (Options.Count == 0) b.AppendLine("| — | No arrangement found within the search budget | — | — | — | — | — | — | — |");
+        b.AppendLine("| Rank | Cell | S/P | Nominal Wh | Assumed pack g | Estimated Wh/kg | Wh/L of GROSS allowed zones | Gross XY cell fill | Meets Wh target | Wh/mass Pareto |");
+        b.AppendLine("|---:|---|---|---:|---:|---:|---:|---:|---|---|");
+        if (Options.Count == 0) b.AppendLine("| — | No arrangement found within the search budget | — | — | — | — | — | — | — | — |");
         for (int i = 0; i < Options.Count; i++)
         {
             var o=Options[i];
-            b.AppendLine($"| {i+1} | {o.CellId} | {o.Topology.Series}S{o.Topology.Parallel}P | {F(o.NominalEnergyWh)} | {F(o.EstimatedMassG)} | {F(o.EstimatedPackWhKg)} | {F(o.GrossZoneEnergyLoadingWhL)} | {F(o.GrossFootprintFillPct)}% | {(o.MeetsEnergyTarget ? "Yes" : "No")} |");
+            b.AppendLine($"| {i+1} | {o.CellId} | {o.Topology.Series}S{o.Topology.Parallel}P | {F(o.NominalEnergyWh)} | {F(o.EstimatedMassG)} | {F(o.EstimatedPackWhKg)} | {F(o.GrossZoneEnergyLoadingWhL)} | {F(o.GrossFootprintFillPct)}% | {(o.MeetsEnergyTarget ? "Yes" : "No")} | {(o.ParetoOnEnergyMass ? "Yes" : "No")} |");
         }
+        b.AppendLine();
+        b.AppendLine("Wh/mass Pareto means no other **listed** candidate has both at least as much nominal Wh and no more assumed mass, with one strict improvement. It ignores voltage compatibility, thermal limits, routing, costs and true pack Wh/L.");
         foreach (var option in Options.Take(5))
         {
             b.AppendLine();
@@ -193,7 +200,14 @@ public static class LayoutOptimizer
                     (engine.BudgetReached?" — no fit found before search budget":" — no fit found by bounded anchor search"));
             truncated |= engine.BudgetReached;
         }
-        var ranked=options
+        var marked=options.Select(option => option with {
+            ParetoOnEnergyMass = !options.Any(other =>
+                other.NominalEnergyWh+Eps >= option.NominalEnergyWh &&
+                other.EstimatedMassG<=option.EstimatedMassG+Eps &&
+                (other.NominalEnergyWh>option.NominalEnergyWh+Eps ||
+                 other.EstimatedMassG+Eps<option.EstimatedMassG))
+        }).ToArray();
+        var ranked=marked
             .OrderByDescending(x=>x.MeetsEnergyTarget)
             .ThenByDescending(x=>x.NominalEnergyWh)
             .ThenByDescending(x=>x.EstimatedPackWhKg)
