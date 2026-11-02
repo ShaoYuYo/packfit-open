@@ -261,3 +261,6 @@ body[data-theme="dark"]{--bg:#19171a;--panel:#262226;--panel2:#332b31;--field:#2
   .device-import-panel{padding:19px}
   .device-report-grid{grid-template-columns:1fr}
 }
+
+/* Keep native hidden state authoritative over card/field display declarations. */
+[hidden]{display:none!important}
