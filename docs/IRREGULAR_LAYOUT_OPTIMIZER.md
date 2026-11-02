@@ -50,7 +50,7 @@ For one candidate cell:
 - **Gross footprint fill:** total rigid cell XY area divided by total allowed-zone XY area. It does not account for excluded cutouts or seals as a usable metric.
 - **Actual finished-pack Wh/L:** cannot be determined accurately without a verified 3D pack assembly boundary and complete inactive material volume.
 
-The optimizer ranks by whether the target Wh was met, then highest nominal Wh, then highest estimated Wh/kg. This is **one transparent sorting policy**, not a Pareto-global optimum. With different cost, weight, thickness or thermal targets, other candidates may be better.
+The optimizer ranks by whether the target Wh was met, then highest nominal Wh, then highest estimated Wh/kg. It **also marks a limited two-objective Pareto frontier**, where no other listed candidate has both more/equal nominal Wh and less/equal assumed pack mass, with at least one strict improvement. This limited frontier compares only the *enumerated* candidates: it is **not** a global optimum proof, nor does it establish S/P electrical compatibility, manufacturability, cost or thermal performance. With different cost, weight, thickness or thermal targets, other candidates may be better.
 
 ## Exactly what the engine does and does not do
 
