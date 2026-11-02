@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.7.0-beta.2 candidate — 2026-11-02
+
+- Fix native Windows battery-report parsing: restrict installed battery data, separate multiple batteries, reject ambiguous/malformed values.
+- Add synthetic dual-battery/history fixture, independent C# regression vectors and an update to issue #2 documenting remaining supported-format questions.
+- Replace the long README with task-based getting-started examples, accurate testing status and user onboarding.
+- Add 15-minute privacy-safe browser/Windows trial plus first-time feedback issue template.
+- Refresh the engineering release checklist, adoption evidence and Codex for OSS application text.
+- **Status:** Candidate, not published until its GitHub release workflow passes.
+
+
 ## v0.7.0-beta.1 — 2026-11-02
 
 - First public **repository beta**, combining the v0.6.1 browser app and the WinUI 3 engineering desktop preview.
