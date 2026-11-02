@@ -263,6 +263,17 @@ internal sealed class RecoveryWindow : Window
         return Task.CompletedTask;
     }
 
+    internal void RunVisualSmokeTest()
+    {
+        LoadDemoAsync().GetAwaiter().GetResult();
+        CalculateStandbyAsync().GetAwaiter().GetResult();
+        if(_batteryRecords.Count!=1 || _capacityHistory.Count<2 ||
+           _telemetry?.Trace.Count<2 || _matrix is null ||
+           _pack is null || _standby is null || _visuals.Children.Count<4 ||
+           _standbyCanvas.Children.Count==0)
+            throw new InvalidOperationException("Compatibility native charts smoke test failed.");
+    }
+
     private Task LoadDemoAsync()
     {
         const string batteryHtml = "<h2>Installed batteries</h2><table>" +
