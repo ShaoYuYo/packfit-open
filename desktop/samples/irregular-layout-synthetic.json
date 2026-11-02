@@ -1,0 +1,72 @@
+{
+  "Zones": [
+    {
+      "XMm": 0,
+      "YMm": 0,
+      "WidthMm": 138,
+      "HeightMm": 64,
+      "MaxThicknessMm": 6.8
+    },
+    {
+      "XMm": 0,
+      "YMm": 64,
+      "WidthMm": 75,
+      "HeightMm": 64,
+      "MaxThicknessMm": 6.2
+    }
+  ],
+  "Keepouts": [
+    {
+      "XMm": 70,
+      "YMm": 75,
+      "WidthMm": 5,
+      "HeightMm": 12
+    }
+  ],
+  "Cells": [
+    {
+      "Id": "SYNTH-LONG-65x55",
+      "WidthMm": 65,
+      "HeightMm": 55,
+      "ThicknessMm": 6,
+      "NominalVoltageV": 3.85,
+      "CapacityAh": 5,
+      "MassG": 62,
+      "Allow90DegreeRotation": false
+    },
+    {
+      "Id": "SYNTH-COMPACT-42x55",
+      "WidthMm": 42,
+      "HeightMm": 55,
+      "ThicknessMm": 5.5,
+      "NominalVoltageV": 3.85,
+      "CapacityAh": 3,
+      "MassG": 39,
+      "Allow90DegreeRotation": true
+    }
+  ],
+  "Topologies": [
+    {
+      "Series": 2,
+      "Parallel": 1
+    },
+    {
+      "Series": 3,
+      "Parallel": 1
+    },
+    {
+      "Series": 4,
+      "Parallel": 1
+    },
+    {
+      "Series": 2,
+      "Parallel": 2
+    }
+  ],
+  "CellGapMm": 2,
+  "BoundaryMarginMm": 1,
+  "KeepoutMarginMm": 1,
+  "NonCellMassG": 48,
+  "TargetEnergyWh": 48,
+  "MaxSearchNodes": 6000
+}
