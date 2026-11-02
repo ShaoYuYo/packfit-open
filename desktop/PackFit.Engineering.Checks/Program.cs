@@ -127,4 +127,44 @@ string semi="Timestamp;Voltage_V;Current_A;Temp_C;SOC_pct\n"+
 Assert(TelemetryAnalyzer.Analyze(semi,new TelemetryThresholds()).Samples==2,
     "semicolon-separated logs imported with no manual delimiter conversion");
 
+
+string capacityHistoryHtml="<h2>Installed batteries</h2><table>"+
+    "<tr><td>DESIGN CAPACITY</td><td>56,000 mWh</td></tr>"+
+    "<tr><td>FULL CHARGE CAPACITY</td><td>49,000 mWh</td></tr></table>"+
+    "<h2>Battery capacity history</h2><table>"+
+    "<tr><th>Period</th><th>Full charge capacity</th><th>Design capacity</th></tr>"+
+    "<tr><td>2026-08</td><td>52,000 mWh</td><td>56,000 mWh</td></tr>"+
+    "<tr><td>2026-09</td><td>51,000 mWh</td><td>56,000 mWh</td></tr>"+
+    "<tr><td>2026-10</td><td>49,000 mWh</td><td>56,000 mWh</td></tr></table>";
+var historyPoints=BatteryHistoryParser.Parse(capacityHistoryHtml);
+Assert(historyPoints.Count==3 && Close(historyPoints[0].FullChargeWh,52) &&
+    Close(historyPoints[2].FullChargeWh,49),
+    "Windows full-charge history is parsed in report order without mixing current batteries");
+Assert(BatteryHistoryParser.Parse("<h2>Installed batteries</h2><table></table>").Count==0,
+    "Missing battery capacity history yields an empty series, not invented data");
+
+var drainEstimate=StandbyDrainEstimator.Estimate(85,77,8,56);
+Assert(Close(drainEstimate.LostSocPercent,8) &&
+    Close(drainEstimate.LossPercentPerHour,1) &&
+    Close(drainEstimate.LostEnergyWh??0,4.48) &&
+    Close(drainEstimate.AveragePowerW??0,.56),
+    "Standby SOC loss, hourly rate and user-supplied Wh estimate");
+Assert(StandbyDrainEstimator.Estimate(85,77,8,null).AveragePowerW is null,
+    "Missing capacity never fabricates average W");
+try
+{
+    StandbyDrainEstimator.Estimate(70,85,8,56);
+    throw new Exception("FAIL: rising SOC cannot be called standby drain");
+}
+catch(ArgumentException){Console.WriteLine("PASS: rising SOC is rejected");}
+
+Assert(analysis.Trace.Count>=2 &&
+    analysis.Trace.Count<=321 &&
+    analysis.Trace[0].Timestamp < analysis.Trace[^1].Timestamp,
+    "Native chart trace is bounded, chronological and includes the final sample");
+var nextSteps=EngineeringTriage.NextSteps(analysis,battery,false);
+Assert(nextSteps.Any(s=>s.Contains("Temperature flags")) &&
+    nextSteps.Any(s=>s.Contains("validation matrix")),
+    "Evidence-based triage proposes next checks without claiming an automatic root cause");
+
 Console.WriteLine("All PackFit engineering core checks passed.");
