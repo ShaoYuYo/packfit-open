@@ -112,13 +112,25 @@ public static partial class BatteryReportParser
 
     private static string InstalledSection(string html)
     {
-        var heading = Regex.Match(html,
-            @"(?is)<h[1-6]\b[^>]*>\s*(?:<[^>]+>\s*)*(?:Installed\s+batteries|已安裝的電池|已安裝電池|安装的电池|已安装的电池)\s*</h[1-6]\s*>");
-        if (!heading.Success) return html; // Supports minimal standalone test fixtures.
-        int start = heading.Index + heading.Length;
-        var next = Regex.Match(html[start..], @"(?is)<h[1-6]\b");
-        int length = next.Success ? next.Index : html.Length - start;
-        return html.Substring(start,length);
+        var headings = HeadingRegex().Matches(html);
+        foreach (Match heading in headings)
+        {
+            string title = Text(heading.Groups[1].Value).Trim();
+            if (!Is(title.ToUpperInvariant(), "INSTALLED BATTERIES",
+                "已安裝的電池", "已安裝電池", "安装的电池", "已安装的电池"))
+                continue;
+            int start = heading.Index + heading.Length;
+            var following = headings.Cast<Match>().FirstOrDefault(x => x.Index >= start);
+            return html.Substring(start, (following?.Index ?? html.Length) - start);
+        }
+        // Minimal fixture support. If no headings exist, only parse a single
+        // table to avoid mistaking unrelated capacity history for a new battery.
+        if (headings.Count == 0)
+        {
+            var first = TableRegex().Match(html);
+            return first.Success ? first.Value : html;
+        }
+        throw new FormatException("Installed batteries section is missing.");
     }
 
     private static bool Is(string value, params string[] expected)
@@ -140,6 +152,8 @@ public static partial class BatteryReportParser
         return match.Groups[2].Value.Equals("mWh", StringComparison.OrdinalIgnoreCase) ? n / 1000 : n;
     }
 
+    [GeneratedRegex(@"(?is)<h[1-6]\\b[^>]*>(.*?)</h[1-6]\\s*>", RegexOptions.CultureInvariant)]
+    private static partial Regex HeadingRegex();
     [GeneratedRegex(@"(?is)<table\b[^>]*>(.*?)</table\s*>", RegexOptions.CultureInvariant)]
     private static partial Regex TableRegex();
     [GeneratedRegex(@"(?is)<tr\b[^>]*>(.*?)</tr\s*>", RegexOptions.CultureInvariant)]
