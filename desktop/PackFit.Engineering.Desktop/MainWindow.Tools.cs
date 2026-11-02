@@ -43,6 +43,7 @@ public sealed partial class MainWindow
         {
             _guide=InvestigationGuides.Find(option.Tag?.ToString()??"sleep-drain");
             RenderGuide();
+            RenderGuideFlow();
         }
     }
 
