@@ -46,6 +46,7 @@ public sealed partial class MainWindow : Window
         }
 
         SetupGuides();
+        InitializeEngineeringInsights();
         Navigation.SelectedItem = Navigation.MenuItems[0];
         ShowPage("overview");
     }
@@ -129,6 +130,8 @@ public sealed partial class MainWindow : Window
     {
         OverviewPanel.Visibility = name == "overview" ? Visibility.Visible : Visibility.Collapsed;
         BatteryPanel.Visibility = name == "battery" ? Visibility.Visible : Visibility.Collapsed;
+        VisualsPanel.Visibility = name == "visuals" ? Visibility.Visible : Visibility.Collapsed;
+        SleepPanel.Visibility = name == "sleep" ? Visibility.Visible : Visibility.Collapsed;
         TelemetryPanel.Visibility = name == "telemetry" ? Visibility.Visible : Visibility.Collapsed;
         ValidationPanel.Visibility = name == "validation" ? Visibility.Visible : Visibility.Collapsed;
         PackPanel.Visibility = name == "pack" ? Visibility.Visible : Visibility.Collapsed;
@@ -142,6 +145,8 @@ public sealed partial class MainWindow : Window
         {
             "overview" => OverviewPanel,
             "battery" => BatteryPanel,
+            "visuals" => VisualsPanel,
+            "sleep" => SleepPanel,
             "telemetry" => TelemetryPanel,
             "validation" => ValidationPanel,
             "pack" => PackPanel,
@@ -225,6 +230,7 @@ public sealed partial class MainWindow : Window
                     $"powercfg 失敗（結束碼：{process.ExitCode}）。部分桌機沒有可用電池。");
             string html = await File.ReadAllTextAsync(reportPath);
             _batteryRecords = await Task.Run(() => BatteryReportParser.ParseAll(html));
+            _batteryHistory = await Task.Run(() => BatteryHistoryParser.Parse(html));
             _battery = _batteryRecords.Count == 1 ? _batteryRecords[0] : null;
             UpdateBattery();
             Notice("Windows 電池報告已在本機建立並分析。");
@@ -246,7 +252,10 @@ public sealed partial class MainWindow : Window
         {
             var path = await PickFileAsync(".html", ".htm");
             if (path is null) return;
-            _batteryRecords = await Task.Run(() => BatteryReportParser.ParseAll(File.ReadAllText(path)));
+            string html = await File.ReadAllTextAsync(path);
+            (_batteryRecords, _batteryHistory) = await Task.Run(() =>
+                ((IReadOnlyList<BatteryHealth>)BatteryReportParser.ParseAll(html),
+                 (IReadOnlyList<CapacityHistoryPoint>)BatteryHistoryParser.Parse(html)));
             _battery = _batteryRecords.Count == 1 ? _batteryRecords[0] : null;
             UpdateBattery();
             Notice("已匯入並分析電池容量報告。");
@@ -271,6 +280,7 @@ public sealed partial class MainWindow : Window
         OverviewBattery.Text = _batteryRecords.Count == 1
             ? _batteryRecords[0].RetentionPercent.ToString("0.0", Culture) + "%"
             : $"{_batteryRecords.Count} batteries";
+        RefreshVisuals();
     }
 
     private TelemetryThresholds ReadThresholds() => new(
@@ -308,6 +318,7 @@ public sealed partial class MainWindow : Window
             if (_telemetry.TotalFindings == 0)
                 TelemetryList.Items.Add("此輪門檻下未發現異常；不等於安全驗證通過。");
             OverviewTelemetry.Text = _telemetry.TotalFindings.ToString("N0",Culture) + " flags";
+            RefreshVisuals();
             Notice("量測 CSV 分析完成。請確認門檻、電流正負號及原始資料。");
         }
         catch (Exception ex) { Notice(ex.Message, true); }
@@ -334,6 +345,7 @@ public sealed partial class MainWindow : Window
             if (_matrix.Count > 400)
                 ValidationList.Items.Add($"另外 {_matrix.Count - 400} 筆未顯示；報告會包含全部案例。");
             OverviewValidation.Text = $"{summary.Failed} FAIL / {summary.NotRun} OPEN";
+            RefreshVisuals();
             Notice("驗證矩陣已完成 PASS/FAIL/NOT RUN 整理。");
         }
         catch (Exception ex) { Notice(ex.Message, true); }
@@ -354,6 +366,7 @@ public sealed partial class MainWindow : Window
                 WidthMm: ReadNumber(WidthBox),
                 HeightMm: ReadNumber(HeightBox),
                 LoadW: ReadNumber(LoadBox));
+            _packDesign = design;
             _pack = PackCalculator.Calculate(design);
             PackResultText.Text = string.Format(Culture,
                 "電芯 {0} 顆 · 電壓 {1:0.##} V · 容量 {2:0.##} Ah\n" +
@@ -364,6 +377,7 @@ public sealed partial class MainWindow : Window
                 _pack.EnergyWh, _pack.TotalMassG, _pack.VolumeL,
                 _pack.GravimetricWhKg, _pack.VolumetricWhL,
                 _pack.IdealRuntimeHours);
+            RefreshVisuals();
             Notice("電池包名目數據已計算。不是機構可行性或安規簽核。");
         }
         catch (Exception ex) { Notice(ex.Message, true); }
@@ -387,6 +401,16 @@ public sealed partial class MainWindow : Window
             }
             review += "\nThese batteries are not combined or treated as a single pack.\n";
         }
+        if(_sleepDrain is not null)
+            review += $"\n\n## Standby drain (entered values)\n" +
+                $"SOC start {_sleepDrain.StartSoc:0.##}%, end {_sleepDrain.EndSoc:0.##}%, " +
+                $"duration {_sleepDrain.DurationHours:0.##} hours, " +
+                $"loss {_sleepDrain.LossPercentPerHour:0.###}%/h, " +
+                $"estimated average power {_sleepDrain.AveragePowerW?.ToString("0.###", Culture) ?? "N/A"} W. " +
+                "This is a manual SOC estimate, not power-meter evidence.\n";
+        review += "\n\n## Next investigation steps\n";
+        foreach(var step in EngineeringTriage.NextSteps(_telemetry,_battery,_matrix is not null))
+            review += "- [ ] "+step+"\n";
         return string.IsNullOrWhiteSpace(batch)?review:review+"\n\n"+batch;
     }
 
