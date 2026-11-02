@@ -5,7 +5,7 @@
 ## Public repository snapshot (2026-11-02)
 
 - **4 GitHub Stars**, **0 forks**, and **no independent PRs** at the time of verification. A Star is not proof of usage; no conversion from stars to users is claimed.
-- **3 published prereleases**: [beta.1](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.1), [beta.2](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.2), and [beta.3](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.3). All include Windows executable assets and SHA-256 files, but successful packaging is not proof of physical-device compatibility.
+- **5 published prereleases**: [beta.1](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.1), [beta.2](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.2), and [beta.3](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.7.0-beta.3). All include Windows executable assets and SHA-256 files, but successful packaging is not proof of physical-device compatibility.
 - **3 open maintainer-raised issues** addressing browser QA, battery report variants and native Windows QA; these are **not** external bug reports.
 - Windows and browser CI have passed on recent commits. CI does **not** replace first-hand device testing.
 - The maintainer has started a [15-minute trial](TRY_PACKFIT.md) and an issue template to collect verified external feedback. **There are not yet published independent trial reports.**
@@ -50,6 +50,12 @@ These entries describe code changes; **they do not assert external adoption, dow
 6. Update this file only when new evidence can be verified.
 
 Official Codex for Open Source application: https://openai.com/form/codex-for-oss/ . A newly created repository is not automatically eligible.
+
+## Native engineering visualization release (2026-11-02)
+
+[v0.8.0-beta.1](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.8.0-beta.1) is a **published prerelease**, not merely an unreleased roadmap. Its GitHub Actions job passed browser checks, pure C# engineering calculations, native WinUI folder publishing, a real MainWindow XAML construction check, a XAML-independent compatibility construction check, and **native synthetic chart/demo smoke tests in both interfaces**. It contains an executable ZIP, an unrenamed self-extracting EXE and SHA-256 hashes.
+
+The visual features are based on local parsed capacity/telemetry/validation data, with unit-specific plots, a bounded trace preview, S/P topology and manual standby estimates. Charts are not calibrated instrumentation, direct root-cause analysis, enterprise security approval, or a finished hardware compatibility audit. Independent user adoption, full visual accessibility tests and original-device feedback still require evidence.
 
 ## Battery report reliability progress (2026-11-02)
 
