@@ -42,8 +42,18 @@ public partial class App : Application
         }
         catch (Exception ex)
         {
-            StartupDiagnostics.Fatal("MainWindow initialization or activation failed", ex);
-            Exit();
+            StartupDiagnostics.Record("MainWindow failed; attempting recovery window", ex);
+            try
+            {
+                _mainWindow = new RecoveryWindow(ex);
+                _mainWindow.Activate();
+                StartupDiagnostics.Record("Recovery window activated");
+            }
+            catch (Exception recovery)
+            {
+                StartupDiagnostics.Fatal("Main window and recovery window failed", recovery);
+                Exit();
+            }
         }
     }
 }
