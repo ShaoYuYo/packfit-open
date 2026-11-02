@@ -1,5 +1,15 @@
 # Changelog
 
+
+## Web v0.6.3 — 2026-11-02
+
+- Keep browser battery-report parsing scoped to installed batteries; do not mistake capacity-history rows for current capacity.
+- Support selecting one of several physical batteries without silently combining Wh values.
+- Improve error handling for malformed or oversized battery-report imports by removing stale displayed results.
+- Add bilingual selector text, visibility overrides, pure parser test cases and UI wiring checks.
+- Refresh the service-worker cache version so updated scripts replace cached older versions.
+- This is a web patch, separate from the already published Windows beta.2 binary.
+
 ## v0.7.0-beta.2 — 2026-11-02 (published)
 
 - Fix native Windows battery-report parsing: restrict installed battery data, separate multiple batteries, reject ambiguous/malformed values.
