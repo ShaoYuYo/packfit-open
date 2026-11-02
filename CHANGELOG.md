@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.8.0-beta.1 — 2026-11-02 (published)
+
+- Add functional native WinUI capacity-retention bars, single-battery capacity-history trends, four-signal telemetry charts, S/P cell topology diagrams and standby SOC/hour/optional Wh estimates.
+- Add Basic/Engineering navigation, symptom-first triage, evidence-based next steps and one-click fully synthetic demo scenarios.
+- Extend XAML-independent compatibility workspace with native charts, standby estimation, synthetic sample data and handoff tools.
+- Add a bounded and chronological telemetry chart trace; large log datasets do not create unbounded chart objects.
+- Respect missing data, per-signal units and multi-battery ambiguity; avoid unverified health color bands and automatic root-cause claims.
+- Add pure C# regression vectors for history, standby calculations and trace sampling, along with native smoke tests that build each diagram in full and compatibility modes.
+- Document engineering formulas, workflow assumptions and official Microsoft diagnostics.
+- **[Public prerelease](https://github.com/ShaoYuYo/packfit-open/releases/tag/v0.8.0-beta.1)** with full WinUI ZIP, original-name single-file EXE and SHA-256 hashes. Passing hosted-Windows checks does not certify behavior on every real device.
 
 ## v0.7.0-beta.4 — 2026-11-02 (published)
 
