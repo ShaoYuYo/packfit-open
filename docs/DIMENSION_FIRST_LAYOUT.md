@@ -1,6 +1,6 @@
 # Dimension-first Battery Pack Screening — without 3D CAD
 
-**Status:** New native WinUI feature under [PR #13](https://github.com/ShaoYuYo/packfit-open/pull/13). The source implementation may change until CI review and merge. It is not in the previously tagged `v0.8.0-beta.1` Windows download.
+**Status:** Merged into `main` via [PR #13](https://github.com/ShaoYuYo/packfit-open/pull/13). The reviewed PR head passed [Linux CI](https://github.com/ShaoYuYo/packfit-open/actions/runs/41467867805), [native Windows](https://github.com/ShaoYuYo/packfit-open/actions/runs/41467867448) and [CodeQL](https://github.com/ShaoYuYo/packfit-open/actions/runs/41467867400). It is **not** in the older tagged `v0.8.0-beta.1` Windows binary, and has not had independent packaging-engineer acceptance.
 
 ## Why this workflow exists
 
