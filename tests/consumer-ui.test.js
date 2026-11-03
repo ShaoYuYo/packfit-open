@@ -21,7 +21,8 @@ test("consumer battery selection and failure cleanup are connected",()=>{
  assert.match(ui,/selectReportBattery\(Number\(event\.target\.value\)\)/);
  assert.match(ui,/function clearHealthOnImportError\(/);
  assert.match(ui,/if\(file\.size>2000000\)\{clearHealthOnImportError\(\)/);
- assert.match(ui,/healthRecords=\[\];healthResult=null;/);
+ assert.match(ui,/function invalidateHealthResult\(\)\{\s*healthResult=null;/);
+ assert.match(ui,/function clearHealthOnImportError\(\)\{\s*healthRecords=\[\];\s*invalidateHealthResult\(\);/);
  assert.match(ui,/q\("pf-retention"\)\.hidden=true/);
 });
 

@@ -1,11 +1,13 @@
 import {estimateChargeCost,estimatePowerBank,estimateChargeTime,calculateRetention,parseWindowsReportRecords} from "./consumer.js";
 import {formatNumber,formatDuration} from "./format.js";
 import {consumerText} from "./consumer-i18n.js";
+import {getSymptomGuide,SYMPTOM_IDS} from "./battery-triage.js";
 let language="zh-TW";
 let battery=null;
 let batteryStatus="notChecked";
 let healthResult=null;
 let healthRecords=[];
+let selectedSymptom="short-runtime";
 const q=(id)=>document.getElementById(id);
 const t=(key)=>consumerText(language,key);
 const fmt=(number,digits=1)=>formatNumber(number,language,digits);
@@ -63,12 +65,50 @@ function refreshBatteryOptions(){
   q("pf-battery-selector").hidden=healthRecords.length<=1;
   if(healthRecords.length)select.value=String(Math.min(previouslySelected,healthRecords.length-1));
 }
-function clearHealthOnImportError(){
-  healthRecords=[];healthResult=null;
-  refreshBatteryOptions();
+function invalidateHealthResult(){
+  healthResult=null;
   q("pf-retention").hidden=true;
+  set("pf-health-percent","—");
+  set("pf-out-design","—");
+  set("pf-out-full","—");
+  set("pf-out-cycles","—");
+  set("pf-health-advice","");
+}
+function clearHealthOnImportError(){
+  healthRecords=[];
+  invalidateHealthResult();
+  refreshBatteryOptions();
   q("pf-design").value="";
   q("pf-full").value="";
+}
+/** User-owned text stays local. Guidance is rendered with textContent, never HTML. */
+function renderSymptomGuide(){
+  const choices=q("pf-symptom");
+  const previous=SYMPTOM_IDS.includes(choices.value)?choices.value:selectedSymptom;
+  choices.replaceChildren();
+  for(const id of SYMPTOM_IDS){
+    const option=document.createElement("option");
+    option.value=id;
+    option.textContent=getSymptomGuide(language,id).label;
+    choices.appendChild(option);
+  }
+  selectedSymptom=previous;
+  choices.value=selectedSymptom;
+  const guide=getSymptomGuide(language,selectedSymptom);
+  set("pf-symptom-summary",guide.summary);
+  set("pf-symptom-help",guide.help);
+  const steps=q("pf-symptom-steps");
+  steps.replaceChildren();
+  for(const step of guide.steps){
+    const li=document.createElement("li");
+    li.textContent=step;
+    steps.appendChild(li);
+  }
+  set("pf-symptom-status","");
+}
+function symptomClipboardText(){
+  const item=getSymptomGuide(language,selectedSymptom);
+  return [item.label,item.summary,...item.steps.map((x,i)=>(i+1)+". "+x),item.help].join("\n");
 }
 function selectReportBattery(index){
   const record=healthRecords[index];
@@ -89,12 +129,31 @@ export function translateConsumer(lang){
   if(battery)updateBattery();
   refreshBatteryOptions();
   renderHealth();
+  renderSymptomGuide();
   showCalculators();
 }
 export function initializeConsumer(getLanguage){
   const ids=["pf-cost-wh","pf-cost-eff","pf-cost-rate","pf-cost-times","pf-bank-mah","pf-bank-v",
     "pf-bank-eff","pf-bank-target","pf-time-wh","pf-time-w","pf-time-start","pf-time-end","pf-time-eff"];
   ids.forEach(id=>q(id).addEventListener("input",showCalculators));
+  for(const id of ["pf-design","pf-full"]){
+    q(id).addEventListener("input",()=>{
+      healthRecords=[];
+      refreshBatteryOptions();
+      invalidateHealthResult();
+      set("pf-report-status",t("pendingRecalc"));
+    });
+  }
+  q("pf-symptom").addEventListener("change",event=>{
+    selectedSymptom=event.target.value;
+    renderSymptomGuide();
+  });
+  q("pf-symptom-copy").addEventListener("click",async()=>{
+    try{
+      await navigator.clipboard.writeText(symptomClipboardText());
+      set("pf-symptom-status",t("symptomCopied"));
+    }catch{set("pf-symptom-status",t("symptomCopyFailed"));}
+  });
   q("pf-connect").addEventListener("click",async()=>{
     if(typeof navigator.getBattery!=="function"){batteryStatus="unsupported";translateConsumer(language);return;}
     const button=q("pf-connect");button.disabled=true;
@@ -138,7 +197,10 @@ export function initializeConsumer(getLanguage){
       healthResult={...calculateRetention(get("pf-design"),get("pf-full")),cycles:null};
       renderHealth();set("pf-report-status","");
     }
-    catch{set("pf-report-status",t("badInput"));}
+    catch{
+      invalidateHealthResult();
+      set("pf-report-status",t("badInput"));
+    }
   });
   q("pf-use-capacity").addEventListener("click",()=>{
     if(!healthResult)return;

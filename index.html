@@ -54,7 +54,7 @@
       <div class="sidebar-bottom">
         <div class="sidebar-note"><span class="pulse" aria-hidden="true"></span><span data-i18n="offlineReady">All calculations run on your device</span></div>
         <a class="github-link" href="https://github.com/ShaoYuYo/packfit-open" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">↗</span> GitHub <span class="external-arrow" aria-hidden="true">↗</span></a>
-        <div class="sidebar-foot">VERSION 0.6.4 <span>·</span> MIT LICENSE</div>
+        <div class="sidebar-foot">VERSION 0.6.5 <span>·</span> MIT LICENSE</div>
       </div>
     </aside>
     <div class="app-body">
@@ -194,6 +194,32 @@
             <div class="pf-health-metrics"><div><span data-pf="design">設計容量</span><b id="pf-out-design">—</b></div><div><span data-pf="full">滿充容量</span><b id="pf-out-full">—</b></div><div><span data-pf="cycles">循環次數</span><b id="pf-out-cycles">—</b></div></div></div>
             <button id="pf-use-capacity" type="button" class="secondary-button" data-pf="useForCalc">將容量套用到續航與生活計算機</button>
             <p id="pf-health-advice" class="pf-small"></p>
+          </article>
+          <article class="panel pf-next-step" aria-labelledby="pf-symptom-title">
+            <div class="overline" data-pf="symptomTag">NO REPORT REQUIRED / QUICK HELP</div>
+            <h2 id="pf-symptom-title" data-pf="symptomTitle">筆電遇到問題，先從哪裡查？</h2>
+            <p id="pf-symptom-intro" class="pf-small" data-pf="symptomIntro">不需要先下載程式、匯入檔案或知道電池規格。選一個狀況，先做安全的第一步。</p>
+            <div class="pf-next-step-picker">
+              <label class="field" for="pf-symptom">
+                <span class="field-title" data-pf="symptomLabel">現在遇到的狀況</span>
+                <select id="pf-symptom" aria-describedby="pf-symptom-intro">
+                  <option value="short-runtime">續航突然變短</option>
+                  <option value="overnight-drain">合蓋後隔天掉很多電</option>
+                  <option value="not-charging">插上電源卻沒充進去</option>
+                  <option value="unexpected-shutdown">還有電卻突然關機</option>
+                  <option value="hot-or-swollen">電池發熱、膨脹或有異味</option>
+                </select>
+              </label>
+              <button id="pf-symptom-copy" class="secondary-button" type="button" data-pf="symptomCopy">複製排查步驟</button>
+            </div>
+            <div id="pf-symptom-result" class="pf-next-step-result" aria-live="polite" aria-atomic="true">
+              <h3 id="pf-symptom-summary-heading" data-pf="symptomSteps">可以先做這些事</h3>
+              <p id="pf-symptom-summary"></p>
+              <ol id="pf-symptom-steps"></ol>
+              <p id="pf-symptom-help" class="pf-small"></p>
+            </div>
+            <p id="pf-symptom-status" class="pf-message" role="status" aria-live="polite"></p>
+            <p class="pf-small" data-pf="symptomDisclaimer">只提供初步查詢方向，不會自動判定故障或電池安全性。</p>
           </article>
         </section>
 

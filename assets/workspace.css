@@ -264,3 +264,20 @@ body[data-theme="dark"]{--bg:#19171a;--panel:#262226;--panel2:#332b31;--field:#2
 
 /* Keep native hidden state authoritative over card/field display declarations. */
 [hidden]{display:none!important}
+
+/* Symptom-first help: accessible text hierarchy, no fake severity badges. */
+.pf-next-step{margin-top:var(--ui-gap);padding:clamp(21px,2.5vw,33px)}
+.pf-next-step>h2{font-size:clamp(21px,2vw,28px);font-weight:730;letter-spacing:-.025em;line-height:1.25;margin:8px 0 12px}
+.pf-next-step>.pf-small{max-width:74ch;line-height:1.7}
+.pf-next-step-picker{display:flex;flex-wrap:wrap;align-items:end;gap:12px;margin:22px 0}
+.pf-next-step-picker>.field{flex:1 1 270px;min-width:0}
+.pf-next-step-picker select{width:100%;min-height:45px;border:1px solid var(--border);background:var(--field);color:var(--text);border-radius:11px;padding:8px 12px}
+.pf-next-step-picker select:focus-visible{outline:3px solid var(--accent-strong);outline-offset:2px}
+.pf-next-step-picker button{min-height:45px}
+.pf-next-step-result{border:1px solid var(--border);border-radius:14px;background:var(--panel2);padding:clamp(18px,2vw,27px)}
+.pf-next-step-result h3{font-size:16px;margin:0 0 9px}
+.pf-next-step-result>p{max-width:80ch;line-height:1.7;margin:8px 0}
+.pf-next-step-result ol{margin:14px 0 16px;padding-left:26px;max-width:85ch;line-height:1.85}
+.pf-next-step-result li{padding-left:4px;margin-bottom:9px}
+#pf-symptom-help{border-top:1px solid var(--border);padding-top:14px}
+@media(max-width:560px){.pf-next-step-picker{align-items:stretch;flex-direction:column}.pf-next-step-picker>.field{flex:1 1 auto;width:100%}.pf-next-step-picker button{width:100%}}
